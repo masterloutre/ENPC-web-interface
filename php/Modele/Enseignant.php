@@ -1,16 +1,22 @@
 <?php
 
-class Competence {
+class Enseignant {
 
-    /* COMPETENCE
+    /* Enseignant
     id :        int
-    nom :       nom de la compétence
+    nom :       string
+    prenom :    string
+    login :     string identifiant de connexion
+    admin :     bool
     */
 
 
     // Ligne à multiplier selon le nombre d'attributs
     private $id;
     private $nom;
+    private $prenom;
+    private $login;
+    private $admin;
 
 
     // Construction de la classe
@@ -34,6 +40,30 @@ class Competence {
 
     public function set_nom($nom) {
         $this->nom = $nom;
+    }
+
+    public function get_prenom() {
+        return $this->prenom;
+    }
+
+    public function set_prenom($prenom) {
+        $this->prenom = $prenom;
+    }
+
+    public function get_login() {
+        return $this->login;
+    }
+
+    public function set_login($login) {
+        $this->login = $login;
+    }
+
+    public function get_admin() {
+        return $this->admin;
+    }
+
+    public function set_admin($admin) {
+        $this->admin = $admin;
     }
     // Fin du multiplier--------------------------------
 
