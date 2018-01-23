@@ -2,9 +2,9 @@
 
 class Competence {
 
-    /* BADGE
+    /* COMPETENCE
     id :        int
-    nom :      nom de la compétence
+    nom :       nom de la compétence
     */
 
 
