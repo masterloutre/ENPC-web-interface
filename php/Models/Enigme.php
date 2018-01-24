@@ -11,6 +11,7 @@ class Enigme {
     difficulte :        1 - 2 - 3
     score_max :         score maximum possible calculé
     tentatives_max :    tentatives maximum authorisées
+    competence :        objet competence
     */
 
 
@@ -23,6 +24,7 @@ class Enigme {
     private $difficulte;
     private $score_max;
     private $tentatives_max;
+    private $competence;
 
 
     // Construction de la classe
@@ -94,6 +96,14 @@ class Enigme {
 
     public function set_tentatives_max($tentatives_max) {
         $this->tentatives_max = $tentatives_max;
+    }
+
+    public function get_competence() {
+        return $this->competence;
+    }
+
+    public function set_competence($competence) {
+        $this->competence = $competence;
     }
     // Fin du multiplier--------------------------------
 
