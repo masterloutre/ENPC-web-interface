@@ -25,14 +25,14 @@ echo "id after if exist + add : ".$etud_test->get_id()."<br>";
 
 delete_etudiant($db, $etud_test);
 
-$etud_test = getEtudiant($db, 3);
+$etud_test = get_etudiant($db, 3);
 
 if($etud_test != NULL){
     $etud_test->set_nom("Lovegood");
     update_etudiant($db, $etud_test);
 }
 
-//getAll($db);
+//get_all_etudiant($db);
 
 
 /*****
@@ -131,7 +131,7 @@ function etudiant_exists($db, Etudiant $etudiant){
 
 //get where id = $id
 //retourne un etudiant
-function getEtudiant($db, $id){
+function get_etudiant($db, $id){
     try{
         
     $bdd_req = $db->prepare('SELECT * FROM etudiant WHERE id = '.$id);
@@ -151,7 +151,7 @@ function getEtudiant($db, $id){
 
 //select *
 //retourne un tableau d'etudiant
-function getAll($db){
+function get_all_etudiant($db){
     try{
         
     $bdd_req = $db->prepare('SELECT * FROM etudiant');
