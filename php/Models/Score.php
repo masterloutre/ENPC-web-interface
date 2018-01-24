@@ -46,7 +46,7 @@ class Score {
     public function get_tentatives(){
         return $this->tentatives;
     }
-    
+
     public function set_tentatives($tentatives){
         $this->tentatives = $tentatives;
     }
@@ -54,7 +54,7 @@ class Score {
     public function get_temps(){
         return $this->temps;
     }
-    
+
     public function set_temps($temps){
         $this->temps = $temps;
     }
@@ -62,7 +62,7 @@ class Score {
     public function get_aide(){
         return $this->aide;
     }
-    
+
     public function set_aide($aide){
         $this->aide = $aide;
     }
