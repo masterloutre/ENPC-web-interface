@@ -4,23 +4,10 @@
 include "../Global/connect.php";
 include "../Global/global.php";
 require_once "../Models/Enigme.php";
+require_once "../Models/Etudiant.php";
 require_once "../Controllers/CompetenceController.php";
-
-$array = [
-  "id" => 26,
-  "index_unity" => 38,
-  "type" => 1,
-  "nom" => "Zouh",
-  "temps_max" => 10,
-  "difficulte" => 1,
-  "score_max" => 150,
-  "tentatives_max" => 1,
-  "competence" => $competence1
-];
-
-$enigme = create_enigme($array);
-//var_dump(add_enigme($db, $enigme));
-var_dump(update_enigme($db, $enigme));
+require_once "../Controllers/EtudiantController.php";
+require_once "../Controllers/ScoreController.php";
 
 function create_enigme($array_enigme)
 {
@@ -138,9 +125,30 @@ function get_all_enigme($db)
   catch(PDOException $e) { echo "Selection failed: " . $e->getMessage(); }
 }
 
-function get_score($db, Etudiant $etudiant, Enigme $enigme)
+function get_score_from_etudiant_on_enigme($db, Etudiant $etudiant, Enigme $enigme)
 {
-  return new Score(/*...*/);
+
+  try {
+    $db_req = $db->prepare('SELECT score.id, points, tentatives, temps, aide
+      FROM score
+      INNER JOIN etudiant ON etudiant.id = score.etudiant_id
+      INNER JOIN enigme ON enigme.id = score.enigme_id
+      WHERE etudiant.id = '.$etudiant->get_id().'
+      AND enigme.id = '.$enigme->get_id()
+    );
+    $db_req->execute();
+    $result = $db_req->fetchAll();
+    if (!empty($result))
+    {
+      return create_score($result[0]);
+    }
+    else { return false; }
+
+  }
+  catch(PDOException $e) {
+    echo "Selection failed: " . $e->getMessage();
+    return false;
+  }
 }
 
  ?>

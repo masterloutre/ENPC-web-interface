@@ -94,7 +94,7 @@ function get_score($db, $id)
 {
   try {
     $db_req = $db->prepare(
-      'SELECT *
+      'SELECT id, points, tentatives, temps, aide
        FROM score
        WHERE score.id = '.$id
       );
