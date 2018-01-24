@@ -68,7 +68,8 @@ function delete_enigme($db, Enigme $enigme)
   if(enigme_exists($db, $enigme))
   {
     try {
-      $db_req = $db->prepare('DELETE FROM enigme
+      $db_req = $db->prepare('DELETE
+        FROM enigme
         WHERE enigme.id = '.$id
         );
       $db_req->execute();
@@ -82,7 +83,8 @@ function delete_enigme($db, Enigme $enigme)
 function enigme_exists($db, $index_unity)
 {
   try {
-    $db_req = $db->prepare('SELECT id FROM enigme
+    $db_req = $db->prepare('SELECT id
+      FROM enigme
       WHERE enigme.index_unity = '.$index_unity
       );
     $db_req->execute();
@@ -97,25 +99,39 @@ function enigme_exists($db, $index_unity)
 function get_enigme($db, $id)
 {
   try {
-    $db_req = $db->prepare('SELECT id, index_unity, type, nom, temps_max, difficulte, score_max, tentatives_max, competence_id FROM enigme
+    $db_req = $db->prepare('SELECT id, index_unity, type, nom, temps_max, difficulte, score_max, tentatives_max, competence_id
+      FROM enigme
       WHERE enigme.id = '.$id
       );
     $db_req->execute();
     $result = $db_req->fetchAll();
-    $result[0]["competence_id"] = get_comptence($db, $result[0]["competence_id"]);
-    return create_enigme($result[0]);
+    if ($result != NULL)
+    {
+      $result[0]["competence_id"] = get_comptence($db, $result[0]["competence_id"]);
+      return create_enigme($result[0]);
+    }
+    else { return false; }
+
   }
   catch(PDOException $e) { echo "Selection failed: " . $e->getMessage(); }
 }
 
-function get_enigme_index_unity($db, $index_unity)
-{
- // A voir
-}
-
 function get_all_enigme()
 {
-
+  try {
+    $db_req = $db->prepare('SELECT id, index_unity, type, nom, temps_max, difficulte, score_max, tentatives_max, competence_id
+      FROM enigme'
+      );
+    $db_req->execute();
+    $enigme_tab = [];
+    while ($result = $db_req->fetch(PDO::FETCH_ASSOC))
+    {
+      $result["competence_id"] = get_comptence($db, $result["competence_id"]);
+      $enigme_tab[] = create_enigme($result);
+    }
+    else { return false; }
+  }
+  catch(PDOException $e) { echo "Selection failed: " . $e->getMessage(); }
 }
 
 function get_score($db, Etudiant $etudiant, Enigme $enigme)
