@@ -4,6 +4,7 @@
 include "../Global/connect.php";
 include "../Global/global.php";
 require_once "../Models/Enigme.php";
+require_once "../Models/CompetenceController.php";
 
 $array = [
   "id" => 11,
@@ -18,8 +19,9 @@ $array = [
 ];
 
 $enigme = create_enigme($array);
-//add_enigme($db, $enigme);
-update_enigme($db, $enigme);
+
+$getenigme = get_enigme($db, 1);
+var_dump($getenigme);
 
 function create_enigme($array_enigme)
 {
@@ -28,41 +30,97 @@ function create_enigme($array_enigme)
 
 function add_enigme($db, Enigme $enigme)
 {
-  try {
-    $db_req = $db->prepare('INSERT INTO enigme
-      (index_unity, type, nom, temps_max, difficulte, score_max, tentatives_max, competence_id)
-      VALUES ('.$enigme->get_index_unity().','.$enigme->get_type().',"'.$enigme->get_nom().'",'.$enigme->get_temps_max().','.$enigme->get_difficulte().','.$enigme->get_score_max().','.$enigme->get_tentatives_max().','.$enigme->get_competence()->get_id().')');
-    $db_req->execute();
+  if(enigme_exists($db, $enigme))
+  {
+    try {
+      $db_req = $db->prepare('INSERT INTO enigme
+        (index_unity, type, nom, temps_max, difficulte, score_max, tentatives_max, competence_id)
+        VALUES ('.$enigme->get_index_unity().','.$enigme->get_type().',"'.$enigme->get_nom().'",'.$enigme->get_temps_max().','.$enigme->get_difficulte().','.$enigme->get_score_max().','.$enigme->get_tentatives_max().','.$enigme->get_competence()->get_id().')');
+      $db_req->execute();
+      $enigme->set_id($db->lastInsertId());
+    }
+    catch(PDOException $e) { echo "Insertion failed: " . $e->getMessage(); }
+    return true;
   }
-  catch(PDOException $e) { echo "Insertion failed: " . $e->getMessage(); }
+  else { return false; }
 }
 
 function update_enigme($db, Enigme $enigme)
 {
-  try {
-    $db_req = $db->prepare('UPDATE enigme
-      SET index_unity = '.$enigme->get_index_unity().', type = '.$enigme->get_type().', nom = "'.$enigme->get_nom().'", temps_max = '.$enigme->get_temps_max().', difficulte = '.$enigme->get_difficulte().', score_max = '.$enigme->get_score_max().', tentatives_max = '.$enigme->get_tentatives_max().', competence_id = '.$enigme->get_competence()->get_id().'
-      WHERE enigme.id = '.$enigme->get_id()
-      );
-    var_dump($db_req);
-    $db_req->execute();
+  if(enigme_exists($db, $enigme))
+  {
+    try {
+      $db_req = $db->prepare('UPDATE enigme
+        SET index_unity = '.$enigme->get_index_unity().', type = '.$enigme->get_type().', nom = "'.$enigme->get_nom().'", temps_max = '.$enigme->get_temps_max().', difficulte = '.$enigme->get_difficulte().', score_max = '.$enigme->get_score_max().', tentatives_max = '.$enigme->get_tentatives_max().', competence_id = '.$enigme->get_competence()->get_id().'
+        WHERE enigme.id = '.$enigme->get_id()
+        );
+      var_dump($db_req);
+      $db_req->execute();
+    }
+    catch(PDOException $e) { echo "Update failed: " . $e->getMessage(); }
+    return true;
   }
-  catch(PDOException $e) { echo "Update failed: " . $e->getMessage(); }
+  else { return false; }
 }
 
-function enigme_exists($unity_index)
+function delete_enigme($db, Enigme $enigme)
 {
-
+  if(enigme_exists($db, $enigme))
+  {
+    try {
+      $db_req = $db->prepare('DELETE FROM enigme
+        WHERE enigme.id = '.$id
+        );
+      $db_req->execute();
+    }
+    catch(PDOException $e) { echo "Deletion failed: " . $e->getMessage(); }
+    return true;
+  }
+  else { return false; }
 }
 
-function get_enigme($id)
+function enigme_exists($db, $index_unity)
 {
+  try {
+    $db_req = $db->prepare('SELECT id FROM enigme
+      WHERE enigme.index_unity = '.$index_unity
+      );
+    $db_req->execute();
+    $result = $db_req->fetchAll();
+  }
+  catch(PDOException $e) { echo "Selection failed: " . $e->getMessage(); }
 
+  if ($result != NULL) { return true; }
+  else { return false; }
+}
+
+function get_enigme($db, $id)
+{
+  try {
+    $db_req = $db->prepare('SELECT id, index_unity, type, nom, temps_max, difficulte, score_max, tentatives_max, competence_id FROM enigme
+      WHERE enigme.id = '.$id
+      );
+    $db_req->execute();
+    $result = $db_req->fetchAll();
+    $result[0]["competence_id"] = get_comptence($db, $result[0]["competence_id"]);
+    return create_enigme($result[0]);
+  }
+  catch(PDOException $e) { echo "Selection failed: " . $e->getMessage(); }
+}
+
+function get_enigme_index_unity($db, $index_unity)
+{
+ // A voir
 }
 
 function get_all_enigme()
 {
 
+}
+
+function get_score($db, Etudiant $etudiant, Enigme $enigme)
+{
+  return new Score(/*...*/);
 }
 
  ?>
