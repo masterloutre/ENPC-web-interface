@@ -29,7 +29,7 @@ function add_competence($db, Competence $competence)
 
 function update_competence($db, Competence $competence)
 {
-  if(competence_exists($db, $competence))
+  if(competence_exists($db, $competence) && $competence->get_id() != NULL)
   {
     try {
       $db_req = $db->prepare(

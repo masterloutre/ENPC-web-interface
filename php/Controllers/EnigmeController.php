@@ -7,10 +7,10 @@ require_once "../Models/Enigme.php";
 require_once "../Controllers/CompetenceController.php";
 
 $array = [
-  "id" => 11,
-  "index_unity" => 3,
+  "id" => 26,
+  "index_unity" => 38,
   "type" => 1,
-  "nom" => "Hello",
+  "nom" => "Zouh",
   "temps_max" => 10,
   "difficulte" => 1,
   "score_max" => 150,
@@ -19,12 +19,8 @@ $array = [
 ];
 
 $enigme = create_enigme($array);
-
-// $get_enigme = get_enigme($db, 4);
-// var_dump($get_enigme);
-
-$get_all_enigme = get_all_enigme($db);
-var_dump($get_all_enigme);
+//var_dump(add_enigme($db, $enigme));
+var_dump(update_enigme($db, $enigme));
 
 function create_enigme($array_enigme)
 {
@@ -33,7 +29,7 @@ function create_enigme($array_enigme)
 
 function add_enigme($db, Enigme $enigme)
 {
-  if(enigme_exists($db, $enigme))
+  if(!enigme_exists($db, $enigme))
   {
     try {
       $db_req = $db->prepare('INSERT INTO enigme
@@ -50,18 +46,17 @@ function add_enigme($db, Enigme $enigme)
 
 function update_enigme($db, Enigme $enigme)
 {
-  if(enigme_exists($db, $enigme))
+  if(enigme_exists($db, $enigme) && $enigme->get_id() != NULL)
   {
     try {
       $db_req = $db->prepare('UPDATE enigme
         SET index_unity = '.$enigme->get_index_unity().', type = '.$enigme->get_type().', nom = "'.$enigme->get_nom().'", temps_max = '.$enigme->get_temps_max().', difficulte = '.$enigme->get_difficulte().', score_max = '.$enigme->get_score_max().', tentatives_max = '.$enigme->get_tentatives_max().', competence_id = '.$enigme->get_competence()->get_id().'
         WHERE enigme.id = '.$enigme->get_id()
         );
-      var_dump($db_req);
       $db_req->execute();
+      return true;
     }
     catch(PDOException $e) { echo "Update failed: " . $e->getMessage(); }
-    return true;
   }
   else { return false; }
 }
@@ -83,12 +78,12 @@ function delete_enigme($db, Enigme $enigme)
   else { return false; }
 }
 
-function enigme_exists($db, $index_unity)
+function enigme_exists($db, Enigme $enigme)
 {
   try {
     $db_req = $db->prepare('SELECT id
       FROM enigme
-      WHERE enigme.index_unity = '.$index_unity
+      WHERE enigme.index_unity = '.$enigme->get_index_unity()
       );
     $db_req->execute();
     $result = $db_req->fetchAll();
