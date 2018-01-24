@@ -4,7 +4,7 @@
 include "../Global/connect.php";
 include "../Global/global.php";
 require_once "../Models/Enigme.php";
-require_once "../Models/CompetenceController.php";
+require_once "../Controllers/CompetenceController.php";
 
 $array = [
   "id" => 11,
@@ -20,8 +20,11 @@ $array = [
 
 $enigme = create_enigme($array);
 
-$getenigme = get_enigme($db, 1);
-var_dump($getenigme);
+// $get_enigme = get_enigme($db, 4);
+// var_dump($get_enigme);
+
+$get_all_enigme = get_all_enigme($db);
+var_dump($get_all_enigme);
 
 function create_enigme($array_enigme)
 {
@@ -105,9 +108,9 @@ function get_enigme($db, $id)
       );
     $db_req->execute();
     $result = $db_req->fetchAll();
-    if ($result != NULL)
+    if (!empty($result))
     {
-      $result[0]["competence_id"] = get_comptence($db, $result[0]["competence_id"]);
+      $result[0]["competence"] = get_competence($db, $result[0]["competence_id"]);
       return create_enigme($result[0]);
     }
     else { return false; }
@@ -116,18 +119,24 @@ function get_enigme($db, $id)
   catch(PDOException $e) { echo "Selection failed: " . $e->getMessage(); }
 }
 
-function get_all_enigme()
+function get_all_enigme($db)
 {
   try {
     $db_req = $db->prepare('SELECT id, index_unity, type, nom, temps_max, difficulte, score_max, tentatives_max, competence_id
-      FROM enigme'
+      FROM enigme
+      ORDER BY id'
       );
     $db_req->execute();
     $enigme_tab = [];
-    while ($result = $db_req->fetch(PDO::FETCH_ASSOC))
+    $result = $db_req->fetchAll();
+    if (!empty($result))
     {
-      $result["competence_id"] = get_comptence($db, $result["competence_id"]);
-      $enigme_tab[] = create_enigme($result);
+      for ($i = 0; $i < count($result); ++$i)
+      {
+        $result[$i]["competence"] = get_competence($db, $result[$i]["competence_id"]);
+        $enigme_tab[] = create_enigme($result[$i]);
+      }
+      return $enigme_tab;
     }
     else { return false; }
   }
