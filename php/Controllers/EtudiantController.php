@@ -91,7 +91,10 @@ function delete_etudiant($db, Etudiant $etudiant){
 //verif si exist dans la fonction
 function update_etudiant($db, Etudiant $etudiant){
     
-    if(!etudiant_exists($db, $etudiant)){
+    $prev_id = $etudiant->get_id();
+    $exists = etudiant_exists($db, $etudiant);
+    
+    if($exists && $prev_id != $etudiant->get_id()){
         return 0;
     }
     

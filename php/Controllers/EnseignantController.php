@@ -95,7 +95,10 @@ function delete_enseignant($db, Enseignant $enseignant){
 //verif si exist dans la fonction
 function update_enseignant($db, Enseignant $enseignant){
     
-    if(!enseignant_exists($db, $enseignant)){
+    $prev_id = $enseignant->get_id();
+    $exists = enseignant_exists($db, $enseignant);
+    
+    if($exists && $prev_id != $enseignant->get_id()){
         return 0;
     }
     
