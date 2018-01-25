@@ -24,9 +24,12 @@ function add_enigme($db, Enigme $enigme)
         VALUES ('.$enigme->get_index_unity().','.$enigme->get_type().',"'.$enigme->get_nom().'",'.$enigme->get_temps_max().','.$enigme->get_difficulte().','.$enigme->get_score_max().','.$enigme->get_tentatives_max().','.$enigme->get_competence()->get_id().')');
       $db_req->execute();
       $enigme->set_id($db->lastInsertId());
+      return true;
     }
-    catch(PDOException $e) { echo "Insertion failed: " . $e->getMessage(); }
-    return true;
+    catch(PDOException $e) {
+      echo "Insertion failed: " . $e->getMessage();
+      return false;
+    }
   }
   else { return false; }
 }
@@ -43,7 +46,10 @@ function update_enigme($db, Enigme $enigme)
       $db_req->execute();
       return true;
     }
-    catch(PDOException $e) { echo "Update failed: " . $e->getMessage(); }
+    catch(PDOException $e) {
+      echo "Update failed: " . $e->getMessage();
+      return false;
+    }
   }
   else { return false; }
 }
@@ -58,9 +64,12 @@ function delete_enigme($db, Enigme $enigme)
         WHERE enigme.id = '.$id
         );
       $db_req->execute();
+      return true;
     }
-    catch(PDOException $e) { echo "Deletion failed: " . $e->getMessage(); }
-    return true;
+    catch(PDOException $e) {
+      echo "Deletion failed: " . $e->getMessage();
+      return false;
+    }
   }
   else { return false; }
 }
@@ -75,7 +84,10 @@ function enigme_exists($db, Enigme $enigme)
     $db_req->execute();
     $result = $db_req->fetchAll();
   }
-  catch(PDOException $e) { echo "Selection failed: " . $e->getMessage(); }
+  catch(PDOException $e) {
+    echo "Selection failed: " . $e->getMessage();
+    return false;
+  }
 
   if ($result != NULL) { return true; }
   else { return false; }
@@ -96,9 +108,11 @@ function get_enigme($db, $id)
       return create_enigme($result[0]);
     }
     else { return false; }
-
   }
-  catch(PDOException $e) { echo "Selection failed: " . $e->getMessage(); }
+  catch(PDOException $e) {
+    echo "Selection failed: " . $e->getMessage();
+    return false;
+  }
 }
 
 function get_all_enigme($db)
@@ -122,12 +136,14 @@ function get_all_enigme($db)
     }
     else { return false; }
   }
-  catch(PDOException $e) { echo "Selection failed: " . $e->getMessage(); }
+  catch(PDOException $e) {
+    echo "Selection failed: " . $e->getMessage();
+    return false;
+  }
 }
 
 function get_score_from_etudiant_on_enigme($db, Etudiant $etudiant, Enigme $enigme)
 {
-
   try {
     $db_req = $db->prepare('SELECT score.id, points, tentatives, temps, aide
       FROM score
@@ -143,7 +159,6 @@ function get_score_from_etudiant_on_enigme($db, Etudiant $etudiant, Enigme $enig
       return create_score($result[0]);
     }
     else { return false; }
-
   }
   catch(PDOException $e) {
     echo "Selection failed: " . $e->getMessage();

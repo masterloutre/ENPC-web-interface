@@ -22,7 +22,10 @@ function add_competence($db, Competence $competence)
       $competence->set_id($db->lastInsertId());
       return true;
     }
-    catch(PDOException $e) { echo "Insertion failed: " . $e->getMessage(); }
+    catch(PDOException $e) {
+      echo "Insertion failed: " . $e->getMessage();
+      return false;
+    }
   }
   else { return false; }
 }

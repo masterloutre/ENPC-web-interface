@@ -64,7 +64,10 @@ function delete_score($db, Score $score)
       $db_req->execute();
       return true;
     }
-    catch(PDOException $e) { echo "Deletion failed: " . $e->getMessage(); }
+    catch(PDOException $e) {
+      echo "Deletion failed: " . $e->getMessage();
+      return false;
+    }
   }
   else { return false; }
 }
@@ -82,7 +85,10 @@ function score_exists($db, Score $score)
       $db_req->execute();
       $result = $db_req->fetchAll();
     }
-    catch(PDOException $e) { echo "Selection failed: " . $e->getMessage(); }
+    catch(PDOException $e) {
+      echo "Selection failed: " . $e->getMessage();
+      return false;
+    }
 
     if ($result != NULL) { return true; }
     else { return false; }
@@ -106,7 +112,10 @@ function get_score($db, $id)
     }
     else { return false; }
   }
-  catch(PDOException $e) { echo "Selection failed: " . $e->getMessage(); }
+  catch(PDOException $e) {
+    echo "Selection failed: " . $e->getMessage();
+    return false;
+  }
 }
 
 function get_all_score($db)
@@ -130,7 +139,10 @@ function get_all_score($db)
     }
     else { return false; }
   }
-  catch(PDOException $e) { echo "Selection failed: " . $e->getMessage(); }
+  catch(PDOException $e) {
+    echo "Selection failed: " . $e->getMessage();
+    return false;
+   }
 }
 
  ?>
