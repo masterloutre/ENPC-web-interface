@@ -5,7 +5,7 @@ include "../Global/global.php";
 require_once "../Models/Competence.php";
 require_once "../Controllers/ScoreController.php";
 
-var_dump(get_moyenne_score_from_competence($db, $competence2));
+//var_dump(get_moyenne_score_from_competence($db, $competence2));
 
 function create_competence($array_competence)
 {

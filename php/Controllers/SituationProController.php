@@ -2,6 +2,7 @@
 
 include "../Global/connect.php";
 require_once "../Models/SituationPro.php";
+require_once "../Models/Enigme.php";
 
 /*****
 TEST
@@ -155,7 +156,7 @@ function get_situation_pro($db, $id){
 
 //select *
 //retourne un tableau d'etudiant
-function get_all_situ_pro($db){
+function get_all_situation_pro($db){
     try{
 
     $bdd_req = $db->prepare('SELECT * FROM situation_pro');
@@ -177,6 +178,34 @@ function get_all_situ_pro($db){
 
         return $tab_situ;
     }
+}
+
+function get_situation_pro_from_enigme($db, Enigme $enigme)
+{
+  try {
+    $db_req = $db->prepare('SELECT situation_pro.id, situation_pro.nom, rel_enigme_situation_pro.ratio
+      FROM situation_pro
+      INNER JOIN rel_enigme_situation_pro ON rel_enigme_situation_pro.situation_pro_id = situation_pro.id
+      INNER JOIN enigme ON rel_enigme_situation_pro.enigme_id = enigme.id
+      WHERE enigme.id = '.$enigme->get_id()
+    );
+    $db_req->execute();
+    $situation_pro_tab = [];
+    $result = $db_req->fetchAll();
+    if (!empty($result))
+    {
+      for ($i = 0; $i < count($result); ++$i)
+      {
+        $situation_pro_tab[] = create_situation_pro($result[$i]);
+      }
+      return $situation_pro_tab;
+    }
+    else { return false; }
+  }
+  catch(PDOException $e) {
+    echo "Selection failed: " . $e->getMessage();
+    return false;
+  }
 }
 
  ?>
