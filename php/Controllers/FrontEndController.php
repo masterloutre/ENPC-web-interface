@@ -32,13 +32,15 @@ function login()
        }
        $db_req->execute();
        $result = $db_req->fetchAll();
-       var_dump($result);
 
        if( $db_req->rowCount() > 0)
        {
           if($password == $result[0]['mdp'])
           {
-             return intval($result[0]['id']);
+            if ($category == 'etudiant')
+             header('Location: index.php?action=interface-etudiant');
+            else if ($category == 'enseignant')
+              header('Location: index.php?action=interface-enseignant');
           }
           else
           {
@@ -61,4 +63,19 @@ function login()
 function sign_in()
 {
   require('../Views/LoginView.php');
+}
+
+function interface_etudiant()
+{
+  require('../Views/InterfaceEtudiantView.php');
+}
+
+function interface_enseignant()
+{
+  require('../Views/InterfaceEnseignantView.php');
+}
+
+function is_logged_in()
+{
+  return true;
 }
