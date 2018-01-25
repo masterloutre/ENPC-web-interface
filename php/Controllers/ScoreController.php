@@ -317,4 +317,40 @@ function get_moyenne_score_from_competence($db, Competence $competence)
   }
 }
 
+function get_moyenne_score_from_situation_pro($db, SituationPro $situation_pro)
+{
+  try {
+    $db_req = $db->prepare('SELECT points, tentatives, temps, aide
+      FROM score
+      INNER JOIN enigme ON enigme.id = score.enigme_id
+      INNER JOIN rel_enigme_situation_pro ON rel_enigme_situation_pro.enigme_id = enigme.id
+      INNER JOIN situation_pro ON situation_pro.id = rel_enigme_situation_pro.situation_pro_id
+      WHERE situation_pro.id = '.$situation_pro->get_id()
+    );
+    $db_req->execute();
+    $score_tab = ["points" => 0, "tentatives" => 0, "temps" => 0, "aide" => 0];
+    $result = $db_req->fetchAll();
+    if (!empty($result))
+    {
+      for ($i = 0; $i < count($result); ++$i)
+      {
+        $score_tab["points"] += $result[$i]["points"];
+        $score_tab["tentatives"] += $result[$i]["tentatives"];
+        $score_tab["temps"] += $result[$i]["temps"];
+        $score_tab["aide"] += $result[$i]["aide"];
+      }
+      $score_tab["points"] = round($score_tab["points"] / count($result), 2);
+      $score_tab["tentatives"] = round($score_tab["tentatives"] / count($result), 2);
+      $score_tab["temps"] = round($score_tab["temps"] / count($result), 2);
+      $score_tab["aide"] = round($score_tab["aide"] / count($result), 2);
+      return create_score($score_tab);
+    }
+    else { return false; }
+  }
+  catch(PDOException $e) {
+    echo "Selection failed: " . $e->getMessage();
+    return false;
+  }
+}
+
  ?>
