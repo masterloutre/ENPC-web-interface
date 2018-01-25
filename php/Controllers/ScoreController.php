@@ -181,6 +181,73 @@ function get_score_from_etudiant_on_enigme($db, Etudiant $etudiant, Enigme $enig
   }
 }
 
+function get_score_from_etudiant_on_competence($db, Etudiant $etudiant, Competence $competence)
+{
+  try {
+    $db_req = $db->prepare('SELECT score.id, points, tentatives, temps, aide
+      FROM score
+      INNER JOIN etudiant ON etudiant.id = score.etudiant_id
+      INNER JOIN enigme ON enigme.id = score.enigme_id
+      INNER JOIN competence ON competence.id = enigme.competence_id
+      WHERE etudiant.id = '.$etudiant->get_id().'
+      AND competence.id = '.$competence->get_id()
+    );
+    $db_req->execute();
+    $score_tab = ["points" => 0, "tentatives" => 0, "temps" => 0, "aide" => 0];
+    $result = $db_req->fetchAll();
+    if (!empty($result))
+    {
+      for ($i = 0; $i < count($result); ++$i)
+      {
+        $score_tab["points"] += $result[$i]["points"];
+        $score_tab["tentatives"] += $result[$i]["tentatives"];
+        $score_tab["temps"] += $result[$i]["temps"];
+        $score_tab["aide"] += $result[$i]["aide"];
+      }
+      return create_score($score_tab);
+    }
+    else { return false; }
+  }
+  catch(PDOException $e) {
+    echo "Selection failed: " . $e->getMessage();
+    return false;
+  }
+}
+
+function get_score_from_etudiant_on_situation_pro($db, Etudiant $etudiant, SituationPro $situation_pro)
+{
+  try {
+    $db_req = $db->prepare('SELECT score.id, points, tentatives, temps, aide
+      FROM score
+      INNER JOIN etudiant ON etudiant.id = score.etudiant_id
+      INNER JOIN enigme ON enigme.id = score.enigme_id
+      INNER JOIN rel_enigme_situation_pro ON rel_enigme_situation_pro.enigme_id = enigme.id
+      INNER JOIN situation_pro ON situation_pro.id = rel_enigme_situation_pro.situation_pro_id
+      WHERE etudiant.id = '.$etudiant->get_id().'
+      AND situation_pro.id = '.$situation_pro->get_id()
+    );
+    $db_req->execute();
+    $score_tab = ["points" => 0, "tentatives" => 0, "temps" => 0, "aide" => 0];
+    $result = $db_req->fetchAll();
+    if (!empty($result))
+    {
+      for ($i = 0; $i < count($result); ++$i)
+      {
+        $score_tab["points"] += $result[$i]["points"];
+        $score_tab["tentatives"] += $result[$i]["tentatives"];
+        $score_tab["temps"] += $result[$i]["temps"];
+        $score_tab["aide"] += $result[$i]["aide"];
+      }
+      return create_score($score_tab);
+    }
+    else { return false; }
+  }
+  catch(PDOException $e) {
+    echo "Selection failed: " . $e->getMessage();
+    return false;
+  }
+}
+
 function get_moyenne_score_from_enigme($db, Enigme $enigme)
 {
   try {
