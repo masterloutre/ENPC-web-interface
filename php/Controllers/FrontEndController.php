@@ -9,38 +9,53 @@ function login()
 {
   include "../Global/connect.php";
 
-  if (isset($_POST["user_category"]) && isset($_POST["mdp"]) && isset($_POST["login"]))
+  if (session_status() != PHP_SESSION_DISABLED) {
+      session_start();
+  }
+
+  if (isset($_POST["mdp"]) && isset($_POST["login"]))
   {
-    $category = $_POST["user_category"];
     $login = $_POST["login"];
     $password = $_POST["mdp"];
     try
     {
-       if ($category == 'enseignant')
-       {
-         $db_req = $db->prepare('SELECT *
-         FROM enseignant
-         WHERE enseignant.login = "'.$login.'"
-         LIMIT 1');
-       }
-       else if ($category == 'etudiant')
-       {
-         $db_req = $db->prepare('SELECT *
-         FROM etudiant
-         WHERE etudiant.num_etud = '.$login.'
-         LIMIT 1');
-       }
+       $db_req = $db->prepare(
+         'SELECT *
+          FROM enseignant
+          WHERE enseignant.login = "'.$login.'"
+          LIMIT 1');
        $db_req->execute();
        $result = $db_req->fetchAll();
 
+       if ($db_req->rowCount() == 0)
+       {
+         $db_req = $db->prepare(
+           'SELECT *
+            FROM etudiant
+            WHERE etudiant.num_etud = "'.$login.'"
+            LIMIT 1');
+         $db_req->execute();
+         $result = $db_req->fetchAll();
+       }
+
        if( $db_req->rowCount() > 0)
        {
-          if($password == $result[0]['mdp'])
+          if(sha1('gz'.$password) == $result[0]['mdp'])
           {
-            if ($category == 'etudiant')
-             header('Location: index.php?action=interface-etudiant');
-            else if ($category == 'enseignant')
+               $_SESSION['user_session'] = $result[0]['token'];
+            if (isset($result[0]['num_etud'])) // Etudiant
+            {
+              $_SESSION['login'] = array('login' => utf8_encode($result[0]['num_etud']));
+              header('Location: index.php?action=interface-etudiant');
+            }
+            else if (isset($result[0]['login']))
+            {
+              $_SESSION['login'] = array('login' => utf8_encode($result[0]['login']));
+              if (true == $result[0]['admin'])
+                header('Location: index.php?action=interface-admin');
+              else
               header('Location: index.php?action=interface-enseignant');
+            }
           }
           else
           {
@@ -60,6 +75,11 @@ function login()
   }
 }
 
+function logout() {
+    $_SESSION = array();
+    session_destroy();
+}
+
 function sign_in()
 {
   require('../Views/LoginView.php');
@@ -73,6 +93,11 @@ function interface_etudiant()
 function interface_enseignant()
 {
   require('../Views/InterfaceEnseignantView.php');
+}
+
+function interface_admin()
+{
+  require('../Views/InterfaceAdminView.php');
 }
 
 function is_logged_in()

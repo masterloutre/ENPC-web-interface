@@ -10,15 +10,6 @@
   </p>
 
   <p>
-  <label for="user_category">Connexion en tant que</label>
-  <select name="user_category">
-    <option value="" disabled selected>Veuillez choisir</option>
-    <option value="etudiant">Etudiant</option>
-    <option value="enseignant">Enseignant</option>
-  </select>
-  </p>
-
-  <p>
     <input type="submit" value="Envoyer">
   </p>
 </form>

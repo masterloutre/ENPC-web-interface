@@ -11,6 +11,9 @@ if (isset($_GET['action'])) {
     else if ($_GET['action'] == 'interface-enseignant') {
         interface_enseignant();
     }
+    else if ($_GET['action'] == 'interface-admin') {
+        interface_admin();
+    }
 }
 else
 {

@@ -17,6 +17,7 @@ class Etudiant {
     private $prenom;
     private $promo;
     private $num_etud;
+    private $mdp;
 
 
     // Construction de la classe
@@ -41,29 +42,37 @@ class Etudiant {
     public function set_nom($nom) {
         $this->nom = $nom;
     }
-    
+
     public function get_prenom(){
         return $this->prenom;
     }
-    
+
     public function set_prenom($prenom){
         $this->prenom = $prenom;
     }
-    
+
     public function get_promo(){
         return $this->promo;
     }
-    
+
     public function set_promo($promo){
         $this->promo = $promo;
     }
-    
+
     public function get_num_etud(){
         return $this->num_etud;
     }
-    
+
     public function set_num_etud($num_etud){
         $this->num_etud = $num_etud;
+    }
+
+    public function get_mdp(){
+        return $this->mdp;
+    }
+
+    public function set_mdp($mdp){
+        $this->mdp = $mdp;
     }
     // Fin du multiplier--------------------------------
 
