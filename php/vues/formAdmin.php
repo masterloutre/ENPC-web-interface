@@ -52,7 +52,7 @@ require("../Controllers/SituationProController.php");
             if(!array_key_exists('item', $_GET)){
                 echo "erreur pas de clé item dans GET";
             }else{
-                if(!array_key_exists('modif', $_GET)){ ?>
+                if(!array_key_exists('id', $_GET)){ ?>
         
                 <h1>Ajouter <?php echo $_GET['item']; ?></h1>
 
@@ -61,7 +61,7 @@ require("../Controllers/SituationProController.php");
                 //var_dump($empty); ?>
 
                 <!-- AJOUT -->
-                <form action="">
+                <form action="add.php?item=<?php echo $_GET['item']; ?>" method="POST">
                    <?php $empty = $empty->get_vars();
                     foreach($empty as $key => $value): ?>
                         <label for="<?php echo $key; ?>"><?php echo $key; ?></label>
@@ -75,21 +75,22 @@ require("../Controllers/SituationProController.php");
                 <h1>Modifier <?php echo $_GET['item']; ?></h1>
 
                 <?php $method = 'get_'.ucfirst($_GET['item']);
-                $object = $method($db, $_GET['modif']);
+                $object = $method($db, $_GET['id']);
 
                 if($object == NULL){
-                    unset($_GET['modif']);
+                    unset($_GET['id']);
                     header("Refresh:0; url=listeAdmin.php?item=".$_GET['item']);
                 }
                 //var_dump($empty); ?>
 
                 <!-- MODIF -->
-                <form action="">
+                <form action="update.php?item=<?php echo $_GET['item']; ?>" method="POST">
                    <?php $object = $object->get_vars();
                     foreach($object as $key => $value): ?>
                         <label for="<?php echo $key; ?>"><?php echo $key; ?></label>
                         <input type="text" name="<?php echo $key; ?>" value="<?php echo $value; ?>">
                     <?php endforeach; ?>
+                    <input type="hidden" name="id" value="<?php echo $_GET['id']; ?>">
                     <input type="submit" value="Modifier">
                 </form>
         

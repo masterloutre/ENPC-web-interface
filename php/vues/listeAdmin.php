@@ -73,9 +73,11 @@ require("../Controllers/SituationProController.php");
                         <td><?php echo $value; ?></td>
 
                     <?php endforeach;
-                    $modif_link = "formAdmin.php?item=".$_GET['item']."&modif=".$id; ?>
+                    $modif_link = "formAdmin.php?item=".$_GET['item']."&id=".$id;
+                    $delete_link = "delete.php?item=".$_GET['item']."&id=".$id; ?>
+                    
                     <td><a href="<?php echo $modif_link; ?>"><i class="fa fa-pencil"></i></a></td>
-                    <td><a href=""><i class="fa fa-trash-o"></i></a></td>
+                    <td><a href="<?php echo $delete_link; ?>"><i class="fa fa-trash-o"></i></a></td>
                 </tr>
                 <?php endforeach; ?>
             </table>
