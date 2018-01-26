@@ -17,6 +17,11 @@ if(!array_key_exists('item', $_GET)){
         //problème à la création
         header("Refresh:0; url=listeAdmin.php?item=".$_GET['item']);
     }else{
+        if($_GET['item'] == 'enigme'){
+            $competence = get_competence($db, $_POST['competence']);
+            $object->set_competence($competence);
+        }
+        
         $method = 'update_'.ucfirst($_GET['item']);
         $result = $method($db, $object);
 

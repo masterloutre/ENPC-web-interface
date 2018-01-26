@@ -50,7 +50,7 @@ require("../Controllers/SituationProController.php");
       <div class="wrapper">
        <?php
             if(!array_key_exists('item', $_GET)){
-                echo "erreur pas de clé item dans GET";
+                header("Refresh:0; url=homeAdmin.php");
             }else{
                 if(!array_key_exists('id', $_GET)){ ?>
         
@@ -67,6 +67,10 @@ require("../Controllers/SituationProController.php");
                         <label for="<?php echo $key; ?>"><?php echo $key; ?></label>
                         <input type="text" name="<?php echo $key; ?>">
                     <?php endforeach; ?>
+                    <?php if($_GET['item'] == 'enigme'): ?>
+                        <input type="radio" name="competence" value="<?php echo $competence1->get_id(); ?>"> <?php echo $competence1->get_nom(); ?>
+                        <input type="radio" name="competence" value="<?php echo $competence2->get_id(); ?>"> <?php echo $competence2->get_nom(); ?>
+                    <?php endif; ?>
                     <input type="submit" value="Ajouter">
                 </form>
 
@@ -81,7 +85,10 @@ require("../Controllers/SituationProController.php");
                     unset($_GET['id']);
                     header("Refresh:0; url=listeAdmin.php?item=".$_GET['item']);
                 }
-                //var_dump($empty); ?>
+                            
+                if($_GET['item'] == "enigme"){
+                    $competence = $object->get_competence();
+                } ?>
 
                 <!-- MODIF -->
                 <form action="update.php?item=<?php echo $_GET['item']; ?>" method="POST">
@@ -90,6 +97,10 @@ require("../Controllers/SituationProController.php");
                         <label for="<?php echo $key; ?>"><?php echo $key; ?></label>
                         <input type="text" name="<?php echo $key; ?>" value="<?php echo $value; ?>">
                     <?php endforeach; ?>
+                    <?php if($_GET['item'] == 'enigme'): ?>
+                        <input type="radio" name="competence" value="<?php echo $competence1->get_id(); ?>"<?php if($competence == $competence1){echo "checked";} ?>> <?php echo $competence1->get_nom(); ?>
+                        <input type="radio" name="competence" value="<?php echo $competence2->get_id(); ?>"<?php if($competence == $competence2){echo "checked";} ?>> <?php echo $competence2->get_nom(); ?>
+                    <?php endif; ?>
                     <input type="hidden" name="id" value="<?php echo $_GET['id']; ?>">
                     <input type="submit" value="Modifier">
                 </form>

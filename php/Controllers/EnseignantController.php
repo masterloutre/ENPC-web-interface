@@ -16,7 +16,7 @@ function add_enseignant($db, Enseignant $enseignant){
     
     try{
         
-        $bdd_req = $db->prepare('INSERT INTO enseignant (nom, prenom, login, admin, mdp) VALUES ("'.$enseignant->get_nom().'","'.$enseignant->get_prenom().'","'.$enseignant->get_login().'",'.$enseignant->get_admin().',"test")');
+        $bdd_req = $db->prepare('INSERT INTO enseignant (nom, prenom, login, admin, mdp) VALUES ("'.$enseignant->get_nom().'", "'.$enseignant->get_prenom().'", "'.$enseignant->get_login().'", 0, "test")');
         $bdd_req->execute();
         
     }catch(PDOException $e){
@@ -58,7 +58,7 @@ function update_enseignant($db, Enseignant $enseignant){
     
     try{
         
-        $bdd_req = $db->prepare('UPDATE `enseignant` SET nom = "'.$enseignant->get_nom().'", prenom = "'.$enseignant->get_prenom().'", login = "'.$enseignant->get_login().'", admin = '.$enseignant->get_admin().' WHERE `id` = '.$enseignant->get_id());
+        $bdd_req = $db->prepare('UPDATE `enseignant` SET nom = "'.$enseignant->get_nom().'", prenom = "'.$enseignant->get_prenom().'", login = "'.$enseignant->get_login().'" WHERE `id` = '.$enseignant->get_id());
         $bdd_req->execute();
     
     }catch(PDOException $e){

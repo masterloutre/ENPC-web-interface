@@ -45,7 +45,7 @@ require("../Controllers/SituationProController.php");
       <div class="wrapper">
        <?php
             if(!array_key_exists('item', $_GET)){
-                echo "erreur pas de clé GET";
+                header("Refresh:0; url=homeAdmin.php");
             }else{ ?>
         
             <h1>Catalogue <?php echo $_GET['item']; ?></h1>
