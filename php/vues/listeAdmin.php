@@ -23,11 +23,12 @@ require("../Controllers/SituationProController.php");
            }
            a{
                text-decoration: none;
+               color: black;
            }
            a:visited{
                color: black;
            }
-           #add{
+           .button{
                margin: 20px 0;
                border: 1px solid black;
                padding: 5px 10px;
@@ -45,42 +46,41 @@ require("../Controllers/SituationProController.php");
        <?php
             if(!array_key_exists('item', $_GET)){
                 echo "erreur pas de clé GET";
-            }else{
-        ?>
+            }else{ ?>
         
-        <h1>Catalogue <?php echo $_GET['item']; ?></h1>
-        <a id="add" href="<?php /**/ ?>">Ajouter <?php echo $_GET['item']; ?></a>
-        
-        <?php $method = 'get_all_'.ucfirst($_GET['item']);
-        $list = $method($db);
-        //var_dump($list);
-        //var_dump($list[0]->get_vars()); ?>
-        
-        <!-- table head -->
-        <table>
-            <tr>
-               <?php $headers = $list[0]->get_vars();
-                foreach($headers as $key => $value): ?>
-                <th><?php echo $key; ?></th>
-                <?php endforeach; ?>
-                <th colspan="2"></th>
-            </tr>
-            <!-- table content -->
-            <?php foreach($list as $item): ?>
-            <tr>
-               <?php $item = $item->get_vars();
-                foreach($item as $key => $value): ?>
+            <h1>Catalogue <?php echo $_GET['item']; ?></h1>
+            <a class="button" href="<?php echo 'formAdmin.php?item='.$_GET['item']; ?>">Ajouter <?php echo $_GET['item']; ?></a>
 
-                    <td><?php echo $value; ?></td>
-                
+            <?php $method = 'get_all_'.ucfirst($_GET['item']);
+            $list = $method($db); ?>
+
+            <!-- table head -->
+            <table>
+                <tr>
+                   <?php $headers = $list[0]->get_vars();
+                    foreach($headers as $key => $value): ?>
+                    <th><?php echo $key; ?></th>
+                    <?php endforeach; ?>
+                    <th colspan="2"></th>
+                </tr>
+                <!-- table content -->
+                <?php foreach($list as $item): ?>
+                <tr>
+                   <?php $id = $item->get_id();
+                    $item = $item->get_vars();
+                    foreach($item as $key => $value): ?>
+
+                        <td><?php echo $value; ?></td>
+
+                    <?php endforeach;
+                    $modif_link = "formAdmin.php?item=".$_GET['item']."&modif=".$id; ?>
+                    <td><a href="<?php echo $modif_link; ?>"><i class="fa fa-pencil"></i></a></td>
+                    <td><a href=""><i class="fa fa-trash-o"></i></a></td>
+                </tr>
                 <?php endforeach; ?>
-                <td><a href=""><i class="fa fa-pencil"></i></a></td>
-                <td><a href=""><i class="fa fa-trash-o"></i></a></td>
-            </tr>
-            <?php endforeach; ?>
-        </table>
+            </table>
         
-        <?php } ?>
+            <?php } ?>
         </div>
     </body>
 </html>
