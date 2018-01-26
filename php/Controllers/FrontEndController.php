@@ -9,10 +9,6 @@ function login()
 {
   include "../Global/connect.php";
 
-  if (session_status() != PHP_SESSION_DISABLED) {
-      session_start();
-  }
-
   if (isset($_POST["mdp"]) && isset($_POST["login"]))
   {
     $login = $_POST["login"];
@@ -76,8 +72,8 @@ function login()
 }
 
 function logout() {
-    $_SESSION = array();
-    session_destroy();
+  $_SESSION = array();
+  session_destroy();
 }
 
 function sign_in()
@@ -100,7 +96,7 @@ function interface_admin()
   require('../Views/InterfaceAdminView.php');
 }
 
-function is_logged_in()
+function forbidden_access()
 {
-  return true;
+  require('../Views/ForbiddenAccessView.php');
 }

@@ -1,6 +1,7 @@
 <?php
 
-echo sha1('gz'.'12345');
+include "../Global/global.php";
 
+var_dump(create_token("2699405550"));
 
  ?>

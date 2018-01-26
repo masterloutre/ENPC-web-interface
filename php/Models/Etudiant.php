@@ -8,6 +8,8 @@ class Etudiant {
     prenom :    prénom de l'étudiant
     promo :     année d'utilisation du jeu
     num_etud :  identifiant de l'étudiant au sein de l'école
+    mdp :       mot de passe
+    token :     token de sécurité pour authentifier une session
     */
 
 
@@ -18,6 +20,7 @@ class Etudiant {
     private $promo;
     private $num_etud;
     private $mdp;
+    private $token;
 
 
     // Construction de la classe
@@ -73,6 +76,14 @@ class Etudiant {
 
     public function set_mdp($mdp){
         $this->mdp = $mdp;
+    }
+
+    public function get_token(){
+        return $this->token;
+    }
+
+    public function set_token($token){
+        $this->token = $token;
     }
     // Fin du multiplier--------------------------------
 

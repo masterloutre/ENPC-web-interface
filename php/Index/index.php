@@ -1,18 +1,28 @@
 <?php
 require('../Controllers/FrontEndController.php');
-
+require('../Controllers/SessionController.php');
+start();
 if (isset($_GET['action'])) {
     if ($_GET['action'] == 'login') {
         login();
     }
     else if ($_GET['action'] == 'interface-etudiant') {
-        interface_etudiant();
+        if (etudiant_logged_in()) { interface_etudiant(); }
+        else {
+          forbidden_access();
+        }
     }
     else if ($_GET['action'] == 'interface-enseignant') {
-        interface_enseignant();
+        if (enseignant_logged_in()) { interface_enseignant(); }
+        else {
+          forbidden_access();
+        }
     }
     else if ($_GET['action'] == 'interface-admin') {
-        interface_admin();
+      if (admin_logged_in()) { interface_admin(); }
+      else {
+        forbidden_access();
+      }
     }
 }
 else

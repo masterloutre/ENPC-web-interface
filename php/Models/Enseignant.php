@@ -8,6 +8,8 @@ class Enseignant {
     prenom :    string
     login :     string identifiant de connexion
     admin :     bool
+    mdp :       string mot de passe
+    token :     token de sécurité
     */
 
 
@@ -17,7 +19,8 @@ class Enseignant {
     private $prenom;
     private $login;
     private $admin;
-
+    private $mdp;
+    private $token;
 
     // Construction de la classe
     public function __construct(array $donnees) {
@@ -64,6 +67,22 @@ class Enseignant {
 
     public function set_admin($admin) {
         $this->admin = $admin;
+    }
+
+    public function get_mdp(){
+        return $this->mdp;
+    }
+
+    public function set_mdp($mdp){
+        $this->mdp = $mdp;
+    }
+
+    public function get_token(){
+        return $this->token;
+    }
+
+    public function set_token($token){
+        $this->token = $token;
     }
     // Fin du multiplier--------------------------------
 
