@@ -157,6 +157,66 @@ function get_score_max_from_enigme($db, Enigme $enigme)
   return create_score($score);
 }
 
+function get_score_max_from_competence($db, Competence $competence, Etudiant $etudiant)
+{
+  try {
+    $db_req = $db->prepare('SELECT score_max
+      FROM enigme
+      INNER JOIN competence ON enigme.competence_id = competence.id
+      INNER JOIN score ON score.enigme_id = enigme.id
+      INNER JOIN etudiant ON enigme.id = score.enigme_id
+      WHERE etudiant.id = '.$etudiant->get_id().'
+      AND competence.id = '.$competence->get_id() );
+    $db_req->execute();
+    $result = $db_req->fetchAll();
+    $score = 0;
+    if (!empty($result))
+    {
+      for ($x = 0; $x < count($result); ++$x)
+      {
+        $score += $result[$x]['score_max'];
+      }
+      return $score;
+    }
+    else { return 0; }
+  }
+  catch(PDOException $e) {
+    echo "Selection failed: " . $e->getMessage();
+    return false;
+  }
+}
+
+function get_score_max_from_situation_pro($db, SituationPro $situation_pro, Etudiant $etudiant)
+{
+  try {
+    $db_req = $db->prepare('SELECT score_max
+      FROM enigme
+      INNER JOIN score ON score.enigme_id = enigme.id
+      INNER JOIN etudiant ON etudiant.id = score.etudiant_id
+      INNER JOIN rel_enigme_situation_pro ON rel_enigme_situation_pro.enigme_id = enigme.id
+      INNER JOIN situation_pro ON situation_pro.id = rel_enigme_situation_pro.situation_pro_id
+      WHERE etudiant.id = '.$etudiant->get_id().'
+      AND situation_pro.id = '.$situation_pro->get_id()
+    );
+    $db_req->execute();
+    $result = $db_req->fetchAll();
+    $score = 0;
+    if (!empty($result))
+    {
+      for ($x = 0; $x < count($result); ++$x)
+      {
+        $score += $result[$x]['score_max'];
+      }
+      return $score;
+    }
+    else { return 0; }
+  }
+  catch(PDOException $e) {
+    echo "Selection failed: " . $e->getMessage();
+    return false;
+  }
+}
+
 function get_score_from_etudiant_on_enigme($db, Etudiant $etudiant, Enigme $enigme)
 {
   try {
@@ -206,7 +266,9 @@ function get_score_from_etudiant_on_competence($db, Etudiant $etudiant, Competen
       }
       return create_score($score_tab);
     }
-    else { return false; }
+    else {
+      $array = ['points' => 0, 'tentatives' => 0, 'temps' => 0, 'aide' => 0];
+      return create_score($array); }
   }
   catch(PDOException $e) {
     echo "Selection failed: " . $e->getMessage();
@@ -240,7 +302,9 @@ function get_score_from_etudiant_on_situation_pro($db, Etudiant $etudiant, Situa
       }
       return create_score($score_tab);
     }
-    else { return false; }
+    else {
+      $array = ['points' => 0, 'tentatives' => 0, 'temps' => 0, 'aide' => 0];
+      return create_score($array); }
   }
   catch(PDOException $e) {
     echo "Selection failed: " . $e->getMessage();
