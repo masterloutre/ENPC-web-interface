@@ -4,6 +4,7 @@ include "../Global/connect.php";
 include "../Global/global.php";
 require_once "../Models/Etudiant.php";
 require_once "../Models/Enseignant.php";
+require_once "../Controllers/SessionController.php";
 
 function login()
 {
@@ -74,6 +75,7 @@ function login()
 function logout() {
   $_SESSION = array();
   session_destroy();
+  require('../Views/LoginView.php');
 }
 
 function sign_in()
@@ -83,16 +85,22 @@ function sign_in()
 
 function interface_etudiant()
 {
+  $content = [ 'title' => 'Interface Etudiant', 'user' => who_is_logged_in(), 'category' => 'Etudiant'];
+  require('../Views/HeaderView.php');
   require('../Views/InterfaceEtudiantView.php');
 }
 
 function interface_enseignant()
 {
+  $content = [ 'title' => 'Interface Enseignant', 'user' => who_is_logged_in(), 'category' => 'Enseignant'];
+  require('../Views/HeaderView.php');
   require('../Views/InterfaceEnseignantView.php');
 }
 
 function interface_admin()
 {
+  $content = [ 'title' => 'Interface Administrateur', 'user' => who_is_logged_in(), 'category' => 'Administrateur'];
+  require('../Views/HeaderView.php');
   require('../Views/InterfaceAdminView.php');
 }
 

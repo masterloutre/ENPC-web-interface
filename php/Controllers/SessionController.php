@@ -3,6 +3,8 @@
 include "../Global/global.php";
 require_once "../Models/Etudiant.php";
 require_once "../Models/Enseignant.php";
+require_once "../Controllers/EtudiantController.php";
+require_once "../Controllers/EnseignantController.php";
 
 function create_token($data) {
    $tokenGeneric = "EnPCMillén4aire";
@@ -35,7 +37,7 @@ function who_is_logged_in()
 
     if ($db_req->rowCount() > 0)
     {
-      $user = get_enseignant($result['id']);
+      $user = get_enseignant($db, $result[0]['id']);
       return $user;
     }
     else

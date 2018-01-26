@@ -1,0 +1,35 @@
+* {
+  font-family: 'Lato';
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  margin: 0;
+  padding: 10px 5px;
+  width: 100%;
+  height: auto;
+  background-color: black;
+  color: white;
+}
+
+header h1, header h2 {
+  padding-right: 10px;
+  display: inline;
+  margin: 0;
+}
+
+header a p, header a:visited {
+  padding-right: 70px;
+  display: inline;
+  float: right;
+  margin: 0;
+  color: white;
+}
+
+.upper {
+  text-transform: uppercase;
+}

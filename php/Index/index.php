@@ -1,6 +1,6 @@
 <?php
-require('../Controllers/FrontEndController.php');
-require('../Controllers/SessionController.php');
+require_once '../Controllers/FrontEndController.php';
+require_once '../Controllers/SessionController.php';
 start();
 if (isset($_GET['action'])) {
     if ($_GET['action'] == 'login') {
@@ -23,6 +23,9 @@ if (isset($_GET['action'])) {
       else {
         forbidden_access();
       }
+    }
+    else if ($_GET['action'] == 'logout') {
+      logout();
     }
 }
 else
