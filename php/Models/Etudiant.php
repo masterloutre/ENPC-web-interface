@@ -66,6 +66,12 @@ class Etudiant {
         $this->num_etud = $num_etud;
     }
     // Fin du multiplier--------------------------------
+    
+    public function get_vars(){
+        $object = get_object_vars($this);
+        unset($object['id']);
+        return $object;
+    }
 
     // Hydrate
     public function hydrate(array $donnees) {

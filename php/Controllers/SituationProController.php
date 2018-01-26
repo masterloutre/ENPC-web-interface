@@ -107,7 +107,7 @@ function get_situation_pro($db, $id){
     }
 }
 
-function get_all_situ_pro($db){
+function get_all_situation_pro($db){
     try{
         
         $bdd_req = $db->prepare('SELECT * FROM situation_pro');
