@@ -1,9 +1,9 @@
 <?php
-require("../Controllers/EtudiantController.php");
-require("../Controllers/EnseignantController.php");
-require("../Controllers/EnigmeController.php");
-require("../Controllers/LancementJeuController.php");
-require("../Controllers/SituationProController.php");
+require_once ("../Controllers/EtudiantController.php");
+require_once ("../Controllers/EnseignantController.php");
+require_once ("../Controllers/EnigmeController.php");
+require_once ("../Controllers/LancementJeuController.php");
+require_once ("../Controllers/SituationProController.php");
 ?>
 
 <!DOCTYPE html>
@@ -45,7 +45,7 @@ require("../Controllers/SituationProController.php");
            }
        </style>
    </head>
-   
+
     <body>
       <div class="wrapper">
        <?php
@@ -53,7 +53,7 @@ require("../Controllers/SituationProController.php");
                 header("Refresh:0; url=homeAdmin.php");
             }else{
                 if(!array_key_exists('id', $_GET)){ ?>
-        
+
                 <h1>Ajouter <?php echo $_GET['item']; ?></h1>
 
                 <?php $method = 'create_'.ucfirst($_GET['item']);
@@ -85,7 +85,7 @@ require("../Controllers/SituationProController.php");
                     unset($_GET['id']);
                     header("Refresh:0; url=listeAdmin.php?item=".$_GET['item']);
                 }
-                            
+
                 if($_GET['item'] == "enigme"){
                     $competence = $object->get_competence();
                 } ?>
@@ -104,11 +104,11 @@ require("../Controllers/SituationProController.php");
                     <input type="hidden" name="id" value="<?php echo $_GET['id']; ?>">
                     <input type="submit" value="Modifier">
                 </form>
-        
+
                 <?php } ?>
-                
+
                 <a class="button" href="listeAdmin.php?item=<?php echo $_GET['item']; ?>">Retour à la liste</a>
-                
+
         <?php } ?>
         </div>
     </body>

@@ -1,11 +1,11 @@
 <?php
 
 include "../Global/connect.php";
-require("../Controllers/EtudiantController.php");
-require("../Controllers/EnseignantController.php");
-require("../Controllers/EnigmeController.php");
-require("../Controllers/LancementJeuController.php");
-require("../Controllers/SituationProController.php");
+require_once ("../Controllers/EtudiantController.php");
+require_once ("../Controllers/EnseignantController.php");
+require_once ("../Controllers/EnigmeController.php");
+require_once ("../Controllers/LancementJeuController.php");
+require_once ("../Controllers/SituationProController.php");
 
 if(!array_key_exists('item', $_GET)){
     echo "erreur pas de clé item dans GET";
@@ -21,7 +21,7 @@ if(!array_key_exists('item', $_GET)){
             $competence = get_competence($db, $_POST['competence']);
             $object->set_competence($competence);
         }
-        
+
         $method = 'update_'.ucfirst($_GET['item']);
         $result = $method($db, $object);
 

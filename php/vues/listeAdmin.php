@@ -1,9 +1,9 @@
 <?php
-require("../Controllers/EtudiantController.php");
-require("../Controllers/EnseignantController.php");
-require("../Controllers/EnigmeController.php");
-require("../Controllers/LancementJeuController.php");
-require("../Controllers/SituationProController.php");
+require_once ("../Controllers/EtudiantController.php");
+require_once ("../Controllers/EnseignantController.php");
+require_once ("../Controllers/EnigmeController.php");
+require_once ("../Controllers/LancementJeuController.php");
+require_once ("../Controllers/SituationProController.php");
 ?>
 
 <!DOCTYPE html>
@@ -40,14 +40,14 @@ require("../Controllers/SituationProController.php");
            }
        </style>
    </head>
-   
+
     <body>
       <div class="wrapper">
        <?php
             if(!array_key_exists('item', $_GET)){
                 header("Refresh:0; url=homeAdmin.php");
             }else{ ?>
-        
+
             <h1>Catalogue <?php echo $_GET['item']; ?></h1>
             <a class="button" href="<?php echo 'formAdmin.php?item='.$_GET['item']; ?>">Ajouter <?php echo $_GET['item']; ?></a>
 
@@ -75,13 +75,13 @@ require("../Controllers/SituationProController.php");
                     <?php endforeach;
                     $modif_link = "formAdmin.php?item=".$_GET['item']."&id=".$id;
                     $delete_link = "delete.php?item=".$_GET['item']."&id=".$id; ?>
-                    
+
                     <td><a href="<?php echo $modif_link; ?>"><i class="fa fa-pencil"></i></a></td>
                     <td><a href="<?php echo $delete_link; ?>"><i class="fa fa-trash-o"></i></a></td>
                 </tr>
                 <?php endforeach; ?>
             </table>
-        
+
             <?php } ?>
         </div>
     </body>
