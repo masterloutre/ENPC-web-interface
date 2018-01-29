@@ -110,8 +110,6 @@ function get_situation_pro($db, $id){
     }
 }
 
-//select *
-//retourne un tableau d'etudiant
 function get_all_situation_pro($db){
     try{
 
