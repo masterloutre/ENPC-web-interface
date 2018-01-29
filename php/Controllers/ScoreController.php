@@ -160,15 +160,27 @@ function get_score_max_from_enigme($db, Enigme $enigme)
 function get_score_max_from_competence($db, Competence $competence, Etudiant $etudiant)
 {
   try {
-    $db_req = $db->prepare('SELECT score_max
-      FROM enigme
-      INNER JOIN competence ON enigme.competence_id = competence.id
-      INNER JOIN score ON score.enigme_id = enigme.id
-      INNER JOIN etudiant ON enigme.id = score.etudiant_id
-      WHERE etudiant.id = '.$etudiant->get_id().'
-      AND competence.id = '.$competence->get_id() );
-    $db_req->execute();
-    $result = $db_req->fetchAll();
+    if ($etudiant != NULL)
+    {
+      $db_req = $db->prepare('SELECT score_max
+        FROM enigme
+        INNER JOIN competence ON enigme.competence_id = competence.id
+        INNER JOIN score ON score.enigme_id = enigme.id
+        INNER JOIN etudiant ON enigme.id = score.etudiant_id
+        WHERE etudiant.id = '.$etudiant->get_id().' AND competence.id = '.$competence->get_id() );
+      $db_req->execute();
+      $result = $db_req->fetchAll();
+    }
+    else
+    {
+      $db_req = $db->prepare('SELECT score_max
+        FROM enigme
+        INNER JOIN competence ON enigme.competence_id = competence.id
+        WHERE etudiant.id = '.$etudiant->get_id().' AND competence.id = '.$competence->get_id() );
+      $db_req->execute();
+      $result = $db_req->fetchAll();
+    }
+
     $score = 0;
     if (!empty($result))
     {
