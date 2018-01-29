@@ -8,6 +8,8 @@ class Etudiant {
     prenom :    prénom de l'étudiant
     promo :     année d'utilisation du jeu
     num_etud :  identifiant de l'étudiant au sein de l'école
+    mdp :       mot de passe
+    token :     token de sécurité pour authentifier une session
     */
 
 
@@ -17,6 +19,8 @@ class Etudiant {
     private $prenom;
     private $promo;
     private $num_etud;
+    private $mdp;
+    private $token;
 
 
     // Construction de la classe
@@ -41,31 +45,53 @@ class Etudiant {
     public function set_nom($nom) {
         $this->nom = $nom;
     }
-    
+
     public function get_prenom(){
         return $this->prenom;
     }
-    
+
     public function set_prenom($prenom){
         $this->prenom = $prenom;
     }
-    
+
     public function get_promo(){
         return $this->promo;
     }
-    
+
     public function set_promo($promo){
         $this->promo = $promo;
     }
-    
+
     public function get_num_etud(){
         return $this->num_etud;
     }
-    
+
     public function set_num_etud($num_etud){
         $this->num_etud = $num_etud;
     }
+
+    public function get_mdp(){
+        return $this->mdp;
+    }
+
+    public function set_mdp($mdp){
+        $this->mdp = $mdp;
+    }
+
+    public function get_token(){
+        return $this->token;
+    }
+
+    public function set_token($token){
+        $this->token = $token;
+    }
     // Fin du multiplier--------------------------------
+    
+    public function get_vars(){
+        $object = get_object_vars($this);
+        unset($object['id']);
+        return $object;
+    }
 
     // Hydrate
     public function hydrate(array $donnees) {

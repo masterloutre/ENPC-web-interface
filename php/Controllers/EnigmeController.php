@@ -58,7 +58,7 @@ function delete_enigme($db, Enigme $enigme)
     try {
       $db_req = $db->prepare('DELETE
         FROM enigme
-        WHERE enigme.id = '.$id
+        WHERE enigme.id = '.$enigme->get_id()
         );
       $db_req->execute();
       return true;

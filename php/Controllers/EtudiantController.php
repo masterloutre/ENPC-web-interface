@@ -19,7 +19,8 @@ function add_etudiant($db, Etudiant $etudiant){
     }
 
     try{
-    $bdd_req = $db->prepare('INSERT INTO etudiant(nom, prenom, num_etud, promo, mdp) VALUES ("'.$etudiant->get_nom().'","'.$etudiant->get_prenom().'",'.$etudiant->get_num_etud().','.$etudiant->get_promo().',"test")');
+    $pass_hache = sha1('gz'.$etudiant->get_mdp());
+    $bdd_req = $db->prepare('INSERT INTO etudiant(nom, prenom, num_etud, promo, mdp) VALUES ("'.$etudiant->get_nom().'","'.$etudiant->get_prenom().'",'.$etudiant->get_num_etud().','.$etudiant->get_promo().', "'.$pass_hache.'")');
     $bdd_req->execute();
     }catch(PDOException $e){
         echo "ADD ETUDIANT FUNC ERROR : ".$e->getMessage();

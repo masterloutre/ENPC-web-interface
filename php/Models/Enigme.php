@@ -106,6 +106,13 @@ class Enigme {
         $this->competence = $competence;
     }
     // Fin du multiplier--------------------------------
+    
+    public function get_vars(){
+        $object = get_object_vars($this);
+        unset($object['id']);
+        unset($object['competence']);
+        return $object;
+    }
 
     // Hydrate
     public function hydrate(array $donnees) {
