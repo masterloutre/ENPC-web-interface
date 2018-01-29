@@ -4,6 +4,8 @@ include "../Global/connect.php";
 include "../Global/global.php";
 require_once "../Models/Competence.php";
 
+//var_dump(get_moyenne_score_from_competence($db, $competence2));
+
 function create_competence($array_competence)
 {
   return new Competence($array_competence);
@@ -22,7 +24,10 @@ function add_competence($db, Competence $competence)
       $competence->set_id($db->lastInsertId());
       return true;
     }
-    catch(PDOException $e) { echo "Insertion failed: " . $e->getMessage(); }
+    catch(PDOException $e) {
+      echo "Insertion failed: " . $e->getMessage();
+      return false;
+    }
   }
   else { return false; }
 }

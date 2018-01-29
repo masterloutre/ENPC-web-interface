@@ -3,14 +3,16 @@
 class SituationPro {
 
     /* SITUATION PRO
-    id :        int
+    id :       int
     nom :      nom de la situation professionnelle
+    ratio :    rapport de points (%)
     */
 
 
     // Ligne à multiplier selon le nombre d'attributs
     private $id;
     private $nom;
+    private $ratio;
 
 
     // Construction de la classe
@@ -34,6 +36,14 @@ class SituationPro {
 
     public function set_nom($nom) {
         $this->nom = $nom;
+    }
+
+    public function get_ratio() {
+        return $this->ratio;
+    }
+
+    public function set_ratio($ratio) {
+        $this->ratio = $ratio;
     }
     // Fin du multiplier--------------------------------
     
