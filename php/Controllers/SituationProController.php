@@ -154,7 +154,7 @@ function get_situation_pro_from_enigme($db, Enigme $enigme)
       }
       return $situation_pro_tab;
     }
-    else { return false; }
+    else { return $situation_pro_tab; }
   }
   catch(PDOException $e) {
     echo "Selection failed: " . $e->getMessage();

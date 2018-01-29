@@ -157,11 +157,9 @@ function get_score_max_from_enigme($db, Enigme $enigme)
   return create_score($score);
 }
 
-function get_score_max_from_competence($db, Competence $competence, Etudiant $etudiant)
+function get_score_max_from_competence_by_etudiant($db, Competence $competence, Etudiant $etudiant)
 {
   try {
-    if ($etudiant != NULL)
-    {
       $db_req = $db->prepare('SELECT score_max
         FROM enigme
         INNER JOIN competence ON enigme.competence_id = competence.id
@@ -170,16 +168,6 @@ function get_score_max_from_competence($db, Competence $competence, Etudiant $et
         WHERE etudiant.id = '.$etudiant->get_id().' AND competence.id = '.$competence->get_id() );
       $db_req->execute();
       $result = $db_req->fetchAll();
-    }
-    else
-    {
-      $db_req = $db->prepare('SELECT score_max
-        FROM enigme
-        INNER JOIN competence ON enigme.competence_id = competence.id
-        WHERE etudiant.id = '.$etudiant->get_id().' AND competence.id = '.$competence->get_id() );
-      $db_req->execute();
-      $result = $db_req->fetchAll();
-    }
 
     $score = 0;
     if (!empty($result))
@@ -198,7 +186,34 @@ function get_score_max_from_competence($db, Competence $competence, Etudiant $et
   }
 }
 
-function get_score_max_from_situation_pro($db, SituationPro $situation_pro, Etudiant $etudiant)
+function get_score_max_from_competence($db, Competence $competence)
+{
+  try {
+      $db_req = $db->prepare('SELECT score_max
+        FROM enigme
+        INNER JOIN competence ON enigme.competence_id = competence.id
+        WHERE competence.id = '.$competence->get_id() );
+      $db_req->execute();
+      $result = $db_req->fetchAll();
+
+    $score = 0;
+    if (!empty($result))
+    {
+      for ($x = 0; $x < count($result); ++$x)
+      {
+        $score += $result[$x]['score_max'];
+      }
+      return $score;
+    }
+    else { return 0; }
+  }
+  catch(PDOException $e) {
+    echo "Selection failed: " . $e->getMessage();
+    return false;
+  }
+}
+
+function get_score_max_from_situation_pro_by_etudiant($db, SituationPro $situation_pro, Etudiant $etudiant)
 {
   try {
     $db_req = $db->prepare('SELECT enigme.score_max, rel_enigme_situation_pro.ratio
@@ -208,6 +223,36 @@ function get_score_max_from_situation_pro($db, SituationPro $situation_pro, Etud
       INNER JOIN rel_enigme_situation_pro ON rel_enigme_situation_pro.enigme_id = enigme.id
       INNER JOIN situation_pro ON situation_pro.id = rel_enigme_situation_pro.situation_pro_id
       WHERE etudiant.id = '.$etudiant->get_id().' AND situation_pro.id = '.$situation_pro->get_id()
+    );
+    $db_req->execute();
+    $result = $db_req->fetchAll();
+
+    $score = 0;
+    if (!empty($result))
+    {
+      for ($x = 0; $x < count($result); ++$x)
+      {
+        $score += $result[$x]['score_max'] * $result[$x]['ratio'] / 100;
+      }
+      return $score;
+    }
+    else { return 0; }
+  }
+  catch(PDOException $e) {
+    echo "Selection failed: " . $e->getMessage();
+    return false;
+  }
+}
+
+function get_score_max_from_situation_pro($db, SituationPro $situation_pro)
+{
+  try {
+    $db_req = $db->prepare('SELECT enigme.score_max, rel_enigme_situation_pro.ratio
+      FROM enigme
+      INNER JOIN score ON score.enigme_id = enigme.id
+      INNER JOIN rel_enigme_situation_pro ON rel_enigme_situation_pro.enigme_id = enigme.id
+      INNER JOIN situation_pro ON situation_pro.id = rel_enigme_situation_pro.situation_pro_id
+      WHERE situation_pro.id = '.$situation_pro->get_id()
     );
     $db_req->execute();
     $result = $db_req->fetchAll();
@@ -349,7 +394,7 @@ function get_moyenne_score_from_enigme($db, Enigme $enigme)
       $score_tab["aide"] = round($score_tab["aide"] / count($result), 2);
       return create_score($score_tab);
     }
-    else { return false; }
+    else { return create_score($score_tab); }
   }
   catch(PDOException $e) {
     echo "Selection failed: " . $e->getMessage();
@@ -420,7 +465,7 @@ function get_moyenne_score_from_situation_pro($db, SituationPro $situation_pro)
       $score_tab["aide"] = round($score_tab["aide"] / count($result), 2);
       return create_score($score_tab);
     }
-    else { return false; }
+    else { return create_score($score_tab); }
   }
   catch(PDOException $e) {
     echo "Selection failed: " . $e->getMessage();
