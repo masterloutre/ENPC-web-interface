@@ -189,31 +189,23 @@ function get_score_max_from_competence($db, Competence $competence, Etudiant $et
 function get_score_max_from_situation_pro($db, SituationPro $situation_pro, Etudiant $etudiant)
 {
   try {
-    $db_req = $db->prepare('SELECT score_max
+    $db_req = $db->prepare('SELECT enigme.score_max, rel_enigme_situation_pro.ratio
       FROM enigme
       INNER JOIN score ON score.enigme_id = enigme.id
       INNER JOIN etudiant ON etudiant.id = score.etudiant_id
       INNER JOIN rel_enigme_situation_pro ON rel_enigme_situation_pro.enigme_id = enigme.id
       INNER JOIN situation_pro ON situation_pro.id = rel_enigme_situation_pro.situation_pro_id
-      WHERE etudiant.id = '.$etudiant->get_id()
+      WHERE etudiant.id = '.$etudiant->get_id().' AND situation_pro.id = '.$situation_pro->get_id()
     );
     $db_req->execute();
-    $result1 = $db_req->fetchAll();
-
-    $db_req = $db->prepare('SELECT ratio
-      FROM rel_enigme_situation_pro
-      INNER JOIN situation_pro ON situation_pro.id = rel_enigme_situation_pro.situation_pro_id
-      AND situation_pro.id = '.$situation_pro->get_id()
-    );
-    $db_req->execute();
-    $result2 = $db_req->fetchAll();
+    $result = $db_req->fetchAll();
 
     $score = 0;
     if (!empty($result))
     {
       for ($x = 0; $x < count($result); ++$x)
       {
-        $score += $result1[$x]['score_max'] * $result2[$x]['ratio'] / 100;
+        $score += $result[$x]['score_max'] * $result[$x]['ratio'] / 100;
       }
       return $score;
     }
@@ -287,14 +279,13 @@ function get_score_from_etudiant_on_competence($db, Etudiant $etudiant, Competen
 function get_score_from_etudiant_on_situation_pro($db, Etudiant $etudiant, SituationPro $situation_pro)
 {
   try {
-    $db_req = $db->prepare('SELECT score.id, points, tentatives, temps, aide
+    $db_req = $db->prepare('SELECT score.id, points, tentatives, temps, aide, rel_enigme_situation_pro.ratio
       FROM score
       INNER JOIN etudiant ON etudiant.id = score.etudiant_id
       INNER JOIN enigme ON enigme.id = score.enigme_id
       INNER JOIN rel_enigme_situation_pro ON rel_enigme_situation_pro.enigme_id = enigme.id
       INNER JOIN situation_pro ON situation_pro.id = rel_enigme_situation_pro.situation_pro_id
-      WHERE etudiant.id = '.$etudiant->get_id().'
-      AND situation_pro.id = '.$situation_pro->get_id()
+      WHERE etudiant.id = '.$etudiant->get_id().' AND situation_pro.id = '.$situation_pro->get_id()
     );
     $db_req->execute();
     $score_tab = ["points" => 0, "tentatives" => 0, "temps" => 0, "aide" => 0];
@@ -303,7 +294,7 @@ function get_score_from_etudiant_on_situation_pro($db, Etudiant $etudiant, Situa
     {
       for ($i = 0; $i < count($result); ++$i)
       {
-        $score_tab["points"] += $result[$i]["points"];
+        $score_tab["points"] += $result[$i]["points"] * $result[$i]["ratio"] / 100;
         $score_tab["tentatives"] += $result[$i]["tentatives"];
         $score_tab["temps"] += $result[$i]["temps"];
         $score_tab["aide"] += $result[$i]["aide"];
