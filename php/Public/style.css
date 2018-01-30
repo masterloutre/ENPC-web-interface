@@ -70,8 +70,11 @@ input{
    margin: 5px 0 20px;
    width: 300px;
    padding: 3px 0;
+    border-style: solid;
 }
 
-input[type='submit']{
-   border-style: solid;
+select{
+    display: block;
+    margin: 5px 0 20px;
+    padding: 3px 0;
 }
