@@ -235,3 +235,12 @@ h4 {
   border: solid 1px #580531;
   margin: 0 5px;
 }
+
+/*********************
+ *  TABLE ETUDIANTS  *
+ *********************/
+
+.tab-etudiants {
+  margin: 0 10%;
+  margin-bottom: 100px;
+}

@@ -1,3 +1,5 @@
+<section class="tab-etudiants">
+<h3>Détail par étudiant</h3>
 <table>
   <tr>
     <th>Etudiant</th>
@@ -18,3 +20,4 @@
   }
   ?>
 </table>
+</section>
