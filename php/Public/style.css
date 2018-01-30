@@ -1,3 +1,7 @@
+/************
+ *  HEADER  *
+ ************/
+
 * {
   font-family: 'Lato';
 }
@@ -10,10 +14,11 @@ html, body {
 header {
   margin: 0;
   padding: 10px 5px;
-  width: 100%;
+  max-width: 100%;
   height: auto;
-  background-color: black;
+  background-color: #3F8F90;
   color: white;
+
 }
 
 header h1, header h2 {
@@ -34,35 +39,114 @@ header a p, header a:visited {
   text-transform: uppercase;
 }
 
-table, th, td{
-   border: 1px solid black;
-   border-collapse: collapse;
-   padding: 10px 15px;
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  padding: 10px 15px;
 }
 
-th, td{
-    max-width: 160px;
+th, td {
+  max-width: 160px;
 }
 
-a{
-   text-decoration: none;
-   color: black;
+a {
+  text-decoration: none;
+  color: black;
 }
 
-a:visited{
-   color: black;
+a:visited {
+  color: black;
 }
 
-.button{
-   margin: 20px 0;
-   border: 1px solid black;
-   padding: 5px 10px;
-   display: inline-block;
+/***********
+ *  ADMIN  *
+ ***********/
+
+
+.button {
+  margin: 20px 0;
+  border: 1px solid black;
+  padding: 5px 10px;
+  display: inline-block;
 }
 
-.wrapper{
-   margin: 0 auto;
-   width: max-content;
+.wrapper {
+  margin: 0 auto;
+  width: max-content;
+}
+
+input {
+  display: block;
+  margin: 5px 0 20px;
+  width: 300px;
+  padding: 3px 0;
+}
+
+input[type='submit'] {
+  border-style: solid;
+}
+
+h3 {
+  font-size: 1.8em;
+}
+
+/*****************
+ *  COMPETENCES  *
+ *****************/
+
+.flex-container {
+  display: flex;
+}
+
+section {
+  margin: 50px 10%;
+}
+
+.competences .flex-container {
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.competence {
+  width: 45%;
+}
+
+.results {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+h4 {
+  font-size: 1.3em;
+  margin: 2px 0;
+}
+
+.competence .points-totaux {
+  min-width: 155px;
+  max-width: 30%;
+  display: inline-block;
+}
+
+.points {
+  margin: 0;
+}
+
+.points p {
+  display: inline-block;
+}
+
+.points .points-obtenu {
+  font-size: 4em;
+  margin: 0;
+}
+
+.points .points-max {
+  margin: 0;
+}
+
+.points-max {
+  opacity: 0.8;
 }
 
 input{
@@ -77,4 +161,100 @@ select{
     display: block;
     margin: 5px 0 20px;
     padding: 3px 0;
+}
+
+.situation-pro-container {
+  display: inline-block;
+  max-width: 65%;
+}
+
+.situation-pro {
+  padding: 10px 0;
+}
+
+.situation-pro .points {
+  padding: 5px 0;
+}
+
+.situation-pro .points-obtenu {
+  font-size: 1.3em;
+}
+
+.intitule {
+  margin: 0;
+}
+
+/*************
+ *  ENIGMES  *
+ *************/
+
+.enigme section {
+  height: auto;
+}
+
+.enigme .points-obtenu {
+  font-size: 2em;
+  display: inline-block;
+}
+
+.enigme .points-max {
+  font-size: 1.2em;
+  display: inline-block;
+}
+
+.enigme article {
+  background-color: #E6EDF3;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.enigme article .flex-container {
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+}
+
+.enigme .points-totaux {
+  width: 15%;
+}
+
+.enigme .competence-title {
+  font-size: 1em;
+}
+
+.enigme p, .enigme h5 {
+  margin: 10px 0;
+}
+
+.low-opacity {
+  opacity: 0.8;
+}
+
+.situation_pro_bar {
+  font-size: 0.8em;
+}
+
+.tentative-full-box {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background-color: #580531;
+  margin: 0 5px;
+}
+
+.tentative-empty-box {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border: solid 1px #580531;
+  margin: 0 5px;
+}
+
+/*********************
+ *  TABLE ETUDIANTS  *
+ *********************/
+
+.tab-etudiants {
+  margin: 0 10%;
+  margin-bottom: 100px;
 }
