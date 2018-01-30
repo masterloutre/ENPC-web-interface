@@ -1,4 +1,4 @@
-<section>
+<section class="container">
   <article class="competence1">
     <div class="points-totaux">
       <p class="points-obtenu">

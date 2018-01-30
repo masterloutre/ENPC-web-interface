@@ -1,5 +1,10 @@
+/************
+ *  HEADER  *
+ ************/
+
 * {
   font-family: 'Lato';
+  background-color: blue;
 }
 
 html, body {
@@ -75,3 +80,13 @@ input{
 input[type='submit']{
    border-style: solid;
 }
+
+
+/*****************
+ *  COMPETENCES  *
+ *****************/
+
+.container {
+   display: flex;
+   background-color: blue;
+ }
