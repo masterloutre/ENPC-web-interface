@@ -12,8 +12,14 @@ if (isset($_GET['action'])) {
           forbidden_access();
         }
     }
-    else if ($_GET['action'] == 'interface-enseignant') {
-        if (enseignant_logged_in()) { interface_enseignant(); }
+    else if ($_GET['action'] == 'interface-enseignant-enigme') {
+        if (enseignant_logged_in()) { interface_enseignant_enigme(); }
+        else {
+          forbidden_access();
+        }
+    }
+    else if ($_GET['action'] == 'interface-enseignant-competence') {
+        if (enseignant_logged_in()) { interface_enseignant_competence(); }
         else {
           forbidden_access();
         }

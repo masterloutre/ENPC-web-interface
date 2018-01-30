@@ -4,6 +4,7 @@
 require "../Global/connect.php";
 require "../Global/global.php";
 require_once "../Models/Enigme.php";
+require_once "../Models/Etudiant.php";
 require_once "../Models/Competence.php";
 
 function create_enigme($array_enigme)
@@ -118,6 +119,34 @@ function get_all_enigme($db)
     $db_req = $db->prepare('SELECT id, index_unity, type, nom, temps_max, difficulte, score_max, tentatives_max, competence_id
       FROM enigme
       ORDER BY id'
+      );
+    $db_req->execute();
+    $enigme_tab = [];
+    $result = $db_req->fetchAll();
+    if (!empty($result))
+    {
+      for ($i = 0; $i < count($result); ++$i)
+      {
+        $result[$i]["competence"] = get_competence($db, $result[$i]["competence_id"]);
+        $enigme_tab[] = create_enigme($result[$i]);
+      }
+      return $enigme_tab;
+    }
+    else { return false; }
+  }
+  catch(PDOException $e) {
+    echo "Selection failed: " . $e->getMessage();
+    return false;
+  }
+}
+
+function get_all_enigme_from_etudiant($db, Etudiant $etudiant)
+{
+  try {
+    $db_req = $db->prepare('SELECT enigme.id, index_unity, type, nom, temps_max, difficulte, score_max, tentatives_max, competence_id
+      FROM enigme
+      INNER JOIN score ON enigme.id = score.enigme_id
+      WHERE score.etudiant_id = '.$etudiant->get_id().' ORDER BY id'
       );
     $db_req->execute();
     $enigme_tab = [];
