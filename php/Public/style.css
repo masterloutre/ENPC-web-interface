@@ -33,3 +33,45 @@ header a p, header a:visited {
 .upper {
   text-transform: uppercase;
 }
+
+table, th, td{
+   border: 1px solid black;
+   border-collapse: collapse;
+   padding: 10px 15px;
+}
+
+th, td{
+    max-width: 160px;
+}
+
+a{
+   text-decoration: none;
+   color: black;
+}
+
+a:visited{
+   color: black;
+}
+
+.button{
+   margin: 20px 0;
+   border: 1px solid black;
+   padding: 5px 10px;
+   display: inline-block;
+}
+
+.wrapper{
+   margin: 0 auto;
+   width: max-content;
+}
+
+input{
+   display: block;
+   margin: 5px 0 20px;
+   width: 300px;
+   padding: 3px 0;
+}
+
+input[type='submit']{
+   border-style: solid;
+}

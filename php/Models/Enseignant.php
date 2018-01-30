@@ -90,6 +90,8 @@ class Enseignant {
         $object = get_object_vars($this);
         unset($object['admin']);
         unset($object['id']);
+        unset($object['mdp']);
+        unset($object['token']);
         return $object;
     }
 

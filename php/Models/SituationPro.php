@@ -50,6 +50,7 @@ class SituationPro {
     public function get_vars(){
         $object = get_object_vars($this);
         unset($object['id']);
+        unset($object['ratio']);
         return $object;
     }
 

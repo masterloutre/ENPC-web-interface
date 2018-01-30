@@ -1,6 +1,6 @@
 <?php
 
-require_once "connect.php";
+require "connect.php";
 require_once "../Models/Competence.php";
 require_once "../Models/SituationPro.php";
 require_once "../Controllers/CompetenceController.php";

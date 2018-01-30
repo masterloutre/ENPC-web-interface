@@ -1,6 +1,6 @@
 <?php
 
-include "../Global/global.php";
+require "../Global/global.php";
 require_once "../Models/Etudiant.php";
 require_once "../Models/Enseignant.php";
 require_once "../Controllers/EtudiantController.php";

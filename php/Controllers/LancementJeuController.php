@@ -1,6 +1,6 @@
 <?php
 
-include "../Global/connect.php";
+require "../Global/connect.php";
 require_once "../Models/LancementJeu.php";
 
 

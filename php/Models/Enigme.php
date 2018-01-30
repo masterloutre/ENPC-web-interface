@@ -110,7 +110,11 @@ class Enigme {
     public function get_vars(){
         $object = get_object_vars($this);
         unset($object['id']);
-        unset($object['competence']);
+        if($object['competence'] != NULL){
+            $object['competence'] = $object['competence']->get_nom();
+        }else{
+            unset($object['competence']);
+        }
         return $object;
     }
 

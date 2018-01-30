@@ -1,6 +1,6 @@
 <?php
 
-include "../Global/connect.php";
+require "../Global/connect.php";
 require_once ("../Controllers/EtudiantController.php");
 require_once ("../Controllers/EnseignantController.php");
 require_once ("../Controllers/EnigmeController.php");
@@ -15,7 +15,7 @@ if(!array_key_exists('item', $_GET)){
 
     if($object == NULL){
         //problème à la création
-        header("Refresh:0; url=listeAdmin.php?item=".$_GET['item']);
+        header("Refresh:0; url=../Index/index.php?action=interface-admin&vue=liste&item=".$_GET['item']);
     }else{
         if($_GET['item'] == 'enigme'){
             $competence = get_competence($db, $_POST['competence']);
@@ -25,7 +25,7 @@ if(!array_key_exists('item', $_GET)){
         $method = 'update_'.ucfirst($_GET['item']);
         $result = $method($db, $object);
 
-        header("Refresh:0; url=listeAdmin.php?item=".$_GET['item']);
+        header("Refresh:0; url=../Index/index.php?action=interface-admin&vue=liste&item=".$_GET['item']);
     }
 }
 

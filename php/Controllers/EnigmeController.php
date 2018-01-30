@@ -1,8 +1,8 @@
 <?php
 /* ENIGME */
 
-include "../Global/connect.php";
-include "../Global/global.php";
+require "../Global/connect.php";
+require "../Global/global.php";
 require_once "../Models/Enigme.php";
 require_once "../Models/Competence.php";
 

@@ -1,7 +1,8 @@
 <?php
 
-include "../Global/connect.php";
+require "../Global/connect.php";
 require_once "../Models/Enseignant.php";
+require_once "../Controllers/SessionController.php";
 
 
 function create_enseignant($arrayEnseignant){
@@ -15,8 +16,10 @@ function add_enseignant($db, Enseignant $enseignant){
     }
     
     try{
+        $pass_hache = sha1('gz'.$enseignant->get_mdp());
+        $enseignant->set_token(create_token($enseignant->get_login()));
         
-        $bdd_req = $db->prepare('INSERT INTO enseignant (nom, prenom, login, admin, mdp) VALUES ("'.$enseignant->get_nom().'", "'.$enseignant->get_prenom().'", "'.$enseignant->get_login().'", 0, "test")');
+        $bdd_req = $db->prepare('INSERT INTO enseignant (nom, prenom, login, mdp, token) VALUES ("'.$enseignant->get_nom().'", "'.$enseignant->get_prenom().'", "'.$enseignant->get_login().'", "'.$pass_hache.'", "'.$enseignant->get_token().'")');
         $bdd_req->execute();
         
     }catch(PDOException $e){
