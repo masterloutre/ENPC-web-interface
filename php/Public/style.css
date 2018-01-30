@@ -16,7 +16,7 @@ header {
   padding: 10px 5px;
   max-width: 100%;
   height: auto;
-  background-color: #3F8F90;
+  background-color: #54bfc4;
   color: white;
 
 }
@@ -65,8 +65,10 @@ a:visited {
 
 .button {
   margin: 20px 0;
-  border: 1px solid black;
-  padding: 5px 10px;
+  padding: 10px 15px;
+    border-radius: 5px;
+    color: #f2f2f2;
+    background-color: #6c488b;
   display: inline-block;
 }
 
@@ -88,6 +90,7 @@ input[type='submit'] {
 
 h3 {
   font-size: 1.8em;
+    color: #4f4f4f;
 }
 
 /*****************
@@ -120,6 +123,7 @@ section {
 h4 {
   font-size: 1.3em;
   margin: 2px 0;
+    color: #8c4e81;
 }
 
 .competence .points-totaux {
@@ -203,15 +207,18 @@ select{
 }
 
 .enigme article {
-  background-color: #E6EDF3;
-  padding: 10px;
+  background-color: #eee;
+  padding: 25px 30px 20px;
   border-radius: 8px;
+    color: #4f4f4f;
 }
 
 .enigme article .flex-container {
   flex-direction: row;
   flex-wrap: nowrap;
   justify-content: space-around;
+    align-items: center;
+    margin: 20px 0;
 }
 
 .enigme .points-totaux {
@@ -238,7 +245,7 @@ select{
   display: inline-block;
   width: 10px;
   height: 10px;
-  background-color: #580531;
+  background-color: #54bfc4;
   margin: 0 5px;
 }
 
@@ -246,7 +253,7 @@ select{
   display: inline-block;
   width: 8px;
   height: 8px;
-  border: solid 1px #580531;
+  border: solid 1px #8c4e81;
   margin: 0 5px;
 }
 

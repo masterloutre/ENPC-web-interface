@@ -1,4 +1,7 @@
 <div class="wrapper">
+ <h3>Résultats</h3>
+  <a class="button" href="index.php?action=interface-enseignant-competence">Vue par compétence</a>
+  <a class="button" href="index.php?action=interface-enseignant-enigme">Vue par enigme</a>
  <h3>Gestion des données</h3>
   <a class="button" href="index.php?action=interface-admin&vue=liste&item=enigme">Accéder aux énigmes</a>
   <a class="button" href="index.php?action=interface-admin&vue=liste&item=etudiant">Accéder aux étudiants</a>
