@@ -78,11 +78,13 @@ function login()
 function logout() {
   $_SESSION = array();
   session_destroy();
+  require('../Views/HeaderConnection.php');
   require('../Views/LoginView.php');
 }
 
 function sign_in()
 {
+  require('../Views/HeaderConnection.php');
   require('../Views/LoginView.php');
 }
 

@@ -59,6 +59,20 @@ a:visited {
 }
 
 /***********
+ *  LOGIN  *
+ ***********/
+
+.login {
+  width: 300px;
+  margin: auto;
+}
+
+.login input[name='login'], .login input[name='mdp'] {
+  border: none;
+  border-bottom: solid 1px grey;
+}
+
+/***********
  *  ADMIN  *
  ***********/
 

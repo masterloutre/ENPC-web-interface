@@ -2,8 +2,8 @@
 
 echo '<h3>requête de test de LDAP</h3>';
 echo 'Connexion ...';
-$ldap_host = 'ldap://trudaine-test.enpc-test.fr';
-$ldap_dn = "dc=enpc-test,dc=fr";
+$ldap_host = 'trudaine.enpc.fr';
+//$ldap_dn = "dc=enpc-test,dc=fr";
 $ds=ldap_connect($ldap_host);  // doit être un serveur LDAP valide !
 echo 'Le résultat de connexion est ' . $ds . '<br />';
 
