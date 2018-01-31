@@ -4,6 +4,20 @@ var temps_max = document.querySelector("input[name='temps_max']");
 var tentatives_max = document.querySelector("input[name='tentatives_max']");
 var submit_button = document.querySelector("input[type='submit']");
 
+var competences = document.querySelectorAll("input[type='radio']");
+var situPro = document.querySelectorAll("input[type='number']");
+var situProText = document.querySelectorAll("input[type='number'] + p");
+var situProValid = false;
+var checkedComp;
+
+for(var i=0; i<competences.length; i++){
+    if(competences[i].checked){
+        checkedComp = competences[i];
+    }
+}
+
+setSituPro();
+
 var regExpIndexU = /^\d{1,3}$/;
 var regExpDiff = /^[1-2-3]$/;
 var regExpTps = /^1?\d$/;
@@ -85,6 +99,74 @@ tentatives_max.addEventListener("input", function(){
     }
 });
 
+competences[0].addEventListener("click", function(){
+    checkedComp = this;
+    setSituPro();
+});
+
+competences[1].addEventListener("click", function(){
+    checkedComp = this;
+    setSituPro();
+});
+
+for(var i=0; i<situPro.length; i++){
+    situPro[i].addEventListener("input", function(){
+        situProValid = situProTest();
+        console.log("bool situPro : "+situProValid);
+    });
+}
+
+function setSituPro(){
+    if(checkedComp.value == 1){
+        for(var j=0; j<3; j++){
+            situPro[j].style = "display:inline;";
+            situProText[j].style = "display:inline-block;";
+        }
+        for(var j=3; j<6; j++){
+            situPro[j].style = "display:none;";
+            situProText[j].style = "display:none;";
+            if(situPro[j].value != 0){
+                situPro[j].value = 0;
+            }
+        }
+        
+    }else{
+        for(var j=0; j<3; j++){
+            situPro[j].style = "display:none;";
+            situProText[j].style = "display:none;";
+            if(situPro[j].value != 0){
+                situPro[j].value = 0;
+            }
+        }
+        for(var j=3; j<6; j++){
+            situPro[j].style = "display:inline;";
+            situProText[j].style = "display:inline-block;";
+        }
+    }
+}
+
+function situProTest(){
+    var somme = 0;
+    
+    if(checkedComp.value == 1){
+        for(var j=0; j<3; j++){
+            somme += parseInt(situPro[j].value);
+        }
+    }else{
+        for(var j=3; j<6; j++){
+            somme += parseInt(situPro[j].value);
+        }
+    }
+    
+    console.log("somme value : "+somme);
+    
+    if(somme == 100){
+        return true;
+    }else{
+        return false;
+    }
+}
+
 function dataValidTest(){
     var data_valid = true;
     
@@ -103,6 +185,8 @@ function dataValidTest(){
     if(tentatives_max.hasAttribute("data-valid")){
         data_valid = data_valid && JSON.parse(tentatives_max.getAttribute("data-valid"));
     }
+    
+    data_valid = data_valid && situProValid;
     
     return data_valid;
 }
