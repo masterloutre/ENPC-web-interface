@@ -57,6 +57,16 @@ function delete_enigme($db, Enigme $enigme)
   if(enigme_exists($db, $enigme))
   {
     try {
+        //delete score correspondant à l'enigme
+        $db_req = $db->prepare('DELETE
+        FROM score
+        WHERE enigme_id = '.$enigme->get_id()
+        );
+      $db_req->execute();
+        
+        delete_ratio_situation_pro_enigme($db, $enigme);
+        
+        //delete enigme
       $db_req = $db->prepare('DELETE
         FROM enigme
         WHERE enigme.id = '.$enigme->get_id()
@@ -166,6 +176,21 @@ function get_all_enigme_from_etudiant($db, Etudiant $etudiant)
     echo "Selection failed: " . $e->getMessage();
     return false;
   }
+}
+
+function delete_ratio_situation_pro_enigme($db, Enigme $enigme){
+    
+    try{
+        $db_req = $db->prepare('DELETE
+        FROM rel_enigme_situation_pro
+        WHERE enigme_id = '.$enigme->get_id()
+        );
+        $db_req->execute();
+    }
+    catch(PDOException $e) {
+        echo "Selection failed: " . $e->getMessage();
+        return false;
+    }
 }
 
  ?>

@@ -35,10 +35,22 @@ require_once ("../Controllers/SituationProController.php");
         <tr>
            <?php $id = $item->get_id();
           if($_GET['item'] == 'enseignant'){ $admin = $item->get_admin(); }
+          if($_GET['item'] == 'enigme'){ $situPro = get_situation_pro_from_enigme($db, $item); }
+          
             $item = $item->get_vars();
             foreach($item as $key => $value): ?>
 
-                <td><?php echo $value; ?></td>
+                <td>
+                    <?php echo $value; ?>
+                    <?php if($_GET['item'] == 'enigme' && $key == 'competence'){
+                    echo '<div class="situation_pro_bar"> <div class="flex-container">';
+                        for ($y = 0; $y < count($situPro); ++$y)
+                          {
+                            echo '<span data-size="'.$situPro[$y]->get_ratio().'"></span>';
+                          }
+                    echo '</div> </div>';
+                    } ?>
+                </td>
 
             <?php endforeach;
             $modif_link = "index.php?action=interface-admin&vue=form&item=".$_GET['item']."&id=".$id;
@@ -56,3 +68,5 @@ require_once ("../Controllers/SituationProController.php");
 
     <?php } ?>
 </div>
+
+<script src="../Public/ratio_situ_pro.js"></script>

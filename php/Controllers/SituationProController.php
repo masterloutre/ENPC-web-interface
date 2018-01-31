@@ -162,4 +162,17 @@ function get_situation_pro_from_enigme($db, Enigme $enigme)
   }
 }
 
+function add_ratio_situation_pro_enigme($db, $enigme_id, $situation_id, $ratio)
+{
+    try{
+        $db_req = $db->prepare('INSERT INTO `rel_enigme_situation_pro` (`enigme_id`, `situation_pro_id`, `ratio`) VALUES ('.$enigme_id.', '.$situation_id.', '.$ratio.')');
+        $db_req->execute();
+    }
+    catch(PDOException $e) {
+    echo "add ratio failed: " . $e->getMessage();
+    return false;
+  }
+    return 1;
+}
+
  ?>
