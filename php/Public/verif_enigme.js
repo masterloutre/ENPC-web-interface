@@ -112,7 +112,12 @@ competences[1].addEventListener("click", function(){
 for(var i=0; i<situPro.length; i++){
     situPro[i].addEventListener("input", function(){
         situProValid = situProTest();
-        console.log("bool situPro : "+situProValid);
+        if(!dataValidTest()){
+            submit_button.disabled = true;
+        }else{
+            submit_button.disabled = false;
+        }
+        //console.log("bool situPro : "+situProValid);
     });
 }
 
@@ -150,15 +155,15 @@ function situProTest(){
     
     if(checkedComp.value == 1){
         for(var j=0; j<3; j++){
-            somme += parseInt(situPro[j].value);
+            somme += Number(situPro[j].value);
         }
     }else{
         for(var j=3; j<6; j++){
-            somme += parseInt(situPro[j].value);
+            somme += Number(situPro[j].value);
         }
     }
     
-    console.log("somme value : "+somme);
+    //console.log("somme value : "+somme);
     
     if(somme == 100){
         return true;

@@ -82,6 +82,10 @@ table .fa-trash-o{
     color: red;
 }
 
+td .situation_pro_bar{
+    margin-top: 10px;
+}
+
 .button {
   margin: 20px 0;
   padding: 10px 15px;
