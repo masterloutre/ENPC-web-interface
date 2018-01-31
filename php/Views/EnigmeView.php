@@ -40,10 +40,18 @@
     </div>
   </div>
   <div class="situation_pro_bar">
-    <?php
+   <div class="flex-container">
+        <?php
+      for ($y = 0; $y < count($enigme['situations_pro']); ++$y)
+      {
+        echo '<span data-size="'.$enigme['situations_pro'][$y]->get_ratio().'"></span>';
+      }
+      ?>
+    </div>
+  <?php
   for ($y = 0; $y < count($enigme['situations_pro']); ++$y)
   {
-    echo ($enigme['situations_pro'][$y]->get_nom().' '.$enigme['situations_pro'][$y]->get_ratio().'%' );
+    echo $enigme['situations_pro'][$y]->get_nom().' | ';
   }
   ?>
   </div>

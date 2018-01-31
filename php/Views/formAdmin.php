@@ -1,4 +1,5 @@
 <?php
+require "../Global/global.php";
 require_once ("../Controllers/EtudiantController.php");
 require_once ("../Controllers/EnseignantController.php");
 require_once ("../Controllers/EnigmeController.php");
@@ -24,10 +25,19 @@ require_once ("../Controllers/SituationProController.php");
            <?php $empty = $empty->get_vars();
             foreach($empty as $key => $value): ?>
                 <label for="<?php echo $key; ?>"><?php echo $key; ?></label>
-                <input type="text" name="<?php echo $key; ?>">
+                <?php if($_GET['item'] == 'enigme' && $key == 'type'): ?>
+                    <select name="<?php echo $key; ?>">
+                        <option value="1">QCM</option>
+                        <option value="2">Input</option>
+                        <option value="3">Algo</option>
+                    </select>
+                <?php else : ?>
+                    <input type="text" name="<?php echo $key; ?>" required>
+                <?php endif; ?>
             <?php endforeach; ?>
             <?php if($_GET['item'] == 'enigme'): ?>
-                <input type="radio" name="competence" value="<?php echo $competence1->get_id(); ?>"> <?php echo $competence1->get_nom(); ?>
+               <label for="competence">Competence</label>
+                <input type="radio" name="competence" value="<?php echo $competence1->get_id(); ?>" checked> <?php echo $competence1->get_nom(); ?>
                 <input type="radio" name="competence" value="<?php echo $competence2->get_id(); ?>"> <?php echo $competence2->get_nom(); ?>
             <?php endif; ?>
             <input type="submit" value="Ajouter">
@@ -57,9 +67,18 @@ require_once ("../Controllers/SituationProController.php");
             }
             foreach($object as $key => $value): ?>
                 <label for="<?php echo $key; ?>"><?php echo $key; ?></label>
-                <input type="text" name="<?php echo $key; ?>" value="<?php echo $value; ?>">
+                <?php if($_GET['item'] == 'enigme' && $key == 'type'): ?>
+                    <select name="<?php echo $key; ?>">
+                        <option value="1" <?php if($value == "QCM"){echo "selected";}?> >QCM</option>
+                        <option value="2" <?php if($value == "Input"){echo "selected";}?> >Input</option>
+                        <option value="3" <?php if($value == "Algo"){echo "selected";}?> >Algo</option>
+                    </select>
+                <?php else : ?>
+                    <input type="text" name="<?php echo $key; ?>" value="<?php echo $value; ?>" required>
+                <?php endif; ?>
             <?php endforeach; ?>
             <?php if($_GET['item'] == 'enigme'): ?>
+               <label for="competence">Competence</label>
                 <input type="radio" name="competence" value="<?php echo $competence1->get_id(); ?>"<?php if($competence == $competence1){echo "checked";} ?>> <?php echo $competence1->get_nom(); ?>
                 <input type="radio" name="competence" value="<?php echo $competence2->get_id(); ?>"<?php if($competence == $competence2){echo "checked";} ?>> <?php echo $competence2->get_nom(); ?>
             <?php endif; ?>
@@ -70,6 +89,8 @@ require_once ("../Controllers/SituationProController.php");
         <?php } ?>
 
         <a class="button" href="index.php?action=interface-admin&vue=liste&item=<?php echo $_GET['item']; ?>">Retour à la liste</a>
+        
+        <script src="../Public/verif_<?php echo $_GET['item']; ?>.js"></script>
 
 <?php } ?>
 </div>

@@ -9,3 +9,5 @@
     }
     ?>
 </section>
+
+<script src="../Public/ratio_situ_pro.js"></script>
