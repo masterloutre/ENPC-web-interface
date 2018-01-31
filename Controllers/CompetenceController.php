@@ -1,8 +1,8 @@
 <?php
 
-require "../Global/connect.php";
-require "../Global/global.php";
-require_once "../Models/Competence.php";
+require "./Global/connect.php";
+require "./Global/global.php";
+require_once "./Models/Competence.php";
 
 //var_dump(get_moyenne_score_from_competence($db, $competence2));
 

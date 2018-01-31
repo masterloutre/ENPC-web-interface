@@ -1,10 +1,10 @@
 <?php
 
-require "../Global/connect.php";
-require "../Global/global.php";
-require_once "../Models/Score.php";
-require_once "../Models/Enigme.php";
-require_once "../Models/Competence.php";
+require "./Global/connect.php";
+require "./Global/global.php";
+require_once "./Models/Score.php";
+require_once "./Models/Enigme.php";
+require_once "./Models/Competence.php";
 
 function create_score($array_score)
 {

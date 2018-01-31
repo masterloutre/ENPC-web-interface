@@ -16,7 +16,7 @@
   for ($x =0; $x < count($content['etudiants']); ++$x)
   {
     $etudiant = $content['etudiants'][$x];
-    require "../Views/EtudiantTabLineView.php";
+    require "./Views/EtudiantTabLineView.php";
   }
   ?>
 </table>

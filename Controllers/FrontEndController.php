@@ -1,17 +1,17 @@
 <?php
 
-require "../Global/connect.php";
-require "../Global/global.php";
-require_once "../Models/Etudiant.php";
-require_once "../Models/Enseignant.php";
-require_once "../Controllers/SessionController.php";
-require_once "../Controllers/ScoreController.php";
-require_once "../Controllers/EtudiantController.php";
-require_once "../Controllers/EnigmeController.php";
+require "./Global/connect.php";
+require "./Global/global.php";
+require_once "./Models/Etudiant.php";
+require_once "./Models/Enseignant.php";
+require_once "./Controllers/SessionController.php";
+require_once "./Controllers/ScoreController.php";
+require_once "./Controllers/EtudiantController.php";
+require_once "./Controllers/EnigmeController.php";
 
 function login()
 {
-  include "../Global/connect.php";
+  include "./Global/connect.php";
 
   if (isset($_POST["mdp"]) && isset($_POST["login"]))
   {
@@ -78,20 +78,20 @@ function login()
 function logout() {
   $_SESSION = array();
   session_destroy();
-  require('../Views/HeaderConnection.php');
-  require('../Views/LoginView.php');
+  require('./Views/HeaderConnection.php');
+  require('./Views/LoginView.php');
 }
 
 function sign_in()
 {
-  require('../Views/HeaderConnection.php');
-  require('../Views/LoginView.php');
+  require('./Views/HeaderConnection.php');
+  require('./Views/LoginView.php');
 }
 
 function interface_etudiant()
 {
-  include "../Global/connect.php";
-  include "../Global/global.php";
+  include "./Global/connect.php";
+  include "./Global/global.php";
   $etudiant = who_is_logged_in();
   $enigmes = get_all_enigme_from_etudiant($db, $etudiant);
   $enigmes_tab = [];
@@ -134,15 +134,16 @@ function interface_etudiant()
                'enigmes' => $enigmes_tab
 
             ];
-  require('../Views/HeaderView.php');
-  require('../Views/CompetencesView.php');
-  require('../Views/EnigmesView.php');
+  require('./Views/HeaderView.php');
+  require('./Views/CompetencesView.php');
+  require('./Views/EnigmesView.php');
+  echo '<script src="./Public/js/ratio_situ_pro.js"></script>';
 }
 
 function interface_enseignant_competence()
 {
-  include "../Global/connect.php";
-  include "../Global/global.php";
+  include "./Global/connect.php";
+  include "./Global/global.php";
 
   $etudiants = get_all_etudiant($db);
   $etudiants_tab = [];
@@ -184,16 +185,16 @@ function interface_enseignant_competence()
 
                'etudiants' => $etudiants_tab
             ];
-  require('../Views/HeaderView.php');
-  require('../Views/EnseignantMenuView.php');
-  require('../Views/CompetencesView.php');
-  require('../Views/EtudiantsTabView.php');
+  require('./Views/HeaderView.php');
+  require('./Views/EnseignantMenuView.php');
+  require('./Views/CompetencesView.php');
+  require('./Views/EtudiantsTabView.php');
 }
 
 function interface_enseignant_enigme()
 {
-  include "../Global/connect.php";
-  include "../Global/global.php";
+  include "./Global/connect.php";
+  include "./Global/global.php";
 
   $enigmes = get_all_enigme($db);
   $enigmes_tab = [];
@@ -217,24 +218,26 @@ function interface_enseignant_enigme()
   $content = [ 'title' => 'Interface Enseignant', 'user' => who_is_logged_in(), 'category' => 'Enseignant',
               'enigmes' => $enigmes_tab
             ];
-  require('../Views/HeaderView.php');
-  require('../Views/EnseignantMenuView.php');
-  require('../Views/EnigmesView.php');
+  require('./Views/HeaderView.php');
+  require('./Views/EnseignantMenuView.php');
+  require('./Views/EnigmesView.php');
+  echo '<script src="./Public/js/ratio_situ_pro.js"></script>';
 }
 
 function interface_admin()
 {
   $content = [ 'title' => 'Interface Administrateur', 'user' => who_is_logged_in(), 'category' => 'Administrateur'];
-  require('../Views/HeaderView.php');
-  require('../Views/InterfaceAdminView.php');
+  require('./Views/HeaderView.php');
+  require('./Views/InterfaceAdminView.php');
     if(array_key_exists('vue', $_GET)){
-        require('../Views/'.$_GET['vue'].'Admin.php');
+        require('./Views/'.$_GET['vue'].'Admin.php');
     }else{
-        require('../Views/homeAdmin.php');
+        require('./Views/homeAdmin.php');
     }
+  echo '<script src="./Public/js/ratio_situ_pro.js"></script>';
 }
 
 function forbidden_access()
 {
-  require('../Views/ForbiddenAccessView.php');
+  require('./Views/ForbiddenAccessView.php');
 }

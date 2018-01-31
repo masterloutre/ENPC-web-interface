@@ -1,11 +1,11 @@
 <?php
 /* ENIGME */
 
-require "../Global/connect.php";
-require "../Global/global.php";
-require_once "../Models/Enigme.php";
-require_once "../Models/Etudiant.php";
-require_once "../Models/Competence.php";
+require "./Global/connect.php";
+require "./Global/global.php";
+require_once "./Models/Enigme.php";
+require_once "./Models/Etudiant.php";
+require_once "./Models/Competence.php";
 
 function create_enigme($array_enigme)
 {
@@ -63,9 +63,9 @@ function delete_enigme($db, Enigme $enigme)
         WHERE enigme_id = '.$enigme->get_id()
         );
       $db_req->execute();
-        
+
         delete_ratio_situation_pro_enigme($db, $enigme);
-        
+
         //delete enigme
       $db_req = $db->prepare('DELETE
         FROM enigme
@@ -179,7 +179,7 @@ function get_all_enigme_from_etudiant($db, Etudiant $etudiant)
 }
 
 function delete_ratio_situation_pro_enigme($db, Enigme $enigme){
-    
+
     try{
         $db_req = $db->prepare('DELETE
         FROM rel_enigme_situation_pro

@@ -1,9 +1,9 @@
 <?php
-require_once ("../Controllers/EtudiantController.php");
-require_once ("../Controllers/EnseignantController.php");
-require_once ("../Controllers/EnigmeController.php");
-require_once ("../Controllers/LancementJeuController.php");
-require_once ("../Controllers/SituationProController.php");
+require_once ("./Controllers/EtudiantController.php");
+require_once ("./Controllers/EnseignantController.php");
+require_once ("./Controllers/EnigmeController.php");
+require_once ("./Controllers/LancementJeuController.php");
+require_once ("./Controllers/SituationProController.php");
 ?>
 
 
@@ -15,7 +15,7 @@ require_once ("../Controllers/SituationProController.php");
 
     <h3>Catalogue <?php echo $_GET['item']; ?></h3>
     <a class="button" href="<?php echo 'index.php?action=interface-admin&vue=form&item='.$_GET['item']; ?>">Ajouter <?php echo $_GET['item']; ?></a>
-    
+
     <a class="button" href="index.php?action=interface-admin">Modifier une autre liste</a>
 
     <?php $method = 'get_all_'.ucfirst($_GET['item']);
@@ -36,7 +36,7 @@ require_once ("../Controllers/SituationProController.php");
            <?php $id = $item->get_id();
           if($_GET['item'] == 'enseignant'){ $admin = $item->get_admin(); }
           if($_GET['item'] == 'enigme'){ $situPro = get_situation_pro_from_enigme($db, $item); }
-          
+
             $item = $item->get_vars();
             foreach($item as $key => $value): ?>
 
@@ -54,7 +54,7 @@ require_once ("../Controllers/SituationProController.php");
 
             <?php endforeach;
             $modif_link = "index.php?action=interface-admin&vue=form&item=".$_GET['item']."&id=".$id;
-            $delete_link = "../Views/delete.php?item=".$_GET['item']."&id=".$id; ?>
+            $delete_link = "./Views/delete.php?item=".$_GET['item']."&id=".$id; ?>
 
             <td><a href="<?php echo $modif_link; ?>"><i class="fa fa-pencil"></i></a></td>
                 <td>
@@ -68,5 +68,3 @@ require_once ("../Controllers/SituationProController.php");
 
     <?php } ?>
 </div>
-
-<script src="../Public/ratio_situ_pro.js"></script>

@@ -2,7 +2,8 @@
 
 include "../Global/connect.php";
 
-  $json_data = json_decode(file_get_contents('php://input'), true);
+  $json_raw = $_POST;
+  $json_data = json_decode(file_get_contents($json_raw), true);
   if (isset($json_data))
   {
     $mdp = $json_data['mdp'];

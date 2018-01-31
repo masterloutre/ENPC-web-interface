@@ -1,8 +1,8 @@
 <?php
 
-require "../Global/connect.php";
-require_once "../Models/SituationPro.php";
-require_once "../Models/Enigme.php";
+require "./Global/connect.php";
+require_once "./Models/SituationPro.php";
+require_once "./Models/Enigme.php";
 
 /*****
 FUNCTION

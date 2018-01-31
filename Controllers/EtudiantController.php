@@ -1,8 +1,8 @@
 <?php
 
-require "../Global/connect.php";
-require_once "../Models/Etudiant.php";
-require_once "../Controllers/SessionController.php";
+require "./Global/connect.php";
+require_once "./Models/Etudiant.php";
+require_once "./Controllers/SessionController.php";
 
 /*****
 FUNCTION
@@ -22,7 +22,7 @@ function add_etudiant($db, Etudiant $etudiant){
     try{
     $pass_hache = sha1('gz'.$etudiant->get_mdp());
     $etudiant->set_token(create_token($etudiant->get_num_etud()));
-        
+
     $bdd_req = $db->prepare('INSERT INTO etudiant(nom, prenom, num_etud, promo, mdp, token) VALUES ("'.$etudiant->get_nom().'","'.$etudiant->get_prenom().'",'.$etudiant->get_num_etud().','.$etudiant->get_promo().', "'.$pass_hache.'", "'.$etudiant->get_token().'")');
     $bdd_req->execute();
     }catch(PDOException $e){

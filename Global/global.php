@@ -1,10 +1,10 @@
 <?php
 
 require "connect.php";
-require_once "../Models/Competence.php";
-require_once "../Models/SituationPro.php";
-require_once "../Controllers/CompetenceController.php";
-require_once "../Controllers/SituationProController.php";
+require_once "./Models/Competence.php";
+require_once "./Models/SituationPro.php";
+require_once "./Controllers/CompetenceController.php";
+require_once "./Controllers/SituationProController.php";
 
 $competence1 = get_competence($db, 1);
 $competence2 = get_competence($db, 2);
