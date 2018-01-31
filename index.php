@@ -1,6 +1,7 @@
 <?php
 require_once './Controllers/FrontEndController.php';
 require_once './Controllers/SessionController.php';
+
 start();
 if (isset($_GET['action'])) {
     if ($_GET['action'] == 'login') {
