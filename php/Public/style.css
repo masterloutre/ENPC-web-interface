@@ -39,16 +39,6 @@ header a p, header a:visited {
   text-transform: uppercase;
 }
 
-table, th, td {
-  border: 1px solid black;
-  border-collapse: collapse;
-  padding: 10px 15px;
-}
-
-th, td {
-  max-width: 160px;
-}
-
 a {
   text-decoration: none;
   color: black;
@@ -76,6 +66,35 @@ a:visited {
  *  ADMIN  *
  ***********/
 
+table, th, td {
+  border: 1px solid #4f4f4f;
+  border-collapse: collapse;
+  padding: 18px;
+}
+
+th, td {
+  max-width: 160px;
+    min-width: 85px;
+    text-align: center;
+}
+
+th{
+    text-transform: capitalize;
+    background-color: #54bfc4;
+    color: #fff;
+}
+
+tr:nth-of-type(2n){
+    background-color: #f2f2f2;
+}
+
+table .fa-pencil{
+    color: #6c488b;
+}
+
+table .fa-trash-o{
+    color: red;
+}
 
 .button {
   margin: 20px 0;
@@ -85,6 +104,9 @@ a:visited {
     background-color: #6c488b;
   display: inline-block;
 }
+.button:visited{
+    color: #f2f2f2;
+}
 
 .wrapper {
   margin: 0 auto;
@@ -93,13 +115,50 @@ a:visited {
 
 input {
   display: block;
-  margin: 5px 0 20px;
   width: 300px;
-  padding: 3px 0;
+  padding: 6px 0px 6px 10px;
+    border-style: solid;
+    border-color: #4f4f4f;
 }
 
 input[type='submit'] {
-  border-style: solid;
+  color: #fff;
+    background-color: #54bfc4;
+    border-color: #54bfc4;
+}
+
+input[type='radio'], input[type='number']{
+    display: inline;
+    width: auto;
+    margin: 0 10px;
+    vertical-align: super;
+}
+
+label{
+    text-transform: capitalize;
+    margin-bottom: 7px;
+    display: block;
+}
+
+select{
+    display: block;
+    padding: 8px 10px;
+    border-width: 2px;
+    border-color: #4f4f4f;
+}
+
+form{
+    color: #4f4f4f;
+}
+
+form div{
+    margin: 30px 0;
+    max-width: 300px;
+}
+
+form p{
+    max-width: 260px;
+    display: inline-block;
 }
 
 h3 {
@@ -165,20 +224,6 @@ h4 {
 
 .points-max {
   opacity: 0.8;
-}
-
-input{
-   display: block;
-   margin: 5px 0 20px;
-   width: 300px;
-   padding: 3px 0;
-    border-style: solid;
-}
-
-select{
-    display: block;
-    margin: 5px 0 20px;
-    padding: 3px 0;
 }
 
 .situation-pro-container {
