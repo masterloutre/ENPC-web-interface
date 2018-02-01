@@ -9,6 +9,7 @@ require_once ("./Controllers/SituationProController.php");
 
 if(!array_key_exists('item', $_GET)){
     echo "erreur pas de clé item dans GET";
+    header("Refresh:0; url=./index.php?action=interface-admin");
 }else{
     if($_GET['item'] == 'enigme'){
         //récupère les ratio des situations pro
@@ -24,7 +25,7 @@ if(!array_key_exists('item', $_GET)){
 
     if($object == NULL){
         //problème à la création
-        header("Refresh:0; url=./Index/index.php?action=interface-admin&vue=liste&item=".$_GET['item']);
+        header("Refresh:0; url=./index.php?action=interface-admin&vue=liste&item=".$_GET['item']);
     }else{
         if($_GET['item'] == 'enigme'){
             $competence = get_competence($db, $_POST['competence']);
@@ -47,7 +48,7 @@ if(!array_key_exists('item', $_GET)){
             }
         }
 
-        header("Refresh:0; url=./Index/index.php?action=interface-admin&vue=liste&item=".$_GET['item']);
+        header("Refresh:0; url=./index.php?action=interface-admin&vue=liste&item=".$_GET['item']);
     }
 }
 

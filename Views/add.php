@@ -7,8 +7,11 @@ require_once("./Controllers/EnigmeController.php");
 require_once("./Controllers/LancementJeuController.php");
 require_once("./Controllers/SituationProController.php");
 
+//echo "OH TU MARCHES ?";
+
 if(!array_key_exists('item', $_GET)){
-    echo "erreur pas de clé item dans GET";
+    //echo "erreur pas de clé item dans GET";
+    header("Refresh:0; url=./index.php?action=interface-admin");
 }else{
     if($_GET['item'] == 'enigme'){
         //récupère les ratio des situations pro
@@ -21,10 +24,12 @@ if(!array_key_exists('item', $_GET)){
 
     $method = 'create_'.ucfirst($_GET['item']);
     $object = $method($_POST);
+    
+    //var_dump($object);
 
     if($object == NULL){
         //problème à la création
-        header("Refresh:0; url=./Index/index.php?action=interface-admin&vue=liste&item=".$_GET['item']);
+        header("Refresh:0; url=./index.php?action=interface-admin&vue=liste&item=".$_GET['item']);
     }else{
         if($_GET['item'] == 'enigme'){
             $competence = get_competence($db, $_POST['competence']);
@@ -46,8 +51,9 @@ if(!array_key_exists('item', $_GET)){
                 }
             }
         }
-
-        header("Refresh:0; url=./Index/index.php?action=interface-admin&vue=liste&item=".$_GET['item']);
+        
+        //echo "Bonjour";
+        header("Refresh:0; url=./index.php?action=interface-admin&vue=liste&item=".$_GET['item']);
     }
 }
 

@@ -5,7 +5,7 @@ colornb = 0;
 
 for(var i=0; i<container.length; i++){
     var spanRatio = container[i].childNodes[1].childNodes;
-    console.log(spanRatio);
+    //console.log(spanRatio);
     for(var j=0; j<spanRatio.length; j++){
         if(spanRatio[j].localName == "span"){
             if(spanRatio[j].hasAttribute("data-size")){
