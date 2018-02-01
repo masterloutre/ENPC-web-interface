@@ -7,7 +7,7 @@ require_once("./Controllers/EnigmeController.php");
 require_once("./Controllers/LancementJeuController.php");
 require_once("./Controllers/SituationProController.php");
 
-//echo "OH TU MARCHES ?";
+echo "OH TU MARCHES ?";
 
 if(!array_key_exists('item', $_GET)){
     //echo "erreur pas de clé item dans GET";
@@ -24,7 +24,7 @@ if(!array_key_exists('item', $_GET)){
 
     $method = 'create_'.ucfirst($_GET['item']);
     $object = $method($_POST);
-    
+
     //var_dump($object);
 
     if($object == NULL){
@@ -51,7 +51,7 @@ if(!array_key_exists('item', $_GET)){
                 }
             }
         }
-        
+
         //echo "Bonjour";
         header("Refresh:0; url=./index.php?action=interface-admin&vue=liste&item=".$_GET['item']);
     }

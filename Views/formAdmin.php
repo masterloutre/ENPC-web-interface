@@ -21,7 +21,8 @@ require_once ("./Controllers/SituationProController.php");
         //var_dump($empty); ?>
 
         <!-- AJOUT -->
-        <form action="./Views/add.php?item=<?php echo $_GET['item']; ?>" method="POST">
+        <!--<form action="./Views/add.php?item=<?php echo $_GET['item']; ?>" method="POST">-->
+        <form action="./index.php?action=interface-admin&admin=add&item=<?php echo $_GET['item']; ?>" method="POST">
            <?php $empty = $empty->get_vars();
                if($_GET['item'] == 'enigme'){
                    unset($empty['score_max']);
@@ -98,7 +99,7 @@ require_once ("./Controllers/SituationProController.php");
         } ?>
 
         <!-- MODIF -->
-        <form action="./Views/update.php?item=<?php echo $_GET['item']; ?>" method="POST">
+        <form action="./index.php?action=interface-admin&admin=update&item=<?php echo $_GET['item']; ?>" method="POST">
            <?php $object = $object->get_vars();
                 if($_GET['item'] == 'enigme'){
                     unset($object['competence']);
@@ -198,7 +199,7 @@ require_once ("./Controllers/SituationProController.php");
 
         <a class="button" href="index.php?action=interface-admin&vue=liste&item=<?php echo $_GET['item']; ?>">Retour à la liste</a>
 
-        <script src="./Public/verif_<?php echo $_GET['item']; ?>.js"></script>
+        <script src="./Public/js/verif_<?php echo $_GET['item']; ?>.js"></script>
 
 <?php } ?>
 </div>

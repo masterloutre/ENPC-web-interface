@@ -227,7 +227,7 @@ function interface_enseignant_enigme()
 function interface_admin()
 {
   $content = [ 'title' => 'Interface Administrateur', 'user' => who_is_logged_in(), 'category' => 'Administrateur'];
-  require('./Views/HeaderView.php');
+  require('./Views/AdminReturnView.php');
     if(array_key_exists('vue', $_GET)){
         require('./Views/'.$_GET['vue'].'Admin.php');
     }else{
@@ -239,4 +239,19 @@ function interface_admin()
 function forbidden_access()
 {
   require('./Views/ForbiddenAccessView.php');
+}
+
+function admin_add()
+{
+  require('./Views/add.php');
+}
+
+function admin_delete()
+{
+  require('./Views/delete.php');
+}
+
+function admin_update()
+{
+  require('./Views/update.php');
 }

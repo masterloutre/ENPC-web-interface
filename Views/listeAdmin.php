@@ -54,7 +54,7 @@ require_once ("./Controllers/SituationProController.php");
 
             <?php endforeach;
             $modif_link = "index.php?action=interface-admin&vue=form&item=".$_GET['item']."&id=".$id;
-            $delete_link = "./Views/delete.php?item=".$_GET['item']."&id=".$id; ?>
+            $delete_link = "./index.php?action=interface-admin&admin=delete&item=".$_GET['item']."&id=".$id; ?>
 
             <td><a href="<?php echo $modif_link; ?>"><i class="fa fa-pencil"></i></a></td>
                 <td>

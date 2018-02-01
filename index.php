@@ -26,7 +26,24 @@ if (isset($_GET['action'])) {
         }
     }
     else if ($_GET['action'] == 'interface-admin') {
-      if (admin_logged_in()) { interface_admin(); }
+      if (admin_logged_in()) {
+        if (isset($_GET['admin']) && $_GET['admin'] == 'add')
+        {
+          admin_add();
+        }
+        else if (isset($_GET['admin']) && $_GET['admin'] == 'delete')
+        {
+          admin_delete();
+        }
+        else if (isset($_GET['admin']) && $_GET['admin'] == 'update')
+        {
+          admin_update();
+        }
+        else
+        {
+          interface_admin();
+        }
+      }
       else {
         forbidden_access();
       }
