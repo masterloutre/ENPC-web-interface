@@ -7,6 +7,7 @@
   <title>Connexion</title>
   <link rel="stylesheet" href="./Public/css/font-awesome.css">
   <link rel="stylesheet" href="./Public/css/style.css">
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
 </head>
 <body>
 

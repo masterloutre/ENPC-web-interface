@@ -2,9 +2,10 @@
 
 include "../Global/connect.php";
 
-  $json_raw = $_POST;
-  $json_data = json_decode(file_get_contents($json_raw), true);
-  if (isset($json_data))
+  $json_raw = file_get_contents($json_raw);
+  $json_data = json_decode($json_raw, true);
+
+  if (isset($json_data['mdp']))
   {
     $mdp = $json_data['mdp'];
     try {
@@ -19,22 +20,22 @@ include "../Global/connect.php";
       {
         if ($result[0]['mdp'] == $mdp)
         {
-          echo 1;
+          echo "Mot de passe correct";
         }
         else
         {
-          echo 0;
+          echo "Mot de passe incorrect";
         }
       }
       else {
-        echo 0;
+        echo "Problème de bdd 1";
       }
     }
     catch(PDOException $e) {
-      echo 0;
+      echo "Problème de bdd 2";
     }
   }
   else
   {
-    return -1;
+    echo "Le serveur n'a pas pu interpréter les données envoyées";
   }

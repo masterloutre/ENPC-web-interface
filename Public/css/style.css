@@ -3,7 +3,7 @@
  ************/
 
 * {
-  font-family: 'Lato';
+  font-family: 'Lato', sans-serif;
 }
 
 html, body {
@@ -327,4 +327,12 @@ h4 {
 .tab-etudiants {
   margin: 0 10%;
   margin-bottom: 100px;
+}
+
+.tab-etudiants table, th, td {
+  border: 1px solid white;
+}
+
+.tab-etudiant td {
+  color: #4f4f4f;
 }
