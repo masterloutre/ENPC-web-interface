@@ -1,6 +1,7 @@
 <?php
 require_once './Controllers/FrontEndController.php';
 require_once './Controllers/SessionController.php';
+require_once './Controllers/GameInterfaceController.php';
 
 start();
 if (isset($_GET['action'])) {
@@ -48,6 +49,18 @@ if (isset($_GET['action'])) {
         forbidden_access();
       }
     }
+
+    else if ($_GET['action'] == 'who-is-player'){
+        if(etudiant_logged_in()) {
+           send_player_info(who_is_logged_in());
+           //
+        } else {
+            //echo "no one is logged in";
+            //header("HTTP/1.1 404 Not Found");
+            //return null;
+        }
+    }
+
     else if ($_GET['action'] == 'logout') {
       logout();
     }
