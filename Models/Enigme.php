@@ -112,9 +112,11 @@ class Enigme {
         unset($object['id']);
         if($object['competence'] != NULL){
             $object['competence'] = $object['competence']->get_nom();
+            $object['competence_id'] = $this->competence->get_id();
         }else{
             unset($object['competence']);
         }
+        /*
         if($object['type'] != NULL){
             if($object['type'] == 1)
                 $object['type'] = "QCM";
@@ -125,6 +127,7 @@ class Enigme {
             if($object['type'] == 3)
                 $object['type'] = "Algo";
         }
+        */
         return $object;
     }
 
@@ -141,6 +144,11 @@ class Enigme {
             }
         }
     }
+
+    public function toJson(){
+        return json_encode($this->get_vars());
+    }
+
 }
 
 ?>

@@ -197,4 +197,39 @@ function delete_ratio_situation_pro_enigme($db, Enigme $enigme){
     }
 }
 
+function get_all_enigme_by_type($db, int $type)
+{
+  try {
+    $db_req = $db->prepare('SELECT id, index_unity, type, nom, temps_max, difficulte, score_max, tentatives_max, competence_id
+      FROM enigme
+      WHERE type = '.$type .'
+      ORDER BY id'
+      );
+
+    $db_req->execute();
+    $enigme_tab = [];
+    $result = $db_req->fetchAll();
+
+    if (!empty($result))
+    {
+      for ($i = 0; $i < count($result); ++$i)
+      {
+        $result[$i]["competence"] = get_competence($db, $result[$i]["competence_id"]);
+        $enigme_tab[] = create_enigme($result[$i]);
+      }
+      return $enigme_tab;
+    }
+    else { return false; }
+
+  }
+  catch(PDOException $e) {
+    echo "Selection failed: " . $e->getMessage();
+    return false;
+  }
+
+}
+
+
+
+
  ?>
