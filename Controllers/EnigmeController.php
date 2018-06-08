@@ -130,9 +130,11 @@ function get_all_enigme($db)
       FROM enigme
       ORDER BY id'
       );
+
     $db_req->execute();
     $enigme_tab = [];
     $result = $db_req->fetchAll();
+
     if (!empty($result))
     {
       for ($i = 0; $i < count($result); ++$i)
@@ -143,11 +145,13 @@ function get_all_enigme($db)
       return $enigme_tab;
     }
     else { return false; }
+
   }
   catch(PDOException $e) {
     echo "Selection failed: " . $e->getMessage();
     return false;
   }
+
 }
 
 function get_all_enigme_from_etudiant($db, Etudiant $etudiant)
