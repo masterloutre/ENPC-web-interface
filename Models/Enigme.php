@@ -109,7 +109,7 @@ class Enigme {
 
     public function get_vars(){
         $object = get_object_vars($this);
-        unset($object['id']);
+        //unset($object['id']);
         if($object['competence'] != NULL){
             $object['competence'] = $object['competence']->get_nom();
             $object['competence_id'] = $this->competence->get_id();

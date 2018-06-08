@@ -68,11 +68,25 @@ if (isset($_GET['action'])) {
         }
     }
 
+    else if ($_GET['action'] == 'session-ouverte'){
+        if(etudiant_logged_in()) {
+          send_session_ouverte_info();
+        } else {
+            echo "no one is logged in";
+            header("HTTP/1.1 404 Not Found");
+        }
+    }
 
     else if ($_GET['action'] == 'logout') {
       logout();
     }
+
+    if($_GET['action'] == 'envoyer-score' && isset($_POST)){
+            process_score_info();
+        }
+
 }
+
 else
 {
   sign_in();

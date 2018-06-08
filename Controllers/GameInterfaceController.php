@@ -11,7 +11,7 @@ FUNCTION
 
 //get information on the student needed to play the game
 function get_player_info(Etudiant $etudiant){
-    $player = array('num_etud' => $etudiant->get_num_etud(), 'nom' =>$etudiant->get_nom(), 'prenom' =>$etudiant->get_prenom() , 'promo' =>$etudiant->get_promo());
+    $player = array('id' => $etudiant->get_id(),'num_etud' => $etudiant->get_num_etud(), 'nom' =>$etudiant->get_nom(), 'prenom' =>$etudiant->get_prenom() , 'promo' =>$etudiant->get_promo());
     return $player;
 }
 
@@ -52,6 +52,79 @@ function get_n_random_from_array($array, int $n){
     }
 
 }
+
+//get authorization to start the game
+function send_session_ouverte_info(){
+    //arbitraire pour l'instant
+    $session_ouverte = 1;
+    header('Content-Type: application/json');
+    $json = json_encode($session_ouverte);
+    echo $json;
+}
+
+// handle the post form send the score for a particulr student and enigma
+function process_score_info() {
+    include "./Global/connect.php";
+    try{
+        $id_enigme = valid_int($_POST['id_enigme']);
+
+        $id_etudiant = valid_int($_POST['id_etudiant']);
+        $score_data = [
+            'id' => NULL,
+            'points' => valid_float($_POST['points']),
+            'tentatives' => valid_int($_POST['tentatives']),
+            'temps' => valid_float($_POST['temps']),
+            'aide' => valid_int_bool($_POST['aide'])
+        ];
+        $score = create_score($score_data);
+        $etudiant = get_etudiant($db, $id_etudiant);
+        $enigme = get_enigme($db, $id_enigme);
+
+
+
+        $old_score = get_score_from_etudiant_on_enigme($db, $etudiant, $enigme);
+        if($old_score){
+            $score->set_id($old_score->get_id());
+            update_score($db, $score);
+        } else {
+            add_score($db, $score, $id_etudiant, $id_enigme);
+        }
+
+
+    } catch (Exception $e){
+        echo 'Exception reçue : ',  $e->getMessage(), "\n";
+    }
+
+
+}
+
+
+function valid_int_bool($valeur){
+    if($valeur != 0 && $valeur !=1 && $valeur != "0" && $valeur !="1"){
+        throw new Exception('pas une représentation de booléen');
+    }
+    return $valeur;
+}
+
+
+function valid_int($valeur){
+    if(!is_numeric($valeur)){
+        throw new Exception('pas un int');
+    }
+    return $valeur;
+}
+
+function valid_float($valeur){
+
+    if(!is_numeric($valeur)){
+       throw new Exception('pas un float');
+    }
+    return $valeur;
+
+}
+
+
+
 
 
 
