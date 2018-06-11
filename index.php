@@ -50,7 +50,7 @@ if (isset($_GET['action'])) {
       }
     }
 
-    else if ($_GET['action'] == 'who-is-player'){
+    else if ($_GET['action'] == 'qui-joue'){
         if(etudiant_logged_in()) {
            send_player_info(who_is_logged_in());
         } else {
@@ -82,7 +82,14 @@ if (isset($_GET['action'])) {
     }
 
     if($_GET['action'] == 'envoyer-score' && isset($_POST)){
+            try{
             process_score_info();
+            } catch (Exception $e){
+                header("HTTP/1.1 500");
+                echo "La requete a échoué : ".$e->getMessage();
+            }
+
+
         }
 
 }

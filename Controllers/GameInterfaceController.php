@@ -66,23 +66,23 @@ function send_session_ouverte_info(){
 function process_score_info() {
     include "./Global/connect.php";
     try{
-        $id_enigme = valid_int($_POST['id_enigme']);
-
-        $id_etudiant = valid_int($_POST['id_etudiant']);
+        $id_enigme = valid_numeric($_POST['id_enigme']);
+        $id_etudiant = valid_numeric($_POST['id_etudiant']);
         $score_data = [
             'id' => NULL,
-            'points' => valid_float($_POST['points']),
-            'tentatives' => valid_int($_POST['tentatives']),
-            'temps' => valid_float($_POST['temps']),
+            'points' => valid_numeric($_POST['points']),
+            'tentatives' => valid_numeric($_POST['tentatives']),
+            'temps' => valid_numeric($_POST['temps']),
             'aide' => valid_int_bool($_POST['aide'])
         ];
         $score = create_score($score_data);
+
         $etudiant = get_etudiant($db, $id_etudiant);
         $enigme = get_enigme($db, $id_enigme);
 
-
-
-        $old_score = get_score_from_etudiant_on_enigme($db, $etudiant, $enigme);
+        if($etudiant && $enigme) {
+            $old_score = get_score_from_etudiant_on_enigme($db, $etudiant, $enigme);
+        }
         if($old_score){
             $score->set_id($old_score->get_id());
             update_score($db, $score);
@@ -92,35 +92,26 @@ function process_score_info() {
 
 
     } catch (Exception $e){
-        echo 'Exception reçue : ',  $e->getMessage(), "\n";
+        throw new Exception("Le score n'a pas pu etre ajouté en BDD, motif :".$e->getMessage());
     }
 
 
 }
 
-
+//Value validations
 function valid_int_bool($valeur){
     if($valeur != 0 && $valeur !=1 && $valeur != "0" && $valeur !="1"){
-        throw new Exception('pas une représentation de booléen');
+        throw new Exception($valeur.' n\'est pas une représentation de booléen');
     }
     return $valeur;
 }
 
 
-function valid_int($valeur){
+function valid_numeric($valeur){
     if(!is_numeric($valeur)){
-        throw new Exception('pas un int');
+        throw new Exception($valeur.' n\'est pas un nombre');
     }
     return $valeur;
-}
-
-function valid_float($valeur){
-
-    if(!is_numeric($valeur)){
-       throw new Exception('pas un float');
-    }
-    return $valeur;
-
 }
 
 
