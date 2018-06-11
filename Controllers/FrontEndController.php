@@ -135,6 +135,7 @@ function interface_etudiant()
 
             ];
   require('./Views/HeaderView.php');
+  require('./Views/LaunchGameView.php');
   require('./Views/CompetencesView.php');
   require('./Views/EnigmesView.php');
   echo '<script src="./Public/js/ratio_situ_pro.js"></script>';

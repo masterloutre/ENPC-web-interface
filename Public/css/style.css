@@ -336,3 +336,31 @@ h4 {
 .tab-etudiant td {
   color: #4f4f4f;
 }
+
+/*********************
+ *  LAUNCH GAME  *
+ *********************/
+
+.launch-game button {
+  display: block;
+  background-color: #54bfc4;
+  margin: auto;
+  border-radius: 8px;
+  outline: none;
+
+}
+
+.launch-game button:hover{
+  background-color: #8c4e81;
+  font-weight: bolder;
+  margin: auto;
+  border-radius: 8px;
+  cursor : pointer;
+
+}
+
+.launch-game button p{
+  margin: 10px;
+  color: white;
+  font-size: 16pt;
+}
