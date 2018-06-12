@@ -1,0 +1,338 @@
+/************
+ *  HEADER  *
+ ************/
+
+* {
+  font-family: 'Lato', sans-serif;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  margin: 0;
+  padding: 10px 5px;
+  max-width: 100%;
+  height: auto;
+  background-color: #54bfc4;
+  color: white;
+
+}
+
+header h1, header h2 {
+  padding-right: 10px;
+  display: inline;
+  margin: 0;
+}
+
+header a p, header a:visited {
+  padding-right: 70px;
+  display: inline;
+  float: right;
+  margin: 0;
+  color: white;
+}
+
+.upper {
+  text-transform: uppercase;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+a:visited {
+  color: black;
+}
+
+/***********
+ *  LOGIN  *
+ ***********/
+
+.login {
+  width: 300px;
+  margin: auto;
+}
+
+.login input[name='login'], .login input[name='mdp'] {
+  border: none;
+  border-bottom: solid 1px grey;
+}
+
+/***********
+ *  ADMIN  *
+ ***********/
+
+table, th, td {
+  border: 1px solid #4f4f4f;
+  border-collapse: collapse;
+  padding: 18px;
+}
+
+th, td {
+  max-width: 160px;
+    min-width: 85px;
+    text-align: center;
+}
+
+th{
+    text-transform: capitalize;
+    background-color: #54bfc4;
+    color: #fff;
+}
+
+tr:nth-of-type(2n){
+    background-color: #f2f2f2;
+}
+
+table .fa-pencil{
+    color: #6c488b;
+}
+
+table .fa-trash-o{
+    color: red;
+}
+
+td .situation_pro_bar{
+    margin-top: 10px;
+}
+
+.button {
+  margin: 20px 0;
+  padding: 10px 15px;
+    border-radius: 5px;
+    color: #f2f2f2;
+    background-color: #6c488b;
+  display: inline-block;
+}
+.button:visited{
+    color: #f2f2f2;
+}
+
+.wrapper {
+  margin: 0 auto;
+  width: max-content;
+}
+
+input {
+  display: block;
+  width: 300px;
+  padding: 6px 0px 6px 10px;
+    border-style: solid;
+    border-color: #4f4f4f;
+}
+
+input[type='submit'] {
+  color: #fff;
+    background-color: #54bfc4;
+    border-color: #54bfc4;
+}
+
+input[type='radio'], input[type='number']{
+    display: inline;
+    width: auto;
+    margin: 0 10px;
+    vertical-align: super;
+}
+
+label{
+    text-transform: capitalize;
+    margin-bottom: 7px;
+    display: block;
+}
+
+select{
+    display: block;
+    padding: 8px 10px;
+    border-width: 2px;
+    border-color: #4f4f4f;
+}
+
+form{
+    color: #4f4f4f;
+}
+
+form div{
+    margin: 30px 0;
+    max-width: 300px;
+}
+
+form p{
+    max-width: 260px;
+    display: inline-block;
+}
+
+h3 {
+  font-size: 1.8em;
+    color: #4f4f4f;
+}
+
+/*****************
+ *  COMPETENCES  *
+ *****************/
+
+.flex-container {
+  display: flex;
+}
+
+section {
+  margin: 50px 10%;
+}
+
+.competences .flex-container {
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.competence {
+  width: 45%;
+}
+
+.results {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+h4 {
+  font-size: 1.3em;
+  margin: 2px 0;
+    color: #8c4e81;
+}
+
+.competence .points-totaux {
+  min-width: 155px;
+  max-width: 30%;
+  display: inline-block;
+}
+
+.points {
+  margin: 0;
+}
+
+.points p {
+  display: inline-block;
+}
+
+.points .points-obtenu {
+  font-size: 4em;
+  margin: 0;
+}
+
+.points .points-max {
+  margin: 0;
+}
+
+.points-max {
+  opacity: 0.8;
+}
+
+.situation-pro-container {
+  display: inline-block;
+  max-width: 65%;
+}
+
+.situation-pro {
+  padding: 10px 0;
+}
+
+.situation-pro .points {
+  padding: 5px 0;
+}
+
+.situation-pro .points-obtenu {
+  font-size: 1.3em;
+}
+
+.intitule {
+  margin: 0;
+}
+
+/*************
+ *  ENIGMES  *
+ *************/
+
+.enigme section {
+  height: auto;
+}
+
+.enigme .points-obtenu {
+  font-size: 2em;
+  display: inline-block;
+}
+
+.enigme .points-max {
+  font-size: 1.2em;
+  display: inline-block;
+}
+
+.enigme article {
+  background-color: #eee;
+  padding: 25px 30px 20px;
+  border-radius: 8px;
+    color: #4f4f4f;
+}
+
+.enigme article .flex-container {
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.enigme .points-totaux {
+  width: 15%;
+}
+
+.enigme .competence-title {
+  font-size: 1em;
+}
+
+.enigme p, .enigme h5 {
+  margin: 10px 0;
+}
+
+.low-opacity {
+  opacity: 0.8;
+}
+
+.situation_pro_bar {
+  font-size: 0.8em;
+}
+
+.tentative-full-box {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background-color: #54bfc4;
+  margin: 0 5px;
+}
+
+.tentative-empty-box {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border: solid 1px #8c4e81;
+  margin: 0 5px;
+}
+
+/*********************
+ *  TABLE ETUDIANTS  *
+ *********************/
+
+.tab-etudiants {
+  margin: 0 10%;
+  margin-bottom: 100px;
+}
+
+.tab-etudiants table, th, td {
+  border: 1px solid white;
+}
+
+.tab-etudiant td {
+  color: #4f4f4f;
+}

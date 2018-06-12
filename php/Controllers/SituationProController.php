@@ -1,8 +1,8 @@
 <?php
 
-include "../Global/connect.php";
-require_once "../Models/SituationPro.php";
-require_once "../Models/Enigme.php";
+require "./Global/connect.php";
+require_once "./Models/SituationPro.php";
+require_once "./Models/Enigme.php";
 
 /*****
 FUNCTION
@@ -110,8 +110,6 @@ function get_situation_pro($db, $id){
     }
 }
 
-//select *
-//retourne un tableau d'etudiant
 function get_all_situation_pro($db){
     try{
 
@@ -156,12 +154,25 @@ function get_situation_pro_from_enigme($db, Enigme $enigme)
       }
       return $situation_pro_tab;
     }
-    else { return false; }
+    else { return $situation_pro_tab; }
   }
   catch(PDOException $e) {
     echo "Selection failed: " . $e->getMessage();
     return false;
   }
+}
+
+function add_ratio_situation_pro_enigme($db, $enigme_id, $situation_id, $ratio)
+{
+    try{
+        $db_req = $db->prepare('INSERT INTO `rel_enigme_situation_pro` (`enigme_id`, `situation_pro_id`, `ratio`) VALUES ('.$enigme_id.', '.$situation_id.', '.$ratio.')');
+        $db_req->execute();
+    }
+    catch(PDOException $e) {
+    echo "add ratio failed: " . $e->getMessage();
+    return false;
+  }
+    return 1;
 }
 
  ?>

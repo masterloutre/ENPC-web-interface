@@ -1,101 +1,49 @@
-<section>
-  <article class="competence1">
-    <div class="points-totaux">
+
+<section class="competences">
+  <h3>Résumé des compétences</h3>
+  <div class="flex-container">
+
+  <?php for ($i=0; $i < count($competences_tab); $i++) { ?> 
+
+    <article class="competence">
+    <h4><?php echo( $competences_tab[$i]->get_nom() ); ?></h4>
+    <div class="results">
+    <div class="points points-totaux">
       <p class="points-obtenu">
-        <?php echo( $content['score_competence1']->get_points() ); ?>
+        <?php echo( $content['score_competence'.($i+1)]->get_points() ); ?>
       </p>
       <p class="points-max">
-        / <?php echo( $content['points_max_competence1'] ); ?>
+        /
+        <?php echo( $content['points_max_competence'.($i+1)] ); ?>
       </p>
     </div>
+
     <div class="situation-pro-container">
 
-      <div class="situation_pro">
-        <p class="points-obtenu">
-          <?php echo( $content['score_situation_pro1']->get_points() ); ?>
-        </p>
-        <p class="points-max">
-          / <?php echo( $content['points_max_situation_pro1'] ); ?>
-        </p>
+    <?php for ($j=0; $j < count($situation_pro_tab); $j++) { ?>
+
+      <div class="situation-pro">
+        <div class="points">
+          <p class="points-obtenu">
+            <?php echo( $content['score_situation_pro'.($j+1)]->get_points() ); ?>
+          </p>
+          <p class="points-max">
+            /
+            <?php echo( $content['points_max_situation_pro'.($j+1)] ); ?>
+          </p>
+        </div>
         <p class="intitule">
-          <?php echo( $situation_pro1->get_nom() ); ?>
+          <?php echo( $situation_pro_tab[$j]->get_nom() ); ?>
         </p>
       </div>
 
-      <div class="situation_pro">
-        <p class="points-obtenu">
-          <?php echo( $content['score_situation_pro2']->get_points() ); ?>
-        </p>
-        <p class="points-max">
-          / <?php echo( $content['points_max_situation_pro2'] ); ?>
-        </p>
-        <p class="intitule">
-          <?php echo( $situation_pro2->get_nom() ); ?>
-        </p>
-      </div>
-
-      <div class="situation_pro">
-        <p class="points-obtenu">
-          <?php echo( $content['score_situation_pro3']->get_points() ); ?>
-        </p>
-        <p class="points-max">
-          / <?php echo( $content['points_max_situation_pro3'] ); ?>
-        </p>
-        <p class="intitule">
-          <?php echo( $situation_pro3->get_nom() ); ?>
-        </p>
-      </div>
+    <?php } ?>
 
     </div>
   </article>
+  <?php } ?>
 
-  <article class="competence2">
-    <div class="points-totaux">
-      <p class="points-obtenu">
-        <?php echo( $content['score_competence2']->get_points() ); ?>
-      </p>
-      <p class="points-max">
-        / <?php echo( $content['points_max_competence2'] ); ?>
-      </p>
-    </div>
-    <div class="situation-pro-container">
+  
 
-      <div class="situation_pro">
-        <p class="points-obtenu">
-          <?php echo( $content['score_situation_pro4']->get_points() ); ?>
-        </p>
-        <p class="points-max">
-          / <?php echo( $content['points_max_situation_pro4'] ); ?>
-        </p>
-        <p class="intitule">
-          <?php echo( $situation_pro4->get_nom() ); ?>
-        </p>
-      </div>
-
-      <div class="situation_pro">
-        <p class="points-obtenu">
-          <?php echo( $content['score_situation_pro5']->get_points() ); ?>
-        </p>
-        <p class="points-max">
-          / <?php echo( $content['points_max_situation_pro5'] ); ?>
-        </p>
-        <p class="intitule">
-          <?php echo( $situation_pro5->get_nom() ); ?>
-        </p>
-      </div>
-
-      <div class="situation_pro">
-        <p class="points-obtenu">
-          <?php echo( $content['score_situation_pro6']->get_points() ); ?>
-        </p>
-        <p class="points-max">
-          / <?php echo( $content['points_max_situation_pro6'] ); ?>
-        </p>
-        <p class="intitule">
-          <?php echo( $situation_pro6->get_nom() ); ?>
-        </p>
-      </div>
-
-    </div>
-  </article>
+</div>
 </section>

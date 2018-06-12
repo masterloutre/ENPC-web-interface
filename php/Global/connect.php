@@ -1,6 +1,8 @@
 <?php
 
 $servername = "localhost";
+// $username = "admin_millenaire4";
+// $password = "MuShahf4ool5";
 $username = "root";
 $password = "";
 

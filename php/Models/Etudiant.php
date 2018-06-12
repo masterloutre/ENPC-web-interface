@@ -86,6 +86,14 @@ class Etudiant {
         $this->token = $token;
     }
     // Fin du multiplier--------------------------------
+    
+    public function get_vars(){
+        $object = get_object_vars($this);
+        unset($object['id']);
+        unset($object['mdp']);
+        unset($object['token']);
+        return $object;
+    }
 
     // Hydrate
     public function hydrate(array $donnees) {

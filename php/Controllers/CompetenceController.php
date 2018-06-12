@@ -1,8 +1,10 @@
 <?php
 
-include "../Global/connect.php";
-include "../Global/global.php";
-require_once "../Models/Competence.php";
+require "./Global/connect.php";
+require "./Global/global.php";
+require_once "./Models/Competence.php";
+
+//var_dump(get_moyenne_score_from_competence($db, $competence2));
 
 function create_competence($array_competence)
 {
@@ -124,6 +126,26 @@ function get_all_competence($db)
         $competence_tab[] = create_competence($result[$i]);
       }
       return $competence_tab;
+    }
+    else { return false; }
+  }
+  catch(PDOException $e) { echo "Selection failed: " . $e->getMessage(); }
+}
+
+function get_competence_from_enigme($db, Enigme $enigme)
+{
+  try {
+    $db_req = $db->prepare(
+      'SELECT competence.*
+       FROM competence
+       INNER JOIN enigme ON competence.id = enigme.competence_id
+       WHERE enigme.id = '.$enigme->get_id()
+      );
+    $db_req->execute();
+    $result = $db_req->fetchAll();
+    if (!empty($result))
+    {
+      return create_competence($result[0]);
     }
     else { return false; }
   }

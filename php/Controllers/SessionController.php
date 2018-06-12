@@ -1,10 +1,10 @@
 <?php
 
-include "../Global/global.php";
-require_once "../Models/Etudiant.php";
-require_once "../Models/Enseignant.php";
-require_once "../Controllers/EtudiantController.php";
-require_once "../Controllers/EnseignantController.php";
+require "./Global/global.php";
+require_once "./Models/Etudiant.php";
+require_once "./Models/Enseignant.php";
+require_once "./Controllers/EtudiantController.php";
+require_once "./Controllers/EnseignantController.php";
 
 function create_token($data) {
    $tokenGeneric = "EnPCMillén4aire";
@@ -25,7 +25,7 @@ function start()
 
 function who_is_logged_in()
 {
-  include "../Global/connect.php";
+  include "./Global/connect.php";
   try {
     $db_req = $db->prepare(
       'SELECT id

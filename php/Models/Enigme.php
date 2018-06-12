@@ -107,6 +107,27 @@ class Enigme {
     }
     // Fin du multiplier--------------------------------
 
+    public function get_vars(){
+        $object = get_object_vars($this);
+        unset($object['id']);
+        if($object['competence'] != NULL){
+            $object['competence'] = $object['competence']->get_nom();
+        }else{
+            unset($object['competence']);
+        }
+        if($object['type'] != NULL){
+            if($object['type'] == 1)
+                $object['type'] = "QCM";
+            
+            if($object['type'] == 2)
+                $object['type'] = "Input";
+            
+            if($object['type'] == 3)
+                $object['type'] = "Algo";
+        }
+        return $object;
+    }
+
     // Hydrate
     public function hydrate(array $donnees) {
         foreach ($donnees as $key => $value) {
