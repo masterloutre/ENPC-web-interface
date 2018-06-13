@@ -11,7 +11,7 @@ FUNCTION
 
 //get information on the student needed to play the game
 function get_player_info(Etudiant $etudiant){
-    $player = array('id' => $etudiant->get_id(),'num_etud' => $etudiant->get_num_etud(), 'nom' =>$etudiant->get_nom(), 'prenom' =>$etudiant->get_prenom() , 'promo' =>$etudiant->get_promo());
+    $player = array('id' => $etudiant->get_id(),'studentNumber' => $etudiant->get_num_etud(), 'surname' =>$etudiant->get_nom(), 'firstname' =>$etudiant->get_prenom() , 'graduatingYear' =>$etudiant->get_promo());
     return $player;
 }
 
@@ -22,6 +22,14 @@ function send_player_info(Etudiant $etudiant){
     $json = json_encode($player);
     echo($json);
 }
+
+function send_dummy_player_info(){
+    $player = array('id' => 0,'studentNumber' => 6666666666, 'surname' => 'Dummy', 'firstname' => 'FromServer' , 'graduatingYear' =>'2000');
+    header('Content-Type: application/json');
+    $json = json_encode($player);
+    echo($json);
+}
+
 
 //get ids of all the enigmas the player will have to do
 function enigmes_dispo() {
@@ -43,7 +51,7 @@ function send_enigmes_dispo_info(){
 }
 
 //get n random objects from an array
-function get_n_random_from_array($array, int $n){
+function get_n_random_from_array($array, $n){
     shuffle($array);
     if(count($array)>= n){
         return array_slice($array, 0, $n);

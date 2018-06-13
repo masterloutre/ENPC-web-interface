@@ -1,4 +1,4 @@
 
 <section class="launch-game">
-    <a href="unityBuild/index.html"><button><p>Launch Game</p></button></a>
+    <a href="unityBuild/index.html" target="_blank"><button><p>Launch Game</p></button></a>
 </section>
