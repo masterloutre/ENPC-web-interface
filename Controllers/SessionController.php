@@ -27,6 +27,9 @@ function who_is_logged_in()
 {
   include "./Global/connect.php";
   try {
+      if(!isset($_SESSION['user_session'])){
+         return false;
+      }
     $db_req = $db->prepare(
       'SELECT id
        FROM enseignant
