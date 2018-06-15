@@ -75,8 +75,10 @@ if (isset($_GET['action'])) {
         if(etudiant_logged_in()) {
           send_session_ouverte_info();
         } else {
-            echo "no one is logged in";
-            header("HTTP/1.1 404 Not Found");
+            //echo "no one is logged in";
+            //header("HTTP/1.1 404 Not Found");
+            echo 1;
+
         }
     }
 
