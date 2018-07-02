@@ -56,19 +56,23 @@ if (isset($_GET['action'])) {
         } else {
             //echo "no one is logged in";
             //header("HTTP/1.1 404 Not Found");
-            send_dummy_player_info();
+            //send_dummy_player_info();
+            send_player_info(get_etudiant($db, 1));
         }
     }
 
     else if ($_GET['action'] == 'enigmes-disponibles'){
-        //if(etudiant_logged_in()) {
+        if(etudiant_logged_in()) {
           send_enigmes_dispo_info();
-          /*
+        
         } else {
-            echo "no one is logged in";
-            header("HTTP/1.1 404 Not Found");
+          //  echo "no one is logged in";
+          //  header("HTTP/1.1 404 Not Found");
+          
+          //  FOR TESTING
+          send_enigmes_dispo_info();
         }
-          */
+        
     }
 
     else if ($_GET['action'] == 'session-ouverte'){
@@ -77,7 +81,7 @@ if (isset($_GET['action'])) {
         } else {
             //echo "no one is logged in";
             //header("HTTP/1.1 404 Not Found");
-            echo 1;
+            echo 1; //testing
 
         }
     }
@@ -90,8 +94,8 @@ if (isset($_GET['action'])) {
             try{
             process_score_info();
             } catch (Exception $e){
-                header("HTTP/1.1 500");
-                echo "La requete a échoué : ".$e->getMessage();
+              echo "La requete a échoué : ".$e->getMessage();
+              header("HTTP/1.1 500");
             }
 
 

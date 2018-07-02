@@ -88,16 +88,22 @@ function process_score_info() {
         $etudiant = get_etudiant($db, $id_etudiant);
         $enigme = get_enigme($db, $id_enigme);
 
-        if($etudiant && $enigme) {
-            $old_score = get_score_from_etudiant_on_enigme($db, $etudiant, $enigme);
+        if(!$etudiant){
+          throw new Exception("L'id étudiant est invalid");
         }
+        
+        if(!$enigme){
+            throw new Exception("L'id enigme est invalid");
+        }
+        
+        $old_score = get_score_from_etudiant_on_enigme($db, $etudiant, $enigme);
+        
         if($old_score){
             $score->set_id($old_score->get_id());
             update_score($db, $score);
         } else {
             add_score($db, $score, $id_etudiant, $id_enigme);
         }
-
 
     } catch (Exception $e){
         throw new Exception("Le score n'a pas pu etre ajouté en BDD, motif :".$e->getMessage());
