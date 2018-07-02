@@ -54,30 +54,33 @@ if (isset($_GET['action'])) {
         if(etudiant_logged_in()) {
            send_player_info(who_is_logged_in());
         } else {
-            //echo "no one is logged in";
-            //header("HTTP/1.1 404 Not Found");
-            send_dummy_player_info();
+            echo "no one is logged in";
+            header("HTTP/1.1 404 Not Found");
+            //send_player_info(get_etudiant($db, 1));
         }
     }
 
     else if ($_GET['action'] == 'enigmes-disponibles'){
         //if(etudiant_logged_in()) {
           send_enigmes_dispo_info();
-          /*
+
         } else {
-            echo "no one is logged in";
-            header("HTTP/1.1 404 Not Found");
+          echo "no one is logged in";
+          header("HTTP/1.1 404 Not Found");
+
+          //  FOR TESTING
+          //send_enigmes_dispo_info();
         }
-          */
+
     }
 
     else if ($_GET['action'] == 'session-ouverte'){
         if(etudiant_logged_in()) {
           send_session_ouverte_info();
         } else {
-            //echo "no one is logged in";
-            //header("HTTP/1.1 404 Not Found");
-            echo 1;
+            echo "no one is logged in";
+            header("HTTP/1.1 404 Not Found");
+            //echo 1; //testing
 
         }
     }
