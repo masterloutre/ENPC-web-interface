@@ -244,6 +244,7 @@ function interface_enseignant_enigme()
 function interface_admin()
 {
   $content = [ 'title' => 'Interface Administrateur', 'user' => who_is_logged_in(), 'category' => 'Administrateur'];
+  require('./Views/HeaderView.php');
   require('./Views/AdminReturnView.php');
     if(array_key_exists('vue', $_GET)){
         require('./Views/'.$_GET['vue'].'Admin.php');
