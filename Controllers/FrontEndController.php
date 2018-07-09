@@ -148,15 +148,7 @@ function interface_enseignant_competence()
   {
     $array = [
       'nom' => $etudiants[$i]->get_nom(),
-      'prenom' => $etudiants[$i]->get_prenom()/*,
-      'competence1' => get_score_from_etudiant_on_competence($db, $etudiants[$i], $competence1)->get_points(),
-      'competence2' => get_score_from_etudiant_on_competence($db, $etudiants[$i], $competence2)->get_points(),
-      'situation_pro1' =>  get_score_from_etudiant_on_situation_pro($db, $etudiants[$i], $situation_pro1)->get_points(),
-      'situation_pro2' =>  get_score_from_etudiant_on_situation_pro($db, $etudiants[$i], $situation_pro2)->get_points(),
-      'situation_pro3' =>  get_score_from_etudiant_on_situation_pro($db, $etudiants[$i], $situation_pro3)->get_points(),
-      'situation_pro4' =>  get_score_from_etudiant_on_situation_pro($db, $etudiants[$i], $situation_pro4)->get_points(),
-      'situation_pro5' =>  get_score_from_etudiant_on_situation_pro($db, $etudiants[$i], $situation_pro5)->get_points(),
-      'situation_pro6' =>  get_score_from_etudiant_on_situation_pro($db, $etudiants[$i], $situation_pro6)->get_points()*/
+      'prenom' => $etudiants[$i]->get_prenom()
     ];
     for ($j = 0 ; $j < count($competences_tab) ; $j++)
     {
@@ -172,24 +164,6 @@ function interface_enseignant_competence()
   $content = [ 'title' => 'Interface Enseignant',
   'user' => who_is_logged_in(),
   'category' => 'Enseignant',
-
-    /*'score_competence1' => get_moyenne_score_from_competence($db, $competence1),
-    'points_max_competence1' => get_score_max_from_competence($db, $competence1),
-        'score_competence2' => get_moyenne_score_from_competence($db, $competence2),
-        'points_max_competence2' => get_score_max_from_competence($db, $competence2),
-    'score_situation_pro1' => get_moyenne_score_from_situation_pro($db, $situation_pro1),
-    'points_max_situation_pro1'=> get_score_max_from_situation_pro($db, $situation_pro1),
-        'score_situation_pro2' => get_moyenne_score_from_situation_pro($db, $situation_pro2),
-        'points_max_situation_pro2'=> get_score_max_from_situation_pro($db, $situation_pro2),
-    'score_situation_pro3' => get_moyenne_score_from_situation_pro($db, $situation_pro3),
-    'points_max_situation_pro3'=> get_score_max_from_situation_pro($db, $situation_pro3),
-        'score_situation_pro4' => get_moyenne_score_from_situation_pro($db, $situation_pro4),
-        'points_max_situation_pro4'=> get_score_max_from_situation_pro($db, $situation_pro4),
-    'score_situation_pro5' => get_moyenne_score_from_situation_pro($db, $situation_pro5),
-    'points_max_situation_pro5'=> get_score_max_from_situation_pro($db, $situation_pro5),
-        'score_situation_pro6' => get_moyenne_score_from_situation_pro($db, $situation_pro6),
-        'points_max_situation_pro6'=> get_score_max_from_situation_pro($db, $situation_pro6),
-*/
      'etudiants' => $etudiants_tab
   ];
   for ($i = 0 ; $i < count($competences_tab) ; $i++)
@@ -202,7 +176,11 @@ function interface_enseignant_competence()
     $content['score_situation_pro'.($i+1) ]= get_moyenne_score_from_situation_pro($db, $situation_pro_tab[$i]);
     $content['points_max_situation_pro'.($i+1) ] = get_score_max_from_situation_pro($db, $situation_pro_tab[$i]);
   }
+  
   require('./Views/HeaderView.php');
+  if($content['user']->get_admin()){
+    require('./Views/AdminReturnView.php');
+  }
   require('./Views/EnseignantMenuView.php');
   require('./Views/CompetencesView.php');
   require('./Views/EtudiantsTabView.php');
@@ -236,6 +214,9 @@ function interface_enseignant_enigme()
               'enigmes' => $enigmes_tab
             ];
   require('./Views/HeaderView.php');
+  if($content['user']->get_admin()){
+    require('./Views/AdminReturnView.php');
+  }
   require('./Views/EnseignantMenuView.php');
   require('./Views/EnigmesView.php');
   echo '<script src="./Public/js/ratio_situ_pro.js"></script>';

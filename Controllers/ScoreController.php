@@ -316,8 +316,7 @@ function get_score_from_etudiant_on_competence($db, Etudiant $etudiant, Competen
     $result = $db_req->fetchAll();
     if (!empty($result))
     {
-      echo "Résultat de get_score_from_etudiant_on_competence :";
-      print_r($result);
+      
       for ($i = 0; $i < count($result); ++$i)
       {
         $score_tab["points"] += $result[$i]["points"];
