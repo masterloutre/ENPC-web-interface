@@ -96,6 +96,7 @@ function interface_etudiant()
   $enigmes = get_all_enigme_from_etudiant($db, $etudiant);
   $enigmes_tab = [];
 
+
   for ($i = 0; $i < count($enigmes); ++$i)
   {
     $array = [
@@ -112,34 +113,30 @@ function interface_etudiant()
     ];
     $enigmes_tab[] = $array;
   }
-  $content = [ 'title' => 'Interface Etudiant', 'user' => who_is_logged_in(), 'category' => 'Etudiant',
-
-               'score_competence1' => get_score_from_etudiant_on_competence($db, $etudiant, $competence1),
-               'points_max_competence1' => get_score_max_from_competence_by_etudiant($db, $competence1, $etudiant),
-                   'score_competence2' => get_score_from_etudiant_on_competence($db, $etudiant, $competence2),
-                   'points_max_competence2' => get_score_max_from_competence_by_etudiant($db, $competence2, $etudiant),
-               'score_situation_pro1' => get_score_from_etudiant_on_situation_pro($db, $etudiant, $situation_pro1),
-               'points_max_situation_pro1'=> get_score_max_from_situation_pro_by_etudiant($db, $situation_pro1, $etudiant),
-                   'score_situation_pro2' => get_score_from_etudiant_on_situation_pro($db, $etudiant, $situation_pro2),
-                   'points_max_situation_pro2'=> get_score_max_from_situation_pro_by_etudiant($db, $situation_pro2, $etudiant),
-               'score_situation_pro3' => get_score_from_etudiant_on_situation_pro($db, $etudiant, $situation_pro3),
-               'points_max_situation_pro3'=> get_score_max_from_situation_pro_by_etudiant($db, $situation_pro3, $etudiant),
-                   'score_situation_pro4' => get_score_from_etudiant_on_situation_pro($db, $etudiant, $situation_pro4),
-                   'points_max_situation_pro4'=> get_score_max_from_situation_pro_by_etudiant($db, $situation_pro4, $etudiant),
-               'score_situation_pro5' => get_score_from_etudiant_on_situation_pro($db, $etudiant, $situation_pro5),
-               'points_max_situation_pro5'=> get_score_max_from_situation_pro_by_etudiant($db, $situation_pro5, $etudiant),
-                   'score_situation_pro6' => get_score_from_etudiant_on_situation_pro($db, $etudiant, $situation_pro6),
-                   'points_max_situation_pro6'=> get_score_max_from_situation_pro_by_etudiant($db, $situation_pro6, $etudiant),
-
-               'enigmes' => $enigmes_tab
-
-            ];
+  
+  $content = [ 
+      'title' => 'Interface Etudiant',
+      'user' => who_is_logged_in(),
+      'category' => 'Etudiant',
+      'enigmes' => $enigmes_tab
+  ];
+  
+  for ($i = 0 ; $i < count($competences_tab) ; $i++)
+  {
+    $content['score_competence'.($i+1) ]= get_score_from_etudiant_on_competence($db, $etudiant, $competences_tab[$i]);
+    $content['points_max_competence'.($i+1) ] = get_score_max_from_competence_by_etudiant($db, $competences_tab[$i], $etudiant);
+  }
+  for ($i = 0 ; $i < count($situation_pro_tab) ; $i++)
+  {
+    $content['score_situation_pro'.($i+1) ]= get_score_from_etudiant_on_situation_pro($db, $etudiant, $situation_pro_tab[$i]);
+    $content['points_max_situation_pro'.($i+1) ] = get_score_max_from_situation_pro_by_etudiant($db, $situation_pro_tab[$i], $etudiant);
+  }
   require('./Views/HeaderView.php');
-  require('./Views/LaunchGameView.php');
   require('./Views/CompetencesView.php');
   require('./Views/EnigmesView.php');
   echo '<script src="./Public/js/ratio_situ_pro.js"></script>';
 }
+
 
 function interface_enseignant_competence()
 {
@@ -152,41 +149,39 @@ function interface_enseignant_competence()
   {
     $array = [
       'nom' => $etudiants[$i]->get_nom(),
-      'prenom' => $etudiants[$i]->get_prenom(),
-      'competence1' => get_score_from_etudiant_on_competence($db, $etudiants[$i], $competence1)->get_points(),
-      'competence2' => get_score_from_etudiant_on_competence($db, $etudiants[$i], $competence2)->get_points(),
-      'situation_pro1' =>  get_score_from_etudiant_on_situation_pro($db, $etudiants[$i], $situation_pro1)->get_points(),
-      'situation_pro2' =>  get_score_from_etudiant_on_situation_pro($db, $etudiants[$i], $situation_pro2)->get_points(),
-      'situation_pro3' =>  get_score_from_etudiant_on_situation_pro($db, $etudiants[$i], $situation_pro3)->get_points(),
-      'situation_pro4' =>  get_score_from_etudiant_on_situation_pro($db, $etudiants[$i], $situation_pro4)->get_points(),
-      'situation_pro5' =>  get_score_from_etudiant_on_situation_pro($db, $etudiants[$i], $situation_pro5)->get_points(),
-      'situation_pro6' =>  get_score_from_etudiant_on_situation_pro($db, $etudiants[$i], $situation_pro6)->get_points()
+      'prenom' => $etudiants[$i]->get_prenom()
     ];
+    for ($j = 0 ; $j < count($competences_tab) ; $j++)
+    {
+      $array['competence'.($j+1) ]= get_score_from_etudiant_on_competence($db, $etudiants[$i], $competences_tab[$j])->get_points();
+    }
+    for ($j = 0 ; $j < count($situation_pro_tab) ; $j++)
+    {
+      $array['situation_pro'.($j+1) ]= get_score_from_etudiant_on_situation_pro($db, $etudiants[$i], $situation_pro_tab[$j])->get_points();
+    }
     $etudiants_tab[] = $array;
   }
 
-  $content = [ 'title' => 'Interface Enseignant', 'user' => who_is_logged_in(), 'category' => 'Enseignant',
-
-              'score_competence1' => get_moyenne_score_from_competence($db, $competence1),
-              'points_max_competence1' => get_score_max_from_competence($db, $competence1),
-                  'score_competence2' => get_moyenne_score_from_competence($db, $competence2),
-                  'points_max_competence2' => get_score_max_from_competence($db, $competence2),
-              'score_situation_pro1' => get_moyenne_score_from_situation_pro($db, $situation_pro1),
-              'points_max_situation_pro1'=> get_score_max_from_situation_pro($db, $situation_pro1),
-                  'score_situation_pro2' => get_moyenne_score_from_situation_pro($db, $situation_pro2),
-                  'points_max_situation_pro2'=> get_score_max_from_situation_pro($db, $situation_pro2),
-              'score_situation_pro3' => get_moyenne_score_from_situation_pro($db, $situation_pro3),
-              'points_max_situation_pro3'=> get_score_max_from_situation_pro($db, $situation_pro3),
-                  'score_situation_pro4' => get_moyenne_score_from_situation_pro($db, $situation_pro4),
-                  'points_max_situation_pro4'=> get_score_max_from_situation_pro($db, $situation_pro4),
-              'score_situation_pro5' => get_moyenne_score_from_situation_pro($db, $situation_pro5),
-              'points_max_situation_pro5'=> get_score_max_from_situation_pro($db, $situation_pro5),
-                  'score_situation_pro6' => get_moyenne_score_from_situation_pro($db, $situation_pro6),
-                  'points_max_situation_pro6'=> get_score_max_from_situation_pro($db, $situation_pro6),
-
-               'etudiants' => $etudiants_tab
-            ];
+  $content = [ 'title' => 'Interface Enseignant',
+  'user' => who_is_logged_in(),
+  'category' => 'Enseignant',
+     'etudiants' => $etudiants_tab
+  ];
+  for ($i = 0 ; $i < count($competences_tab) ; $i++)
+  {
+    $content['score_competence'.($i+1) ]= get_moyenne_score_from_competence($db, $competences_tab[$i]);
+    $content['points_max_competence'.($i+1) ] = get_score_max_from_competence($db, $competences_tab[$i]);
+  }
+  for ($i = 0 ; $i < count($situation_pro_tab) ; $i++)
+  {
+    $content['score_situation_pro'.($i+1) ]= get_moyenne_score_from_situation_pro($db, $situation_pro_tab[$i]);
+    $content['points_max_situation_pro'.($i+1) ] = get_score_max_from_situation_pro($db, $situation_pro_tab[$i]);
+  }
+  
   require('./Views/HeaderView.php');
+  if($content['user']->get_admin()){
+    require('./Views/AdminReturnView.php');
+  }
   require('./Views/EnseignantMenuView.php');
   require('./Views/CompetencesView.php');
   require('./Views/EtudiantsTabView.php');
@@ -220,6 +215,9 @@ function interface_enseignant_enigme()
               'enigmes' => $enigmes_tab
             ];
   require('./Views/HeaderView.php');
+  if($content['user']->get_admin()){
+    require('./Views/AdminReturnView.php');
+  }
   require('./Views/EnseignantMenuView.php');
   require('./Views/EnigmesView.php');
   echo '<script src="./Public/js/ratio_situ_pro.js"></script>';
@@ -228,6 +226,7 @@ function interface_enseignant_enigme()
 function interface_admin()
 {
   $content = [ 'title' => 'Interface Administrateur', 'user' => who_is_logged_in(), 'category' => 'Administrateur'];
+  require('./Views/HeaderView.php');
   require('./Views/AdminReturnView.php');
     if(array_key_exists('vue', $_GET)){
         require('./Views/'.$_GET['vue'].'Admin.php');
