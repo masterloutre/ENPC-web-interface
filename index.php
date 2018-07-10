@@ -56,8 +56,8 @@ if (isset($_GET['action'])) {
         } else {
             //echo "no one is logged in";
             //header("HTTP/1.1 404 Not Found");
-            //send_dummy_player_info();
-            send_player_info(get_etudiant($db, 1));
+            send_dummy_player_info();
+            //send_player_info(get_etudiant($db, 1));
         }
     }
 
@@ -79,9 +79,9 @@ if (isset($_GET['action'])) {
         if(etudiant_logged_in()) {
           send_session_ouverte_info();
         } else {
-            //echo "no one is logged in";
+            
             //header("HTTP/1.1 404 Not Found");
-            echo 1; //testing
+            echo 40;//testing
 
         }
     }

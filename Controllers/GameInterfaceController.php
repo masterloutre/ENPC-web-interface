@@ -53,7 +53,7 @@ function send_enigmes_dispo_info(){
 //get n random objects from an array
 function get_n_random_from_array($array, $n){
     shuffle($array);
-    if(count($array)>= n){
+    if(count($array)>= $n){
         return array_slice($array, 0, $n);
     } else {
         return array();
@@ -64,7 +64,30 @@ function get_n_random_from_array($array, $n){
 //get authorization to start the game
 function send_session_ouverte_info(){
     //arbitraire pour l'instant
-    $session_ouverte = 1;
+    // demander à la bdd quelle ligne est la seule à être à " 1 " en clé " phase ", puis renvoyer son id dans $session_ouverte
+    //sinon envoyer 0 pour que Unity.GlobalManager.GetSessionID bloque le jeu
+    include "./Global/connect.php";
+    $result=0;
+    try {
+        $db_req = $db->prepare('SELECT id
+        FROM lancement_jeu
+        WHERE phase=1'
+        );
+        $db_req->execute();
+        $result = $db_req->fetchAll();
+        if (!empty($result))
+        {
+            return false;
+        }
+        if($result.count!=1){
+            return false;
+        }
+    }
+    catch(PDOException $e) {
+        echo "Selection failed: " . $e->getMessage();
+        return false;
+    }
+    $session_ouverte = $result;
     header('Content-Type: application/json');
     $json = json_encode($session_ouverte);
     echo $json;
