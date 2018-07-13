@@ -13,13 +13,17 @@ function create_score($array_score)
 
 function add_score($db, Score $score, $etudiant_id, $enigme_id)
 {
+  if(!compute_score_points($db,$score,get_enigme($db,$enigme_id))){
+    echo "compute_score_points a failed, le score n'a pas été ajouté";
+    return false;
+  }
   if(!score_exists($db, $score))
   {
     try {
       $db_req = $db->prepare(
         'INSERT INTO score
-         (points, tentatives, temps, aide, etudiant_id, enigme_id)
-         VALUES ('.$score->get_points().','.$score->get_tentatives().','.$score->get_temps().','.$score->get_aide().', '.$etudiant_id.', '.$enigme_id.')');
+         (points, taux_de_succes, tentatives, temps, aide, etudiant_id, enigme_id)
+         VALUES ('.$score->get_points().','.$score->get_taux_de_succes().','.$score->get_tentatives().','.$score->get_temps().','.$score->get_aide().', '.$etudiant_id.', '.$enigme_id.')');
       $db_req->execute();
       $score->set_id($db->lastInsertId());
       return true;
@@ -97,7 +101,40 @@ function score_exists($db, Score $score)
   }
   else { return false; }
 }
+function compute_score_points($db,Score $score, $enigme){
 
+  //prendre le taux dans model
+  // prendre les ratios de SP dans la bdd
+  // prendre le scoremax de l'enigme dans la bdd
+  // appliquer tout
+  // hydrater le score : en bdd ou le modele ?
+  try {
+    $db_req = $db->prepare('SELECT enigme.score_max,rel_enigme_situation_pro.ratio
+      FROM enigme
+      INNER JOIN rel_enigme_situation_pro ON rel_enigme_situation_pro.enigme_id = enigme.id
+      WHERE enigme.id = '.$enigme->get_id()
+    );
+    $db_req->execute();
+    $result = $db_req->fetchAll();
+    // en théorie, c'est le même score_max qui apparait plusieurs fois par relation 1 score -> n situationpro
+    if (!empty($result))
+    {
+      for ($i = 0; $i < count($result); ++$i)
+      {
+        $score["points"] += ($score->get_taux_de_succes()/100) * $result[$i]["score_max"] * ($result[$i]["ratio"] / 100);
+        
+      }
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+  catch(PDOException $e) {
+    echo "(compute_score_points) Selection failed: " . $e->getMessage();
+    return false;
+  }
+}
 function get_score($db, $id)
 {
   try {
@@ -244,6 +281,11 @@ function get_score_max_from_situation_pro_by_etudiant($db, SituationPro $situati
   }
 }
 
+// Prend toutes les énigmes en bdd qui évalue $situation_pro
+//, et somme les points maximum qu'on peut obtenir de chaque énigme
+// pour avoir le score PERFECT sur $situation_pro
+
+// Exemple = tu as 220/250 missile tank
 function get_score_max_from_situation_pro($db, SituationPro $situation_pro)
 {
   try {
@@ -336,7 +378,7 @@ function get_score_from_etudiant_on_competence($db, Etudiant $etudiant, Competen
 function get_score_from_etudiant_on_situation_pro($db, Etudiant $etudiant, SituationPro $situation_pro)
 {
   try {
-    $db_req = $db->prepare('SELECT score.id, points, tentatives, temps, aide, rel_enigme_situation_pro.ratio
+    $db_req = $db->prepare('SELECT score.id, taux_de_succes, tentatives, temps, aide, rel_enigme_situation_pro.ratio, enigme.score_max
       FROM score
       INNER JOIN etudiant ON etudiant.id = score.etudiant_id
       INNER JOIN enigme ON enigme.id = score.enigme_id
@@ -351,7 +393,7 @@ function get_score_from_etudiant_on_situation_pro($db, Etudiant $etudiant, Situa
     {
       for ($i = 0; $i < count($result); ++$i)
       {
-        $score_tab["points"] += $result[$i]["points"] * $result[$i]["ratio"] / 100;
+        $score_tab["points"] += ($result[$i]["taux_de_succes"]/100)* $result[$i]["score_max"] * ($result[$i]["ratio"] / 100);
         $score_tab["tentatives"] += $result[$i]["tentatives"];
         $score_tab["temps"] += $result[$i]["temps"];
         $score_tab["aide"] += $result[$i]["aide"];
@@ -440,7 +482,7 @@ function get_moyenne_score_from_competence($db, Competence $competence)
 function get_moyenne_score_from_situation_pro($db, SituationPro $situation_pro)
 {
   try {
-    $db_req = $db->prepare('SELECT points, tentatives, temps, aide
+    $db_req = $db->prepare('SELECT taux_de_succes, tentatives, temps, aide, rel_enigme_situation_pro.ratio, enigme.score_max
       FROM score
       INNER JOIN enigme ON enigme.id = score.enigme_id
       INNER JOIN rel_enigme_situation_pro ON rel_enigme_situation_pro.enigme_id = enigme.id
@@ -454,7 +496,7 @@ function get_moyenne_score_from_situation_pro($db, SituationPro $situation_pro)
     {
       for ($i = 0; $i < count($result); ++$i)
       {
-        $score_tab["points"] += $result[$i]["points"];
+        $score_tab["points"] += $result[$i]["score_max"] * ($result[$i]["ratio"]/100) * ($result[$i]["taux_de_succes"]/100);
         $score_tab["tentatives"] += $result[$i]["tentatives"];
         $score_tab["temps"] += $result[$i]["temps"];
         $score_tab["aide"] += $result[$i]["aide"];

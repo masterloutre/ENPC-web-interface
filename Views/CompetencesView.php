@@ -1,6 +1,6 @@
 
 <section class="competences">
-  <h3>Résumé des compétences</h3>
+  <h3>Résumé des Compétences</h3>
   <div class="flex-container">
 
   <?php for ($i=0; $i < count($competences_tab); $i++) { ?> 

@@ -17,6 +17,7 @@ class Score {
     private $tentatives;
     private $temps;
     private $aide;
+    private $taux_de_succes;
 
 
     // Construction de la classe
@@ -66,6 +67,17 @@ class Score {
     public function set_aide($aide){
         $this->aide = $aide;
     }
+
+    //Taux de succès
+    public function get_taux_de_succes(){
+        return $this->aide;
+    }
+
+    public function set_taux_de_succes($succes){
+        $this->taux_de_succes = $succes;
+    }
+
+
     // Fin du multiplier--------------------------------
     
     public function get_vars(){
@@ -85,7 +97,6 @@ class Score {
                 // On appelle le setter
                 $this->$method($value);
             }
-            echo "waley";
         }
     }
 }
