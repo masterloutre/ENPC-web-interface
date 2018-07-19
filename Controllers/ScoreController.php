@@ -6,6 +6,27 @@ require_once "./Models/Score.php";
 require_once "./Models/Enigme.php";
 require_once "./Models/Competence.php";
 
+/*
+A propos du calcul des points :
+
+- les points arrivant de unity sont brute de transformations, les calculs liés à la certitude ou à la difficulté ne sont pas encore faits à cette étape de la chaine.
+La valeur est sous forme de % de réussite à une question, qui octroiera une quantité équivalente en points selon le score maximum de points d'une énigme, la certitude, et le ratio de chaque situation pro associées.
+Ce calcul est opéré par la méthode compute_score_point().
+Remarquer que la difficulté n'est pas compté dans ce calcul.
+Une fois cette valeur déterminée, elle sera stockée dans la BDD avec toutes les informations pour pouvoir la recalculer.
+
+- pour calculer le score à une compétence, on somme tous les scores des énigmes qui feature celle-ci.
+en particulier, pour calculer le score d'une situation pro, on ne prend que la fraction du score qui nous intéresse, avant de sommer.
+
+- les scores résultant d'opération de compétences ou de situation pro ne doivent pas être intégré en BDD, seuls les scores d'énigmes sans difficulté y sont autorisés.
+
+- La difficulté sert de coefficient de pondération à la note. Il n'a donc pas intérêt à être calculé avec la note lors de la mise en BDD,
+mais plutôt à servir sa représentation sur l'interface web. En effet, les notes des énigmes et le score maximum théorique sont multipliés par la difficulté,
+mais ils ne sont pas à confondre avec une moyenne.
+Ainsi, cette difficulté apparait dans les méthodes dédiées à l'affichage.
+
+*/
+
 function create_score($array_score)
 {
   return new Score($array_score);
@@ -119,6 +140,8 @@ function compute_score_points($db,Score $score, $enigme){
     // en théorie, c'est le même score_max qui apparait plusieurs fois par relation 1 score -> n situationpro
     if (!empty($result))
     {
+      // recalcule du score
+      $score["points"]=0;
       for ($i = 0; $i < count($result); ++$i)
       {
         $score["points"] += ($score->get_taux_de_succes()/100) * $result[$i]["score_max"] * ($result[$i]["ratio"] / 100);
@@ -197,7 +220,7 @@ function get_score_max_from_enigme($db, Enigme $enigme)
 function get_score_max_from_competence_by_etudiant($db, Competence $competence, Etudiant $etudiant)
 {
   try {
-      $db_req = $db->prepare('SELECT score_max
+      $db_req = $db->prepare('SELECT score_max, difficulté
         FROM enigme
         INNER JOIN competence ON enigme.competence_id = competence.id
         INNER JOIN score ON score.enigme_id = enigme.id
@@ -206,14 +229,15 @@ function get_score_max_from_competence_by_etudiant($db, Competence $competence, 
       $db_req->execute();
       $result = $db_req->fetchAll();
 
-    $score = 0;
+    $total = 0;
     if (!empty($result))
     {
       for ($x = 0; $x < count($result); ++$x)
       {
-        $score += $result[$x]['score_max'];
+        // pondération par la difficulté
+        $total += $result[$x]['score_max']*$result[$x]['difficulté'];
       }
-      return $score;
+      return $total;
     }
     else { return 0; }
   }
@@ -226,21 +250,22 @@ function get_score_max_from_competence_by_etudiant($db, Competence $competence, 
 function get_score_max_from_competence($db, Competence $competence)
 {
   try {
-      $db_req = $db->prepare('SELECT score_max
+      $db_req = $db->prepare('SELECT score_max, difficulté
         FROM enigme
         INNER JOIN competence ON enigme.competence_id = competence.id
         WHERE competence.id = '.$competence->get_id() );
       $db_req->execute();
       $result = $db_req->fetchAll();
 
-    $score = 0;
+    $total = 0;
     if (!empty($result))
     {
       for ($x = 0; $x < count($result); ++$x)
       {
-        $score += $result[$x]['score_max'];
+        // pondération par la difficulté
+        $total += $result[$x]['score_max']*$result[$x]['difficulté'];
       }
-      return $score;
+      return $total;
     }
     else { return 0; }
   }
@@ -253,7 +278,7 @@ function get_score_max_from_competence($db, Competence $competence)
 function get_score_max_from_situation_pro_by_etudiant($db, SituationPro $situation_pro, Etudiant $etudiant)
 {
   try {
-    $db_req = $db->prepare('SELECT enigme.score_max, rel_enigme_situation_pro.ratio
+    $db_req = $db->prepare('SELECT enigme.score_max, rel_enigme_situation_pro.ratio,enigme.difficulté
       FROM enigme
       INNER JOIN score ON score.enigme_id = enigme.id
       INNER JOIN etudiant ON etudiant.id = score.etudiant_id
@@ -264,14 +289,15 @@ function get_score_max_from_situation_pro_by_etudiant($db, SituationPro $situati
     $db_req->execute();
     $result = $db_req->fetchAll();
 
-    $score = 0;
+    $total = 0;
     if (!empty($result))
     {
       for ($x = 0; $x < count($result); ++$x)
       {
-        $score += $result[$x]['score_max'] * $result[$x]['ratio'] / 100;
+        // pondération par la difficulté
+        $total += $result[$x]['difficulté']*$result[$x]['score_max'] * $result[$x]['ratio'] / 100;
       }
-      return $score;
+      return $total;
     }
     else { return 0; }
   }
@@ -289,7 +315,7 @@ function get_score_max_from_situation_pro_by_etudiant($db, SituationPro $situati
 function get_score_max_from_situation_pro($db, SituationPro $situation_pro)
 {
   try {
-    $db_req = $db->prepare('SELECT enigme.score_max, rel_enigme_situation_pro.ratio
+    $db_req = $db->prepare('SELECT enigme.score_max, rel_enigme_situation_pro.ratio,enigme.difficulté
       FROM enigme
       INNER JOIN score ON score.enigme_id = enigme.id
       INNER JOIN rel_enigme_situation_pro ON rel_enigme_situation_pro.enigme_id = enigme.id
@@ -299,14 +325,15 @@ function get_score_max_from_situation_pro($db, SituationPro $situation_pro)
     $db_req->execute();
     $result = $db_req->fetchAll();
 
-    $score = 0;
+    $total = 0;
     if (!empty($result))
     {
       for ($x = 0; $x < count($result); ++$x)
       {
-        $score += $result[$x]['score_max'] * $result[$x]['ratio'] / 100;
+        // pondération par la difficulté
+        $total += $result[$x]['difficulté']*$result[$x]['score_max'] * $result[$x]['ratio'] / 100;
       }
-      return $score;
+      return $total;
     }
     else { return 0; }
   }
@@ -319,7 +346,7 @@ function get_score_max_from_situation_pro($db, SituationPro $situation_pro)
 function get_score_from_etudiant_on_enigme($db, Etudiant $etudiant, Enigme $enigme)
 {
   try {
-    $db_req = $db->prepare('SELECT score.id, points, tentatives, temps, aide
+    $db_req = $db->prepare('SELECT score.id, points, tentatives, temps, aide, enigme.difficulté
       FROM score
       INNER JOIN etudiant ON etudiant.id = score.etudiant_id
       INNER JOIN enigme ON enigme.id = score.enigme_id
@@ -343,7 +370,7 @@ function get_score_from_etudiant_on_enigme($db, Etudiant $etudiant, Enigme $enig
 function get_score_from_etudiant_on_competence($db, Etudiant $etudiant, Competence $competence)
 {
   try {
-    $db_req = $db->prepare('SELECT score.id, points, tentatives, temps, aide
+    $db_req = $db->prepare('SELECT score.id, points, tentatives, temps, aide,enigme.difficulté
       FROM score
       INNER JOIN etudiant ON etudiant.id = score.etudiant_id
       INNER JOIN enigme ON enigme.id = score.enigme_id
@@ -358,7 +385,8 @@ function get_score_from_etudiant_on_competence($db, Etudiant $etudiant, Competen
     {
       for ($i = 0; $i < count($result); ++$i)
       {
-        $score_tab["points"] += $result[$i]["points"];
+        // pondération par difficulté
+        $score_tab["points"] += $result[$i]["points"]*$result[$i]["difficulté"];
         $score_tab["tentatives"] += $result[$i]["tentatives"];
         $score_tab["temps"] += $result[$i]["temps"];
         $score_tab["aide"] += $result[$i]["aide"];
@@ -378,7 +406,7 @@ function get_score_from_etudiant_on_competence($db, Etudiant $etudiant, Competen
 function get_score_from_etudiant_on_situation_pro($db, Etudiant $etudiant, SituationPro $situation_pro)
 {
   try {
-    $db_req = $db->prepare('SELECT score.id, taux_de_succes, tentatives, temps, aide, rel_enigme_situation_pro.ratio, enigme.score_max
+    $db_req = $db->prepare('SELECT score.id, taux_de_succes, tentatives, temps, aide, rel_enigme_situation_pro.ratio, enigme.score_max,enigme.difficulté
       FROM score
       INNER JOIN etudiant ON etudiant.id = score.etudiant_id
       INNER JOIN enigme ON enigme.id = score.enigme_id
@@ -393,7 +421,8 @@ function get_score_from_etudiant_on_situation_pro($db, Etudiant $etudiant, Situa
     {
       for ($i = 0; $i < count($result); ++$i)
       {
-        $score_tab["points"] += ($result[$i]["taux_de_succes"]/100)* $result[$i]["score_max"] * ($result[$i]["ratio"] / 100);
+        // pondération par difficulté
+        $score_tab["points"] += ($result[$i]["taux_de_succes"]/100)* $result[$i]["score_max"] * ($result[$i]["ratio"] / 100) * $result[$i]["difficulté"];
         $score_tab["tentatives"] += $result[$i]["tentatives"];
         $score_tab["temps"] += $result[$i]["temps"];
         $score_tab["aide"] += $result[$i]["aide"];
@@ -413,7 +442,7 @@ function get_score_from_etudiant_on_situation_pro($db, Etudiant $etudiant, Situa
 function get_moyenne_score_from_enigme($db, Enigme $enigme)
 {
   try {
-    $db_req = $db->prepare('SELECT points, tentatives, temps, aide
+    $db_req = $db->prepare('SELECT points, tentatives, temps, aide, enigme.difficulté
       FROM score
       INNER JOIN enigme ON enigme.id = score.enigme_id
       AND enigme.id = '.$enigme->get_id()
@@ -425,7 +454,8 @@ function get_moyenne_score_from_enigme($db, Enigme $enigme)
     {
       for ($i = 0; $i < count($result); ++$i)
       {
-        $score_tab["points"] += $result[$i]["points"];
+        // pondération par difficulté
+        $score_tab["points"] += $result[$i]["points"]*$result[$i]["difficulté"];
         $score_tab["tentatives"] += $result[$i]["tentatives"];
         $score_tab["temps"] += $result[$i]["temps"];
         $score_tab["aide"] += $result[$i]["aide"];
@@ -447,7 +477,7 @@ function get_moyenne_score_from_enigme($db, Enigme $enigme)
 function get_moyenne_score_from_competence($db, Competence $competence)
 {
   try {
-    $db_req = $db->prepare('SELECT points, tentatives, temps, aide
+    $db_req = $db->prepare('SELECT points, tentatives, temps, aide,enigme.difficulté
       FROM score
       INNER JOIN enigme ON enigme.id = score.enigme_id
       INNER JOIN competence ON competence.id = enigme.competence_id
@@ -460,7 +490,7 @@ function get_moyenne_score_from_competence($db, Competence $competence)
     {
       for ($i = 0; $i < count($result); ++$i)
       {
-        $score_tab["points"] += $result[$i]["points"];
+        $score_tab["points"] += $result[$i]["points"]*$result[$i]["difficulté"];
         $score_tab["tentatives"] += $result[$i]["tentatives"];
         $score_tab["temps"] += $result[$i]["temps"];
         $score_tab["aide"] += $result[$i]["aide"];
@@ -482,7 +512,7 @@ function get_moyenne_score_from_competence($db, Competence $competence)
 function get_moyenne_score_from_situation_pro($db, SituationPro $situation_pro)
 {
   try {
-    $db_req = $db->prepare('SELECT taux_de_succes, tentatives, temps, aide, rel_enigme_situation_pro.ratio, enigme.score_max
+    $db_req = $db->prepare('SELECT taux_de_succes, tentatives, temps, aide, rel_enigme_situation_pro.ratio, enigme.score_max, enigme.difficulté
       FROM score
       INNER JOIN enigme ON enigme.id = score.enigme_id
       INNER JOIN rel_enigme_situation_pro ON rel_enigme_situation_pro.enigme_id = enigme.id
@@ -496,7 +526,7 @@ function get_moyenne_score_from_situation_pro($db, SituationPro $situation_pro)
     {
       for ($i = 0; $i < count($result); ++$i)
       {
-        $score_tab["points"] += $result[$i]["score_max"] * ($result[$i]["ratio"]/100) * ($result[$i]["taux_de_succes"]/100);
+        $score_tab["points"] += $result[$i]["difficulté"] * $result[$i]["score_max"] * ($result[$i]["ratio"]/100) * ($result[$i]["taux_de_succes"]/100);
         $score_tab["tentatives"] += $result[$i]["tentatives"];
         $score_tab["temps"] += $result[$i]["temps"];
         $score_tab["aide"] += $result[$i]["aide"];

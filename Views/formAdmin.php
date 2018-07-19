@@ -49,30 +49,19 @@ require_once ("./Controllers/SituationProController.php");
              <!-- Competences pour une enigme -->
               <div>
                <label for="competence">Competence</label>
-                <input type="radio" name="competence" value="<?php echo $competence1->get_id(); ?>" checked> <p><?php echo $competence1->get_nom(); ?></p>
-                <input type="radio" name="competence" value="<?php echo $competence2->get_id(); ?>"> <p><?php echo $competence2->get_nom(); ?></p>
+                <?php foreach ($competences_tab as $cp) { ?>
+                    <input type="radio" name="competence" value="<?php echo $cp->get_id(); ?>" checked> <p><?php echo $cp->get_nom(); ?></p>
+                <?php } ?>
                 </div>
 
                 <!-- Situations professionnelles pour une enigme -->
-                <div>
+               <div>
                <label for="situation_pro">Situations Professionnelles</label>
-                <input type="number" step="5" min="0" max="100" name="situation_pro<?php echo $situation_pro1->get_id();?>" data-id="<?php echo $situation_pro1->get_id(); ?>">
-                <p><?php echo $situation_pro1->get_nom(); ?></p>
-
-                <input type="number" step="5" min="0" max="100" name="situation_pro<?php echo $situation_pro2->get_id();?>" data-id="<?php echo $situation_pro2->get_id(); ?>">
-                <p><?php echo $situation_pro2->get_nom(); ?></p>
-
-                <input type="number" step="5" min="0" max="100" name="situation_pro<?php echo $situation_pro3->get_id();?>" data-id="<?php echo $situation_pro3->get_id(); ?>">
-                <p><?php echo $situation_pro3->get_nom(); ?></p>
-
-                <input type="number" step="5" min="0" max="100" name="situation_pro<?php echo $situation_pro4->get_id();?>" data-id="<?php echo $situation_pro4->get_id(); ?>">
-                <p><?php echo $situation_pro4->get_nom(); ?></p>
-
-                <input type="number" step="5" min="0" max="100" name="situation_pro<?php echo $situation_pro5->get_id();?>" data-id="<?php echo $situation_pro5->get_id(); ?>">
-                <p><?php echo $situation_pro5->get_nom(); ?></p>
-
-                <input type="number" step="5" min="0" max="100" name="situation_pro<?php echo $situation_pro6->get_id();?>" data-id="<?php echo $situation_pro6->get_id(); ?>">
-                <p><?php echo $situation_pro6->get_nom(); ?></p>
+               <?php foreach ($situation_pro_tab as $sp) { ?>
+                    <input type="number" step="5" min="0" max="100" name="situation_pro<?php echo $sp->get_id();?>" data-id="<?php echo $sp->get_id(); ?>">
+                    <p><?php echo $sp->get_nom(); ?></p>
+               <?php } ?>
+                
                 </div>
             <?php endif; ?>
 
@@ -127,66 +116,27 @@ require_once ("./Controllers/SituationProController.php");
              <!-- Competences pour une enigme -->
               <div>
                <label for="competence">Competence</label>
-                <input type="radio" name="competence" value="<?php echo $competence1->get_id(); ?>"<?php if($competence == $competence1){echo "checked";} ?>> <p><?php echo $competence1->get_nom(); ?></p>
-                <input type="radio" name="competence" value="<?php echo $competence2->get_id(); ?>"<?php if($competence == $competence2){echo "checked";} ?>> <p><?php echo $competence2->get_nom(); ?></p>
-                </div>
+               <?php foreach ($competences_tab as $cp) { ?>
+                    <input type="radio" name="competence" value="<?php echo $cp->get_id(); ?>" <?php if($competence == $cp){echo "checked";} ?>> <p><?php echo $cp->get_nom(); ?></p>
+               <?php } ?>
+              </div>
 
                 <!-- Situations professionnelles pour une enigme -->
                 <div>
                <label for="situation_pro">Situations Professionnelles</label>
-                <input type="number" step="5" min="0" max="100" name="situation_pro<?php echo $situation_pro1->get_id();?>"
-                <?php for($i=0; $i<count($situation_pro); $i++){
-                if($situation_pro[$i]->get_id() == $situation_pro1->get_id()){
-                    echo 'value="'.$situation_pro[$i]->get_ratio().'"';
-                }
-            }?>
-                data-id="<?php echo $situation_pro1->get_id(); ?>">
-                <p><?php echo $situation_pro1->get_nom(); ?></p>
+                
+                <?php foreach ($situation_pro_tab as $sp) { ?>
+                    <input type="number" step="5" min="0" max="100" name="situation_pro<?php echo $sp->get_id();?>"
+                    <?php for($i=0; $i<count($situation_pro); $i++){
+                        if($situation_pro[$i]->get_id() == $sp->get_id()){
+                            echo 'value="'.$situation_pro[$i]->get_ratio().'"';
+                        }
+                    }?>
+                    data-id="<?php echo $sp->get_id(); ?>">
+                    <p><?php echo $sp->get_nom(); ?></p>
+    
+                <?php } ?>
 
-                <input type="number" step="5" min="0" max="100" name="situation_pro<?php echo $situation_pro2->get_id();?>"
-                <?php for($i=0; $i<count($situation_pro); $i++){
-                if($situation_pro[$i]->get_id() == $situation_pro2->get_id()){
-                    echo 'value="'.$situation_pro[$i]->get_ratio().'"';
-                }
-            }?>
-                data-id="<?php echo $situation_pro2->get_id(); ?>">
-                <p><?php echo $situation_pro2->get_nom(); ?></p>
-
-                <input type="number" step="5" min="0" max="100" name="situation_pro<?php echo $situation_pro3->get_id();?>"
-                <?php for($i=0; $i<count($situation_pro); $i++){
-                if($situation_pro[$i]->get_id() == $situation_pro3->get_id()){
-                    echo 'value="'.$situation_pro[$i]->get_ratio().'"';
-                }
-            }?>
-               data-id="<?php echo $situation_pro3->get_id(); ?>">
-                <p><?php echo $situation_pro3->get_nom(); ?></p>
-
-                <input type="number" step="5" min="0" max="100" name="situation_pro<?php echo $situation_pro4->get_id();?>"
-                <?php for($i=0; $i<count($situation_pro); $i++){
-                if($situation_pro[$i]->get_id() == $situation_pro4->get_id()){
-                    echo 'value="'.$situation_pro[$i]->get_ratio().'"';
-                }
-            }?>
-               data-id="<?php echo $situation_pro4->get_id(); ?>">
-                <p><?php echo $situation_pro4->get_nom(); ?></p>
-
-                <input type="number" step="5" min="0" max="100" name="situation_pro<?php echo $situation_pro5->get_id();?>"
-                <?php for($i=0; $i<count($situation_pro); $i++){
-                if($situation_pro[$i]->get_id() == $situation_pro5->get_id()){
-                    echo 'value="'.$situation_pro[$i]->get_ratio().'"';
-                }
-            }?>
-               data-id="<?php echo $situation_pro5->get_id(); ?>">
-                <p><?php echo $situation_pro5->get_nom(); ?></p>
-
-                <input type="number" step="5" min="0" max="100" name="situation_pro<?php echo $situation_pro6->get_id();?>"
-                <?php for($i=0; $i<count($situation_pro); $i++){
-                if($situation_pro[$i]->get_id() == $situation_pro6->get_id()){
-                    echo 'value="'.$situation_pro[$i]->get_ratio().'"';
-                }
-            }?>
-               data-id="<?php echo $situation_pro6->get_id(); ?>">
-                <p><?php echo $situation_pro6->get_nom(); ?></p>
                 </div>
             <?php endif; ?>
 
