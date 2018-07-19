@@ -4,11 +4,11 @@
   <div class="flex-container">
     <div class="points-totaux">
       <p class="points-obtenu">
-        <?php echo ( $enigme['points']*$enigme['difficulté'] ); ?>
+        <?php echo ( $enigme['points']*$enigme['difficulte'] ); ?>
       </p>
       <p class="points-max">
         /
-        <?php echo( $enigme['points_max']*$enigme['difficulté'] ); ?>
+        <?php echo( $enigme['points_max']*$enigme['difficulte'] ); ?>
       </p>
     </div>
     <h5 class="competence-title">
