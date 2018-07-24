@@ -75,7 +75,7 @@ function send_session_ouverte_info(){
         );
         $db_req->execute();
         $result = $db_req->fetchAll();
-        if (!empty($result))
+        if (empty($result))
         {
             return false;
         }
@@ -87,6 +87,7 @@ function send_session_ouverte_info(){
         echo "Selection failed: " . $e->getMessage();
         return false;
     }
+    echo $result;
     $session_ouverte = $result;
     header('Content-Type: application/json');
     $json = json_encode($session_ouverte);
