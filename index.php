@@ -61,7 +61,7 @@ if (isset($_GET['action'])) {
     }
 
     else if ($_GET['action'] == 'enigmes-disponibles'){
-        //if(etudiant_logged_in()) {
+        if(etudiant_logged_in()) {
           send_enigmes_dispo_info();
 
         } else {
