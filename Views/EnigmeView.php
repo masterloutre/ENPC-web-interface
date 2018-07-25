@@ -25,33 +25,31 @@
     }
     ?>
     </div>
-    <div class="tentatives">
+    <div class="difficulte">
       <?php
-      echo '<p>Tentatives ('.$enigme['tentatives'].')</p>';
-      for ($a = 0; $a < $enigme['tentatives']; ++$a)
+      echo '<p>Difficulté ('.$enigme['difficulte'].')</p>';
+      for ($a = 0; $a < $enigme['difficulte']; ++$a)
       {
         echo '<div class="tentative-full-box"></div>';
-      }
-      for ($a = 0; $a < $enigme['tentatives_max'] - $enigme['tentatives']; ++$a)
-      {
-        echo '<div class="tentative-empty-box"></div>';
       }
       ?>
     </div>
   </div>
   <div class="situation_pro_bar">
    <div class="flex-container">
-        <?php
+      <?php
       for ($y = 0; $y < count($enigme['situations_pro']); ++$y)
       {
-        echo '<span data-size="'.$enigme['situations_pro'][$y]->get_ratio().'"></span>';
-      }
-      ?>
+        echo '<span data-size="'.$enigme['situations_pro'][$y]->get_ratio().
+                  '" style="flex-grow :'.$enigme['situations_pro'][$y]->get_ratio().
+                  '; height : 10px; background-color : '.$enigme['situations_pro'][$y]->get_couleur().
+        ';"></span>';
+      }?>
     </div>
   <?php
   for ($y = 0; $y < count($enigme['situations_pro']); ++$y)
   {
-    echo $enigme['situations_pro'][$y]->get_nom().' | ';
+    echo '<div class="tentative-full-box" style="background-color:'.$enigme['situations_pro'][$y]->get_couleur().';"></div>'.$enigme['situations_pro'][$y]->get_nom().' | ';
   }
   ?>
   </div>

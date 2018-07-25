@@ -1,4 +1,4 @@
-var container = document.getElementsByClassName("situation_pro_bar");
+/*var container = document.getElementsByClassName("situation_pro_bar");
 var color = ["#54bfc4", "#8c4e81", "#6c488b"];
 
 colornb = 0;
@@ -17,4 +17,4 @@ for(var i=0; i<container.length; i++){
     }
     
     colornb = 0;
-}
+}*/

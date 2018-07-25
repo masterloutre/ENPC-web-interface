@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 require "./Global/connect.php";
 require_once "./Models/Etudiant.php";
@@ -61,7 +61,7 @@ function update_etudiant($db, Etudiant $etudiant){
     }
 
     try{
-    $bdd_req = $db->prepare('UPDATE `etudiant` SET nom = "'.$etudiant->get_nom().'", prenom = "'.$etudiant->get_prenom().'", num_etud = '.$etudiant->get_num_etud().', promo = '.$etudiant->get_promo().' WHERE `id` = '.$etudiant->get_id());
+    $bdd_req = $db->prepare('UPDATE `etudiant` SET nom = "'.$etudiant->get_nom().'", prenom = "'.$etudiant->get_prenom().'", num_etud = '.$etudiant->get_num_etud().', promo = '.$etudiant->get_promo().'", mdp = "'.sha1('gz'.$etudiant->get_mdp()).' WHERE `id` = '.$etudiant->get_id());
     $bdd_req->execute();
     }catch(PDOException $e){
         echo "UPDATE ETUDIANT FUNC ERROR : ".$e->getMessage();
@@ -73,7 +73,7 @@ function update_etudiant($db, Etudiant $etudiant){
 
 function etudiant_exists($db, Etudiant $etudiant){
     try{
-    $bdd_req = $db->prepare('SELECT id FROM `etudiant` WHERE num_etud = '.$etudiant->get_num_etud());
+    $bdd_req = $db->prepare('SELECT id FROM etudiant WHERE num_etud = '.$etudiant->get_num_etud());
     $bdd_req->execute();
     $result = $bdd_req->fetchAll();
     }catch(PDOException $e){

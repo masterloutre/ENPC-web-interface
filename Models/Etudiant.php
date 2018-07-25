@@ -90,7 +90,7 @@ class Etudiant {
     public function get_vars(){
         $object = get_object_vars($this);
         unset($object['id']);
-        unset($object['mdp']);
+        //unset($object['mdp']);
         unset($object['token']);
         return $object;
     }
