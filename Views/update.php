@@ -14,9 +14,11 @@ if(!array_key_exists('item', $_GET)){
     if($_GET['item'] == 'enigme'){
         //récupère les ratio des situations pro
         $ratio = array();
-        for($i=1; $i<=6; $i++){
-            array_push($ratio, $_POST['situation_pro'.$i]);
-            unset($_POST['situation_pro'.$i]);
+        foreach($_POST as $key=>$value){
+            if(strpos($key,'situation_pro')!=false){
+                $ratio[$key]=$value;
+                unset($_POST[$key]);
+            }
         }
     }
 
@@ -48,7 +50,8 @@ if(!array_key_exists('item', $_GET)){
             }
         }
 
-        header("Refresh:0; url=./index.php?action=interface-admin&vue=liste&item=".$_GET['item']);
+        //header("Refresh:0; url=./index.php?action=interface-admin&vue=liste&item=".$_GET['item']);
+        header("Location:./index.php?action=interface-admin&vue=liste&item=".$_GET['item']);
     }
 }
 

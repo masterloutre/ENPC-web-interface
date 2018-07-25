@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 require "./Global/connect.php";
 require_once "./Models/Enseignant.php";
@@ -61,7 +61,7 @@ function update_enseignant($db, Enseignant $enseignant){
 
     try{
 
-        $bdd_req = $db->prepare('UPDATE `enseignant` SET nom = "'.$enseignant->get_nom().'", prenom = "'.$enseignant->get_prenom().'", login = "'.$enseignant->get_login().'" WHERE `id` = '.$enseignant->get_id());
+        $bdd_req = $db->prepare('UPDATE `enseignant` SET nom = "'.$enseignant->get_nom().'", prenom = "'.$enseignant->get_prenom().'", login = "'.$enseignant->get_login().'", mdp = "'.sha1('gz'.$enseignant->get_mdp()).'" WHERE `id` = '.$enseignant->get_id());
         $bdd_req->execute();
 
     }catch(PDOException $e){

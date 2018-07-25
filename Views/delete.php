@@ -24,7 +24,8 @@ if(!array_key_exists('item', $_GET)){
             $method = 'delete_'.ucfirst($_GET['item']);
             $result = $method($db, $object);
 
-            header("Refresh:0; url=./index.php?action=interface-admin&vue=liste&item=".$_GET['item']);
+            //header("Refresh:0; url=./index.php?action=interface-admin&vue=liste&item=".$_GET['item']);
+            header("Location:./index.php?action=interface-admin&vue=liste&item=".$_GET['item']);
         }
     }
 }

@@ -13,6 +13,7 @@ class SituationPro {
     private $id;
     private $nom;
     private $ratio;
+    private $color;
 
 
     // Construction de la classe
@@ -44,6 +45,14 @@ class SituationPro {
 
     public function set_ratio($ratio) {
         $this->ratio = $ratio;
+    }
+
+    public function get_couleur() {
+        return $this->color;
+    }
+
+    public function set_couleur($couleur) {
+        $this->color = $couleur;
     }
     // Fin du multiplier--------------------------------
     

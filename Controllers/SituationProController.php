@@ -21,7 +21,7 @@ function add_situation_pro($db, SituationPro $situPro){
 
     try{
 
-    $bdd_req = $db->prepare('INSERT INTO situation_pro (nom) VALUES ("'.$situPro->get_nom().'")');
+    $bdd_req = $db->prepare('INSERT INTO situation_pro (nom,Couleur) VALUES ("'.$situPro->get_nom().','.$situPro->get_couleur().'")');
     $bdd_req->execute();
 
     }catch(PDOException $e){
@@ -63,7 +63,7 @@ function update_situation_pro($db, SituationPro $situPro){
 
     try{
 
-    $bdd_req = $db->prepare('UPDATE `situation_pro` SET nom = "'.$situPro->get_nom().'" WHERE `id` = '.$situPro->get_id());
+    $bdd_req = $db->prepare('UPDATE `situation_pro` SET nom = "'.$situPro->get_nom().'Couleur ="'.$situPro->get_couleur().'" '.' WHERE `id` = '.$situPro->get_id());
     $bdd_req->execute();
 
     }catch(PDOException $e){
@@ -137,7 +137,7 @@ function get_all_situation_pro($db){
 function get_situation_pro_from_enigme($db, Enigme $enigme)
 {
   try {
-    $db_req = $db->prepare('SELECT situation_pro.id, situation_pro.nom, rel_enigme_situation_pro.ratio
+    $db_req = $db->prepare('SELECT situation_pro.id, situation_pro.nom, situation_pro.couleur, rel_enigme_situation_pro.ratio
       FROM situation_pro
       INNER JOIN rel_enigme_situation_pro ON rel_enigme_situation_pro.situation_pro_id = situation_pro.id
       INNER JOIN enigme ON rel_enigme_situation_pro.enigme_id = enigme.id
@@ -165,7 +165,7 @@ function get_situation_pro_from_enigme($db, Enigme $enigme)
 function add_ratio_situation_pro_enigme($db, $enigme_id, $situation_id, $ratio)
 {
     try{
-        $db_req = $db->prepare('INSERT INTO `rel_enigme_situation_pro` (`enigme_id`, `situation_pro_id`, `ratio`) VALUES ('.$enigme_id.', '.$situation_id.', '.$ratio.')');
+        $db_req = $db->prepare('INSERT INTO rel_enigme_situation_pro (enigme_id, situation_pro_id, ratio) VALUES ('.$enigme_id.', '.$situation_id.', '.$ratio.')');
         $db_req->execute();
     }
     catch(PDOException $e) {

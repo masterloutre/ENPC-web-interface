@@ -29,16 +29,18 @@ require_once ("./Controllers/SituationProController.php");
                }
 
             foreach($empty as $key => $value): ?>
-              <!-- Input classique et gestion type enigme -->
+              <!-- Input classique -->
                <div>
                 <label for="<?php echo $key; ?>"><?php echo $key; ?></label>
+                <!-- Si gestion d'énigmes et si on est sur l'input du type, on crée un sélecteur -->
                 <?php if($_GET['item'] == 'enigme' && $key == 'type'): ?>
                     <select name="<?php echo $key; ?>">
                         <option value="1">QCM</option>
                         <option value="2">Input</option>
                         <option value="3">Algo</option>
                     </select>
-                <?php else : ?>
+                <?php else : ?>                
+                <!-- Sinon champ d'input normal-->
                     <input type="text" name="<?php echo $key; ?>" required>
                 <?php endif; ?>
                 </div>
@@ -50,14 +52,16 @@ require_once ("./Controllers/SituationProController.php");
               <div>
                <label for="competence">Competence</label>
                 <?php foreach ($competences_tab as $cp) { ?>
-                    <input type="radio" name="competence" value="<?php echo $cp->get_id(); ?>" checked> <p><?php echo $cp->get_nom(); ?></p>
+                    <input type="radio" name="competence" value="<?php echo $cp->get_id(); ?>" onchange="<php? $skill =$cp;" checked> <p><?php echo $cp->get_nom(); ?></p>
                 <?php } ?>
                 </div>
 
                 <!-- Situations professionnelles pour une enigme -->
                <div>
                <label for="situation_pro">Situations Professionnelles</label>
-               <?php foreach ($situation_pro_tab as $sp) { ?>
+               <?php 
+               
+               foreach ($situation_pro_tab as $sp) { ?>
                     <input type="number" step="5" min="0" max="100" name="situation_pro<?php echo $sp->get_id();?>" data-id="<?php echo $sp->get_id(); ?>">
                     <p><?php echo $sp->get_nom(); ?></p>
                <?php } ?>

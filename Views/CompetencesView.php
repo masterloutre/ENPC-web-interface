@@ -10,7 +10,12 @@
     <div class="results">
     <div class="points points-totaux">
       <p class="points-obtenu">
-        <?php echo( $content['score_competence'.($i+1)]->get_points() ); ?>
+        <?php 
+        if(!empty($content['score_competence'.($i+1)])&&$content['score_competence'.($i+1)]!=false){
+          echo( $content['score_competence'.($i+1)]->get_points() );
+        }else{
+          echo "NA";
+        }?>
       </p>
       <p class="points-max">
         /
