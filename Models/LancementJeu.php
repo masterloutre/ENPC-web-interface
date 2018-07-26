@@ -49,7 +49,6 @@ class LancementJeu {
     
     public function get_vars(){
         $object = get_object_vars($this);
-        unset($object['id']);
         return $object;
     }
 

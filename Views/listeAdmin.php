@@ -48,15 +48,13 @@ require_once ("./Controllers/SituationProController.php");
 
                 <td>
                     <!-- valeur des cases -->
-                    <?php echo $value; ?>
+                    
                     <!-- si en plus on a des compétences à afficher -->
-                    <?php if($_GET['item'] == 'enigme' && $key == 'competence'){
-                    echo '<div class="situation_pro_bar"> <div class="flex-container">';
-                        for ($y = 0; $y < count($situPro); ++$y)
-                          {
-                            echo '<span data-size="'.$situPro[$y]->get_ratio().'"></span>';
-                          }
-                    echo '</div> </div>';
+                    <?php if($_GET['item'] == 'enigme' && $key == 'active'){
+                        if($value){ echo "true"; }
+                        else{ echo "false"; }
+                    }else{
+                        echo $value;
                     } ?>
                 </td>
 

@@ -18,14 +18,14 @@ function add_enigme($db, Enigme $enigme)
   {
     try {
       $db_req = $db->prepare('INSERT INTO enigme
-        (index_unity, type, nom, temps_max, difficulte, score_max, tentatives_max, competence_id)
-        VALUES ('.$enigme->get_index_unity().','.$enigme->get_type().',"'.$enigme->get_nom().'",'.$enigme->get_temps_max().','.$enigme->get_difficulte().','.$enigme->get_score_max().','.$enigme->get_tentatives_max().','.$enigme->get_competence()->get_id().')');
+        (index_unity, type, nom, temps_max, difficulte, score_max, tentatives_max, competence_id, active)
+        VALUES ('.$enigme->get_index_unity().','.$enigme->get_type().',"'.$enigme->get_nom().'",'.$enigme->get_temps_max().','.$enigme->get_difficulte().','.$enigme->get_score_max().','.$enigme->get_tentatives_max().','.$enigme->get_competence()->get_id().','.$enigme->get_active().')');
       $db_req->execute();
       $enigme->set_id($db->lastInsertId());
       return true;
     }
     catch(PDOException $e) {
-      echo "Insertion failed: " . $e->getMessage();
+      echo "Enigma Insertion failed: " . $e->getMessage();
       return false;
     }
   }
@@ -38,8 +38,16 @@ function update_enigme($db, Enigme $enigme)
   {
     try {
       $db_req = $db->prepare('UPDATE enigme
-        SET index_unity = '.$enigme->get_index_unity().', type = '.$enigme->get_type().', nom = "'.$enigme->get_nom().'", temps_max = '.$enigme->get_temps_max().', difficulte = '.$enigme->get_difficulte().', score_max = '.$enigme->get_score_max().', tentatives_max = '.$enigme->get_tentatives_max().', competence_id = '.$enigme->get_competence()->get_id().'
-        WHERE enigme.id = '.$enigme->get_id()
+        SET index_unity = '.$enigme->get_index_unity().
+        ', type = '.$enigme->get_type().
+        ', nom = "'.$enigme->get_nom().
+        '", temps_max = '.$enigme->get_temps_max().
+        ', difficulte = '.$enigme->get_difficulte().
+        ', score_max = '.$enigme->get_score_max().
+        ', tentatives_max = '.$enigme->get_tentatives_max().
+        ', competence_id = '.$enigme->get_competence()->get_id().
+        ', active ='.$enigme->get_active().
+        ' WHERE enigme.id = '.$enigme->get_id()
         );
       $db_req->execute();
       return true;
@@ -49,7 +57,7 @@ function update_enigme($db, Enigme $enigme)
       return false;
     }
   }
-  else { return false; }
+  else { echo "Updating non-existing Enigma" ; return false; } //WTF
 }
 
 function delete_enigme($db, Enigme $enigme)
@@ -87,13 +95,13 @@ function enigme_exists($db, Enigme $enigme)
   try {
     $db_req = $db->prepare('SELECT id
       FROM enigme
-      WHERE enigme.index_unity = '.$enigme->get_index_unity()
+      WHERE enigme.id = '.$enigme->get_id()
       );
     $db_req->execute();
     $result = $db_req->fetchAll();
   }
   catch(PDOException $e) {
-    echo "Selection failed: " . $e->getMessage();
+    echo "Enigma existence error, id is uncomplete: " . $e->getMessage();
     return false;
   }
 
@@ -104,7 +112,7 @@ function enigme_exists($db, Enigme $enigme)
 function get_enigme($db, $id)
 {
   try {
-    $db_req = $db->prepare('SELECT id, index_unity, type, nom, temps_max, difficulte, score_max, tentatives_max, competence_id
+    $db_req = $db->prepare('SELECT id, index_unity, type, nom, temps_max, difficulte, score_max, tentatives_max, competence_id, active
       FROM enigme
       WHERE enigme.id = '.$id
       );
@@ -126,7 +134,7 @@ function get_enigme($db, $id)
 function get_all_enigme($db)
 {
   try {
-    $db_req = $db->prepare('SELECT id, index_unity, type, nom, temps_max, difficulte, score_max, tentatives_max, competence_id
+    $db_req = $db->prepare('SELECT id, index_unity, type, nom, temps_max, difficulte, score_max, tentatives_max, competence_id, active
       FROM enigme
       ORDER BY id'
       );
@@ -148,7 +156,7 @@ function get_all_enigme($db)
 
   }
   catch(PDOException $e) {
-    echo "Selection failed: " . $e->getMessage();
+    echo "Selections failed: " . $e->getMessage();
     return false;
   }
 

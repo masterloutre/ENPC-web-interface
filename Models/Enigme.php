@@ -25,6 +25,7 @@ class Enigme {
     private $score_max;
     private $tentatives_max;
     private $competence;
+    private $active;
 
 
     // Construction de la classe
@@ -104,6 +105,14 @@ class Enigme {
 
     public function set_competence($competence) {
         $this->competence = $competence;
+    }
+
+    public function get_active() {
+        return $this->active;
+    }
+
+    public function set_active($bool) {
+        $this->active = $bool;
     }
     // Fin du multiplier--------------------------------
 

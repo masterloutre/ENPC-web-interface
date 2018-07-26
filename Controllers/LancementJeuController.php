@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 require "./Global/connect.php";
 require_once "./Models/LancementJeu.php";
@@ -72,7 +72,7 @@ function update_lancement_jeu($db, LancementJeu $lancement){
 function lancement_jeu_exists($db, LancementJeu $lancement){
     try{
 
-        $bdd_req = $db->prepare('SELECT id FROM `lancement_jeu` WHERE phase = '.$lancement->get_phase());
+        $bdd_req = $db->prepare('SELECT id FROM `lancement_jeu` WHERE id = '.$lancement->get_id());
         $bdd_req->execute();
         $result = $bdd_req->fetchAll();
 

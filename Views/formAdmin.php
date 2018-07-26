@@ -18,12 +18,13 @@ require_once ("./Controllers/SituationProController.php");
 
         <?php $method = 'create_'.ucfirst($_GET['item']);
         $empty = $method(array());
-        //var_dump($empty); ?>
+        ?>
 
         <!-- AJOUT -->
         <!--<form action="./Views/add.php?item=<?php echo $_GET['item']; ?>" method="POST">-->
         <form action="./index.php?action=interface-admin&admin=add&item=<?php echo $_GET['item']; ?>" method="POST">
            <?php $empty = $empty->get_vars();
+           unset($empty['id']);
                if($_GET['item'] == 'enigme'){
                    unset($empty['score_max']);
                }
@@ -39,9 +40,11 @@ require_once ("./Controllers/SituationProController.php");
                         <option value="2">Input</option>
                         <option value="3">Algo</option>
                     </select>
-                <?php else : ?>                
-                <!-- Sinon champ d'input normal-->
+
+                    <!-- Sinon champ d'input normal-->
+                <?php else :?>
                     <input type="text" name="<?php echo $key; ?>" required>
+                
                 <?php endif; ?>
                 </div>
 
@@ -109,8 +112,14 @@ require_once ("./Controllers/SituationProController.php");
                         <option value="2" <?php if($value == "Input"){echo "selected";}?> >Input</option>
                         <option value="3" <?php if($value == "Algo"){echo "selected";}?> >Algo</option>
                     </select>
-                <?php else : ?>
+                
+                <?php else :
+                  if($key=="id"){?>                
+                    <input type="text" name="<?php echo $key; ?>" value="<?php echo $value; ?>" disabled="disabled">
+                  <?php }else{ ?> 
                     <input type="text" name="<?php echo $key; ?>" value="<?php echo $value; ?>" required>
+                  <?php } ?> 
+                  
                 <?php endif; ?>
                 </div>
 

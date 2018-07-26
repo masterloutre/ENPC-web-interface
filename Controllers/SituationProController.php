@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 require "./Global/connect.php";
 require_once "./Models/SituationPro.php";
@@ -20,8 +20,9 @@ function add_situation_pro($db, SituationPro $situPro){
     }
 
     try{
-
-    $bdd_req = $db->prepare('INSERT INTO situation_pro (nom,Couleur) VALUES ("'.$situPro->get_nom().','.$situPro->get_couleur().'")');
+        if(empty($situPro->get_couleur()))
+            echo "wesh";
+    $bdd_req = $db->prepare('INSERT INTO situation_pro (nom,couleur) VALUES ("'.$situPro->get_nom().'","'.$situPro->get_couleur().'")');
     $bdd_req->execute();
 
     }catch(PDOException $e){
@@ -63,7 +64,7 @@ function update_situation_pro($db, SituationPro $situPro){
 
     try{
 
-    $bdd_req = $db->prepare('UPDATE `situation_pro` SET nom = "'.$situPro->get_nom().'Couleur ="'.$situPro->get_couleur().'" '.' WHERE `id` = '.$situPro->get_id());
+    $bdd_req = $db->prepare('UPDATE `situation_pro` SET nom = "'.$situPro->get_nom().'", couleur ="'.$situPro->get_couleur().'" WHERE `id` = '.$situPro->get_id());
     $bdd_req->execute();
 
     }catch(PDOException $e){
