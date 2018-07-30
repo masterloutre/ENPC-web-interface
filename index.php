@@ -40,6 +40,10 @@ if (isset($_GET['action'])) {
         {
           admin_update();
         }
+        else if (isset($_GET['admin']) && $_GET['admin'] == 'multiple_update')
+        {
+          admin_multiple_update();
+        }
         else
         {
           interface_admin();

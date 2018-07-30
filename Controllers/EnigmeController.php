@@ -37,6 +37,7 @@ function update_enigme($db, Enigme $enigme)
   if(enigme_exists($db, $enigme) && $enigme->get_id() != NULL)
   {
     try {
+      
       $db_req = $db->prepare('UPDATE enigme
         SET index_unity = '.$enigme->get_index_unity().
         ', type = '.$enigme->get_type().

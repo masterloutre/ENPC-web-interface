@@ -257,3 +257,8 @@ function admin_update()
 {
   require('./Views/update.php');
 }
+
+function admin_multiple_update()
+{
+  require('./Views/multipleUpdate.php');
+}

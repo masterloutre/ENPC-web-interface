@@ -23,6 +23,9 @@ require_once ("./Controllers/SituationProController.php");
     <!-- Bouton de modification-->
     <a class="button" href="index.php?action=interface-admin">Modifier une autre liste</a>
 
+    <?php if($_GET['item']=="enigme"){?>
+        <a class="button" href="<?php echo 'index.php?action=interface-admin&vue=enable&item='.$_GET['item']; ?>">Activer plusieurs énigmes</a>
+    <?php }?>
     <!-- On récupère tout de la bdd en composant le nom de la méthode avec l'item-->
     <?php $method = 'get_all_'.ucfirst($_GET['item']);
     $list = $method($db); ?>
