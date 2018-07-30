@@ -24,6 +24,11 @@ if(!array_key_exists('item', $_GET)){
             
         }
         $entry["competence"]=$entry["competence_id"];
+
+        $situation_pro_ratio = get_ratio_situation_pro_enigme($db,$entry["id"]);
+        foreach ($situation_pro_ratio as $sp) {
+            $entry["situation_pro".$sp["situation_pro_id"]]=$sp["ratio"];
+        }
         $content[$i]=$entry;
 
     }

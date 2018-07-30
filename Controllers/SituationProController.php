@@ -176,4 +176,31 @@ function add_ratio_situation_pro_enigme($db, $enigme_id, $situation_id, $ratio)
     return 1;
 }
 
+function get_ratio_situation_pro_enigme($db, $enigme_id)
+{
+    try{
+        $db_req = $db->prepare(
+        'SELECT situation_pro_id, ratio
+        FROM rel_enigme_situation_pro 
+        WHERE enigme_id = '.$enigme_id
+        );
+        $db_req->execute();
+        $situation_pro_tab = [];
+        $result = $db_req->fetchAll();
+        if (!empty($result))
+        {
+            print_r($result);
+            return $result;
+        }
+        else { 
+            echo "Aucune SPs associées à cette énigme.";
+            return array();
+        }
+    }
+    catch(PDOException $e) {
+        echo "[get_ratio_situation_pro_enigme] failed: " . $e->getMessage();
+        return [];
+    }
+}
+
  ?>
