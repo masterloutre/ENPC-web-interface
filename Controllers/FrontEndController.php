@@ -40,7 +40,7 @@ function login()
 
        if( $db_req->rowCount() > 0)
        {
-          if(sha1('gz'.$password) == $result[0]['mdp'])
+          if(sha1('gz'.$password) == sha1('gz'.$result[0]['mdp']))
           {
                $_SESSION['user_session'] = $result[0]['token'];
             if (isset($result[0]['num_etud'])) // Etudiant

@@ -50,8 +50,8 @@ if(!array_key_exists('item', $_GET)){
             }
         }
 
-        header("Refresh:0; url=./index.php?action=interface-admin&vue=liste&item=".$_GET['item']);
-        //header("Location:./index.php?action=interface-admin&vue=liste&item=".$_GET['item']);
+        //header("Refresh:0; url=./index.php?action=interface-admin&vue=liste&item=".$_GET['item']);
+        header("Location:./index.php?action=interface-admin&vue=liste&item=".$_GET['item']);
     }
 }
 

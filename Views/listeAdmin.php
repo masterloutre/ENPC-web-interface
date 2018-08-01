@@ -34,6 +34,7 @@ require_once ("./Controllers/SituationProController.php");
     <table>
         <tr>
            <?php $headers = $list[0]->get_vars();
+           //print_r($headers);
             if($_GET['item']=='enigme'){ $headers['situation_pro']='';unset($headers['tentatives_max']); }
             foreach($headers as $key => $value):?>
             <th><?php echo $key; ?></th>
@@ -46,7 +47,7 @@ require_once ("./Controllers/SituationProController.php");
            <?php $id = $item->get_id();
             $item = $item->get_vars();
             if($_GET['item'] == 'enseignant'){
-                $admin = $item->get_admin();
+                $admin = $item['admin'];
             }
             if($_GET['item'] == 'enigme'){
                 unset($item['tentatives_max']);
@@ -68,10 +69,14 @@ require_once ("./Controllers/SituationProController.php");
                             foreach ($sps as $sp) {
                                 echo get_situation_pro($db,$sp['situation_pro_id'])->get_nom().': '.$sp['ratio'].'%'.'<br>';
                             }
-                        }else{
+                        }
+                        else{
                             echo $value;
                         }
-                    }?>
+                    }else{
+                        echo $value;
+                    }
+                    ?>
                 </td>
 
             <?php endforeach;

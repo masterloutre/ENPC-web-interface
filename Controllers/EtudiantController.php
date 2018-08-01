@@ -20,7 +20,8 @@ function add_etudiant($db, Etudiant $etudiant){
     }
 
     try{
-    $pass_hache = sha1('gz'.$etudiant->get_mdp());
+    //$pass_hache = sha1('gz'.$etudiant->get_mdp());
+    $pass_hache = $etudiant->get_mdp();
     $etudiant->set_token(create_token($etudiant->get_num_etud()));
 
     $bdd_req = $db->prepare('INSERT INTO etudiant(nom, prenom, num_etud, promo, mdp, token) VALUES ("'.$etudiant->get_nom().'","'.$etudiant->get_prenom().'",'.$etudiant->get_num_etud().','.$etudiant->get_promo().', "'.$pass_hache.'", "'.$etudiant->get_token().'")');
@@ -59,9 +60,10 @@ function update_etudiant($db, Etudiant $etudiant){
     if($exists && $prev_id != $etudiant->get_id()){
         return 0;
     }
-
+    //$pass_hache = sha1('gz'.$etudiant->get_mdp());
+    $pass_hache = $etudiant->get_mdp();
     try{
-    $bdd_req = $db->prepare('UPDATE `etudiant` SET nom = "'.$etudiant->get_nom().'", prenom = "'.$etudiant->get_prenom().'", num_etud = '.$etudiant->get_num_etud().', promo = '.$etudiant->get_promo().', mdp = "'.sha1('gz'.$etudiant->get_mdp()).'" WHERE `id` = '.$etudiant->get_id());
+    $bdd_req = $db->prepare('UPDATE `etudiant` SET nom = "'.$etudiant->get_nom().'", prenom = "'.$etudiant->get_prenom().'", num_etud = '.$etudiant->get_num_etud().', promo = '.$etudiant->get_promo().', mdp = "'.$pass_hache.'" WHERE `id` = '.$etudiant->get_id());
     $bdd_req->execute();
     }catch(PDOException $e){
         echo "UPDATE ETUDIANT FUNC ERROR : ".$e->getMessage();
