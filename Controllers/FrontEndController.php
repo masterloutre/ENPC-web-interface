@@ -126,12 +126,13 @@ function interface_etudiant()
   {
     $content['score_competence'.($i+1) ]= get_score_from_etudiant_on_competence($db, $etudiant, $competences_tab[$i]);
     $content['points_max_competence'.($i+1) ] = get_score_max_from_competence_by_etudiant($db, $competences_tab[$i], $etudiant);
+    for ($j = 0 ; $j < count($situation_pro_tab) ; $j++)
+    {
+      $content['score_situation_pro'.($j+1) ][$i]= get_score_from_etudiant_on_situation_pro_on_competence($db, $etudiant, $situation_pro_tab[$j], $competences_tab[$i]);
+      $content['points_max_situation_pro'.($j+1) ][$i] = check_score_from_etudiant_on_situation_pro_on_competence($db, $etudiant, $situation_pro_tab[$j], $competences_tab[$i]);
+    }
   }
-  for ($i = 0 ; $i < count($situation_pro_tab) ; $i++)
-  {
-    $content['score_situation_pro'.($i+1) ]= get_score_from_etudiant_on_situation_pro($db, $etudiant, $situation_pro_tab[$i]);
-    $content['points_max_situation_pro'.($i+1) ] = get_score_max_from_situation_pro_by_etudiant($db, $situation_pro_tab[$i], $etudiant);
-  }
+  
   require('./Views/HeaderView.php');
   require('./Views/CompetencesView.php');
   require('./Views/EnigmesView.php');
@@ -172,12 +173,14 @@ function interface_enseignant_competence()
   {
     $content['score_competence'.($i+1) ]= get_moyenne_score_from_competence($db, $competences_tab[$i]);
     $content['points_max_competence'.($i+1) ] = get_score_max_from_competence($db, $competences_tab[$i]);
+    for ($j = 0 ; $j < count($situation_pro_tab) ; $j++)
+    {
+      $content['points_max_situation_pro'.($j+1) ][$i] = check_score_from_situation_pro_on_competence($db, $situation_pro_tab[$j],$competences_tab[$i]);
+      $content['score_situation_pro'.($j+1) ][$i]= get_moyenne_score_from_situation_pro_on_competence($db, $situation_pro_tab[$j],$competences_tab[$i]);
+      
+    }
   }
-  for ($i = 0 ; $i < count($situation_pro_tab) ; $i++)
-  {
-    $content['score_situation_pro'.($i+1) ]= get_moyenne_score_from_situation_pro($db, $situation_pro_tab[$i]);
-    $content['points_max_situation_pro'.($i+1) ] = get_score_max_from_situation_pro($db, $situation_pro_tab[$i]);
-  }
+  
   
   require('./Views/HeaderView.php');
   if($content['user']->get_admin()){

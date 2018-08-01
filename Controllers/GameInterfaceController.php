@@ -31,13 +31,24 @@ function send_dummy_player_info(){
 }
 
 
-//get ids of all the enigmas the player will have to do
-function enigmes_dispo() {
+function send_enigmes_samples() {
     include "./Global/connect.php";
     $enigmes_type1 = get_n_random_from_array(get_all_enigme_by_type($db, 1), 1);
     $enigmes_type2 = get_n_random_from_array(get_all_enigme_by_type($db, 2), 1);
     $enigmes_type3 = get_n_random_from_array(get_all_enigme_by_type($db, 3), 1);
     $enigmes = array_merge($enigmes_type1, $enigmes_type2, $enigmes_type3);
+    return $enigmes;
+}
+
+function send_enigmes_active() {
+    include "./Global/connect.php";
+    $enigmes = get_all_active_enigme($db);
+    return $enigmes;
+}
+
+function enigmes_dispo() {
+    include "./Global/connect.php";
+    $enigmes = get_all_active_enigme($db);
     return $enigmes;
 }
 

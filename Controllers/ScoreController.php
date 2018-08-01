@@ -64,18 +64,27 @@ function update_score($db, Score $score)
     try {
       $db_req = $db->prepare(
         'UPDATE score
-         SET points = "'.$score->get_points().'", tentatives = '.$score->get_tentatives().', temps = '.$score->get_temps().', aide = '.$score->get_aide().'
-         WHERE score.id = '.$score->get_id()
+         SET 
+         points = "'.$score->get_points().
+         '", tentatives = '.$score->get_tentatives().
+         ', temps = '.$score->get_temps().
+         ', aide = '.$score->get_aide().
+         ', taux_de_succes = '.$score->get_taux_de_succes().
+         ' WHERE score.id = '.$score->get_id()
         );
       $db_req->execute();
+      echo "Score Update réussi.";
       return true;
     }
     catch(PDOException $e) {
-      echo "Update failed: " . $e->getMessage();
+      echo "Score Update failed: " . $e->getMessage();
       return false;
     }
   }
-  else { return false; }
+  else {
+    "Tentative de MAJ du score échoué, inexistant ou identifiant erroné.";
+    return false;
+  }
 }
 
 function delete_score($db, Score $score)
@@ -162,7 +171,7 @@ function get_score($db, $id)
 {
   try {
     $db_req = $db->prepare(
-      'SELECT id, points, tentatives, temps, aide
+      'SELECT id, points, tentatives, temps, aide, taux_de_succes
        FROM score
        WHERE score.id = '.$id
       );
@@ -229,21 +238,24 @@ function get_score_max_from_competence_by_etudiant($db, Competence $competence, 
       $db_req->execute();
       $result = $db_req->fetchAll();
 
-    $total = 0;
+    $score_tab = ["points" => 0, "tentatives" => 0, "temps" => 0, "aide" => 0];
     if (!empty($result))
     {
       for ($x = 0; $x < count($result); ++$x)
       {
         // pondération par la difficulté
-        $total += $result[$x]['score_max']*$result[$x]['difficulte'];
+        $score_tab["points"] += $result[$x]['score_max']*$result[$x]['difficulte'];
       }
-      return $total;
+      return create_score($score_tab);
     }
-    else { return 0; }
+    else {
+      //echo "Il n'y pas de score sur cette compétence pour cette étudiant.";
+      return create_score($score_tab);
+    }
   }
   catch(PDOException $e) {
-    echo "Selection failed: " . $e->getMessage();
-    return false;
+    echo "[get_score_max_from_competence_by_etudiant] failed: " . $e->getMessage();
+    return create_score($score_tab);
   }
 }
 
@@ -257,21 +269,24 @@ function get_score_max_from_competence($db, Competence $competence)
       $db_req->execute();
       $result = $db_req->fetchAll();
 
-    $total = 0;
+    $score_tab = ["points" => 0, "tentatives" => 0, "temps" => 0, "aide" => 0];
     if (!empty($result))
     {
       for ($x = 0; $x < count($result); ++$x)
       {
         // pondération par la difficulté
-        $total += $result[$x]['score_max']*$result[$x]['difficulte'];
+        $score_tab["points"] += $result[$x]['score_max']*$result[$x]['difficulte'];
       }
-      return $total;
+      return create_score($score_tab);
     }
-    else { return 0; }
+    else {
+      //echo "Aucun score trouvé pour cette compétence.";
+      return create_score($score_tab);
+    }
   }
   catch(PDOException $e) {
-    echo "Selection failed: " . $e->getMessage();
-    return false;
+    echo "[get_score_max_from_competence] failed: " . $e->getMessage();
+    return create_score(["points"=>-1]);
   }
 }
 
@@ -289,24 +304,59 @@ function get_score_max_from_situation_pro_by_etudiant($db, SituationPro $situati
     $db_req->execute();
     $result = $db_req->fetchAll();
 
-    $total = 0;
+    $score_tab = ["points" => 0, "tentatives" => 0, "temps" => 0, "aide" => 0];
     if (!empty($result))
     {
       for ($x = 0; $x < count($result); ++$x)
       {
         // pondération par la difficulté
-        $total += $result[$x]['difficulte']*$result[$x]['score_max'] * $result[$x]['ratio'] / 100;
+        $score_tab["points"] += $result[$x]['difficulte']*$result[$x]['score_max'] * $result[$x]['ratio'] / 100;
       }
-      return $total;
+      return create_score($score_tab);
     }
-    else { return 0; }
+    else { 
+
+      echo "Aucun score trouvé pour cette situation pro.";
+      return create_score(["points"=>0]);
+    }
   }
   catch(PDOException $e) {
-    echo "Selection failed: " . $e->getMessage();
-    return false;
+    echo "[get_score_max_from_situation_pro_by_etudiant] failed: " . $e->getMessage();
+    return create_score(["points"=>-1]);
   }
 }
 
+function check_score_from_etudiant_on_situation_pro_on_competence($db, Etudiant $etudiant, SituationPro $situation_pro, Competence $competence)
+{
+  try {
+    $db_req = $db->prepare('SELECT taux_de_succes, temps, aide, rel_enigme_situation_pro.ratio, enigme.score_max, enigme.difficulte
+      FROM score
+      INNER JOIN enigme ON enigme.id = score.enigme_id
+      INNER JOIN competence ON enigme.competence_id = competence.id
+      INNER JOIN etudiant ON etudiant.id = score.etudiant_id
+      INNER JOIN rel_enigme_situation_pro ON rel_enigme_situation_pro.enigme_id = enigme.id
+      INNER JOIN situation_pro ON situation_pro.id = rel_enigme_situation_pro.situation_pro_id
+      WHERE situation_pro.id = '.$situation_pro->get_id().
+      ' AND competence.id = '.$competence->get_id().
+      ' AND etudiant.id = '.$etudiant->get_id()
+    );
+    $db_req->execute();
+    $result = $db_req->fetchAll();
+
+    if (!empty($result))
+    {
+      return create_score(["points"=>100]);
+    }
+    else { 
+      //echo "Aucun score ne correspondent à/aux la compétence et/ou situation pro et/ou l'étudiant données.";
+      return create_score(["points"=>0]);
+    }
+  }
+  catch(PDOException $e) {
+    echo "[check_score_from_etudiant_on_situation_pro_on_competence] failed: " . $e->getMessage();
+    return create_score(["points"=>-1]);
+  }
+}
 // Prend toutes les énigmes en bdd qui évalue $situation_pro
 //, et somme les points maximum qu'on peut obtenir de chaque énigme
 // pour avoir le score PERFECT sur $situation_pro
@@ -325,21 +375,25 @@ function get_score_max_from_situation_pro($db, SituationPro $situation_pro)
     $db_req->execute();
     $result = $db_req->fetchAll();
 
-    $total = 0;
+    $score_tab = ["points" => 0, "tentatives" => 0, "temps" => 0, "aide" => 0];
     if (!empty($result))
     {
       for ($x = 0; $x < count($result); ++$x)
       {
         // pondération par la difficulté
-        $total += $result[$x]['difficulte']*$result[$x]['score_max'] * $result[$x]['ratio'] / 100;
+        $score_tab["points"] += $result[$x]['difficulte']*$result[$x]['score_max'] * $result[$x]['ratio'] / 100;
       }
-      return $total;
+      return create_score($score_tab);
     }
-    else { return 0; }
+    else { 
+
+      echo "Aucun score trouvé pour cette situation pro.";
+      return create_score(["points"=>0]);
+    }
   }
   catch(PDOException $e) {
-    echo "Selection failed: " . $e->getMessage();
-    return false;
+    echo "[get_score_max_from_situation_pro] failed: " . $e->getMessage();
+    return create_score(["points"=>-1]);
   }
 }
 
@@ -439,6 +493,51 @@ function get_score_from_etudiant_on_situation_pro($db, Etudiant $etudiant, Situa
   }
 }
 
+function get_score_from_etudiant_on_situation_pro_on_competence($db, Etudiant $etudiant, SituationPro $situation_pro, Competence $competence)
+{
+  try {
+    $db_req = $db->prepare('SELECT taux_de_succes, temps, aide, rel_enigme_situation_pro.ratio, enigme.score_max, enigme.difficulte
+      FROM score
+      INNER JOIN enigme ON enigme.id = score.enigme_id
+      INNER JOIN competence ON enigme.competence_id = competence.id
+      INNER JOIN etudiant ON etudiant.id = score.etudiant_id
+      INNER JOIN rel_enigme_situation_pro ON rel_enigme_situation_pro.enigme_id = enigme.id
+      INNER JOIN situation_pro ON situation_pro.id = rel_enigme_situation_pro.situation_pro_id
+      WHERE situation_pro.id = '.$situation_pro->get_id().
+      ' AND competence.id = '.$competence->get_id().
+      ' AND etudiant.id = '.$etudiant->get_id()
+    );
+    $db_req->execute();
+    $score_tab = ["points" => 0, "tentatives" => 0, "temps" => 0, "aide" => 0];
+    $max=0;
+    $result = $db_req->fetchAll();
+    if (!empty($result))
+    {
+      for ($i = 0; $i < count($result); ++$i)
+      {
+        $max += $result[$i]["difficulte"] * $result[$i]["score_max"] * ($result[$i]["ratio"]/100) ;
+        $score_tab["points"] += $result[$i]["difficulte"] * $result[$i]["score_max"] * ($result[$i]["ratio"]/100) * ($result[$i]["taux_de_succes"]/100);
+        
+        $score_tab["temps"] += $result[$i]["temps"];
+        $score_tab["aide"] += $result[$i]["aide"];
+      }
+      //score sur 100
+      $score_tab["points"] = round($score_tab["points"]*100 / $max, 2);
+      $score_tab["temps"] = round($score_tab["temps"] / count($result), 2);
+      $score_tab["aide"] = round($score_tab["aide"] / count($result), 2);
+      return create_score($score_tab);
+    }
+    else { 
+      //echo "Aucun score ne correspondent à/aux la compétence et/ou situation pro données.";
+      return create_score($score_tab);
+    }
+  }
+  catch(PDOException $e) {
+    echo "[get_score_from_etudiant_on_situation_pro_on_competence] failed: " . $e->getMessage();
+    return create_score(["points"=>-1]);
+  }
+}
+
 function get_moyenne_score_from_enigme($db, Enigme $enigme)
 {
   try {
@@ -501,11 +600,14 @@ function get_moyenne_score_from_competence($db, Competence $competence)
       $score_tab["aide"] = round($score_tab["aide"] / count($result), 2);
       return create_score($score_tab);
     }
-    else { return false; }
+    else {
+      //echo "Il n'y'a pas de score pour cette compétence.";
+      return create_score($score_tab);
+    }
   }
   catch(PDOException $e) {
-    echo "Selection failed: " . $e->getMessage();
-    return false;
+    echo "[get_moyenne_score_from_competence] failed: " . $e->getMessage();
+    return create_score(["points"=>-1]);
   }
 }
 
@@ -545,4 +647,78 @@ function get_moyenne_score_from_situation_pro($db, SituationPro $situation_pro)
   }
 }
 
+//note sur 100
+function get_moyenne_score_from_situation_pro_on_competence($db, SituationPro $situation_pro,Competence $competence)
+{
+  try {
+    $db_req = $db->prepare('SELECT taux_de_succes, temps, aide, rel_enigme_situation_pro.ratio, enigme.score_max, enigme.difficulte
+      FROM score
+      INNER JOIN enigme ON enigme.id = score.enigme_id
+      INNER JOIN competence ON enigme.competence_id = competence.id
+      INNER JOIN rel_enigme_situation_pro ON rel_enigme_situation_pro.enigme_id = enigme.id
+      INNER JOIN situation_pro ON situation_pro.id = rel_enigme_situation_pro.situation_pro_id
+      WHERE situation_pro.id = '.$situation_pro->get_id().' AND competence.id = '.$competence->get_id()
+    );
+    $db_req->execute();
+    $score_tab = ["points" => 0, "tentatives" => 0, "temps" => 0, "aide" => 0];
+    $max=0;
+    $result = $db_req->fetchAll();
+    if (!empty($result))
+    {
+      for ($i = 0; $i < count($result); ++$i)
+      {
+        $max += $result[$i]["difficulte"] * $result[$i]["score_max"] * ($result[$i]["ratio"]/100) ;
+        $score_tab["points"] += $result[$i]["difficulte"] * $result[$i]["score_max"] * ($result[$i]["ratio"]/100) * ($result[$i]["taux_de_succes"]/100);
+        
+        $score_tab["temps"] += $result[$i]["temps"];
+        $score_tab["aide"] += $result[$i]["aide"];
+      }
+      //score sur 100
+      $score_tab["points"] = round($score_tab["points"]*100 / $max, 2);
+      $score_tab["temps"] = round($score_tab["temps"] / count($result), 2);
+      $score_tab["aide"] = round($score_tab["aide"] / count($result), 2);
+      return create_score($score_tab);
+    }
+    else { 
+      //echo "Aucun score ne correspondent à/aux la compétence et/ou situation pro données.";
+      return create_score($score_tab);
+    }
+  }
+  catch(PDOException $e) {
+    echo "[get_moyenne_score_from_situation_pro_on_competence] failed: " . $e->getMessage();
+    return create_score(["points"=>-1]);
+  }
+}
+
+function check_score_from_situation_pro_on_competence($db, SituationPro $situation_pro,Competence $competence)
+{
+  try {
+    $db_req = $db->prepare('SELECT taux_de_succes, temps, aide, rel_enigme_situation_pro.ratio, enigme.score_max, enigme.difficulte
+      FROM score
+      INNER JOIN enigme ON enigme.id = score.enigme_id
+      INNER JOIN competence ON enigme.competence_id = competence.id
+      INNER JOIN rel_enigme_situation_pro ON rel_enigme_situation_pro.enigme_id = enigme.id
+      INNER JOIN situation_pro ON situation_pro.id = rel_enigme_situation_pro.situation_pro_id
+      WHERE situation_pro.id = '.$situation_pro->get_id().' AND competence.id = '.$competence->get_id()
+    );
+    $db_req->execute();
+    $result = $db_req->fetchAll();
+    if (!empty($result))
+    {
+
+      $score_tab = ["points" => 100];
+      return create_score($score_tab);
+    }
+    else { 
+      //echo "Aucun score ne correspondent à/aux la compétence et/ou situation pro données.";
+      $score_tab = ["points" => 0];
+      return create_score($score_tab);
+    }
+  }
+  catch(PDOException $e) {
+    echo "[get_moyenne_score_from_situation_pro_on_competence] failed: " . $e->getMessage();
+    $score_tab = ["points" => -1];
+      return create_score($score_tab);
+  }
+}
  ?>
