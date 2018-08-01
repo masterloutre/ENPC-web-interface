@@ -113,22 +113,25 @@ function process_score_info() {
         $id_etudiant = valid_numeric($_POST['id_etudiant']);
         $score_data = [
             'id' => NULL,
-            'points' => valid_numeric($_POST['points']),
+            'points'=> 0,
+            'taux_de_succes' => valid_numeric($_POST['taux_de_succes']),
             'tentatives' => valid_numeric($_POST['tentatives']),
             'temps' => valid_numeric($_POST['temps']),
             'aide' => valid_int_bool($_POST['aide'])
         ];
         $score = create_score($score_data);
-
         $etudiant = get_etudiant($db, $id_etudiant);
         $enigme = get_enigme($db, $id_enigme);
 
+
+        $iscomputed = compute_score_points($db,$score,$enigme->get_id());
+
         if(!$etudiant){
-          throw new Exception("L'id étudiant est invalid");
+          throw new Exception("L'id étudiant est invalide");
         }
         
         if(!$enigme){
-            throw new Exception("L'id enigme est invalid");
+            throw new Exception("L'id enigme est invalide");
         }
         
         $old_score = get_score_from_etudiant_on_enigme($db, $etudiant, $enigme);
