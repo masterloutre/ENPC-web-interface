@@ -61,7 +61,6 @@ if (isset($_GET['action'])) {
             //echo "no one is logged in";
             //header("HTTP/1.1 404 Not Found");
             send_dummy_player_info();
-            //send_player_info(get_etudiant($db, 1));
         }
     }
 
@@ -70,11 +69,11 @@ if (isset($_GET['action'])) {
           send_enigmes_dispo_info();
         
         } else {
-          //  echo "no one is logged in";
-          //  header("HTTP/1.1 404 Not Found");
+          echo "no one is logged in";
+          header("HTTP/1.1 404 Not Found");
           
           //  FOR TESTING
-          send_enigmes_dispo_info();
+          //send_enigmes_dispo_info();
         }
         
     }
@@ -95,15 +94,14 @@ if (isset($_GET['action'])) {
     }
 
     if($_GET['action'] == 'envoyer-score' && isset($_POST)){
-            try{
-            process_score_info();
-            } catch (Exception $e){
-              echo "La requete a échoué : ".$e->getMessage();
-              header("HTTP/1.1 500");
-            }
-
-
-        }
+      try{
+        process_score_info();
+      }
+      catch (Exception $e){
+        echo "La requete a échoué : ".$e->getMessage();
+        header("HTTP/1.1 500");
+      }
+    }
 
 }
 
@@ -111,4 +109,3 @@ else
 {
   sign_in();
 }
-//waley

@@ -20,10 +20,8 @@ function add_situation_pro($db, SituationPro $situPro){
     }
 
     try{
-        if(empty($situPro->get_couleur()))
-            echo "wesh";
-    $bdd_req = $db->prepare('INSERT INTO situation_pro (nom,couleur) VALUES ("'.$situPro->get_nom().'","'.$situPro->get_couleur().'")');
-    $bdd_req->execute();
+        $bdd_req = $db->prepare('INSERT INTO situation_pro (nom,couleur) VALUES ("'.$situPro->get_nom().'","'.$situPro->get_couleur().'")');
+        $bdd_req->execute();
 
     }catch(PDOException $e){
         echo "ADD SITUATION PRO FUNC ERROR : ".$e->getMessage();
@@ -134,7 +132,7 @@ function get_all_situation_pro($db){
         return $tab_situ;
     }
 }
-
+// get all the situation pro the enigma assess
 function get_situation_pro_from_enigme($db, Enigme $enigme)
 {
   try {
@@ -162,7 +160,7 @@ function get_situation_pro_from_enigme($db, Enigme $enigme)
     return false;
   }
 }
-
+// method to modify situation pro score proportion in enigma
 function add_ratio_situation_pro_enigme($db, $enigme_id, $situation_id, $ratio)
 {
     try{
@@ -185,11 +183,10 @@ function get_ratio_situation_pro_enigme($db, $enigme_id)
         WHERE enigme_id = '.$enigme_id
         );
         $db_req->execute();
-        $situation_pro_tab = [];
         $result = $db_req->fetchAll();
         if (!empty($result))
         {
-            print_r($result);
+            //print_r($result);
             return $result;
         }
         else { 

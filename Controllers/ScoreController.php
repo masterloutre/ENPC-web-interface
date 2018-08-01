@@ -18,15 +18,16 @@ Une fois cette valeur déterminée, elle sera stockée dans la BDD avec toutes l
 - pour calculer le score à une compétence, on somme tous les scores des énigmes qui feature celle-ci.
 en particulier, pour calculer le score d'une situation pro, on ne prend que la fraction du score qui nous intéresse, avant de sommer.
 
-- les scores résultant d'opération de compétences ou de situation pro ne doivent pas être intégré en BDD, seuls les scores d'énigmes sans difficulté y sont autorisés.
+- les scores résultant d'opération de compétences ou de situation pro ne doivent pas être intégré en BDD, seuls les scores d'énigmes calculés sans difficulté y sont autorisés.
 
 - La difficulté sert de coefficient de pondération à la note. Il n'a donc pas intérêt à être calculé avec la note lors de la mise en BDD,
 mais plutôt à servir sa représentation sur l'interface web. En effet, les notes des énigmes et le score maximum théorique sont multipliés par la difficulté,
 mais ils ne sont pas à confondre avec une moyenne.
-Ainsi, cette difficulté apparait dans les méthodes dédiées à l'affichage.
+Ainsi, cette difficulté apparait dans les méthodes dédiées à l'affichage. C'est aussi pour conserver le barême original.
 
 */
 
+/* FONCTIONS BASIQUE DE BDD*/
 function create_score($array_score)
 {
   return new Score($array_score);
@@ -105,7 +106,10 @@ function delete_score($db, Score $score)
       return false;
     }
   }
-  else { return false; }
+  else {
+    "Tentative de MAJ du score échoué, inexistant ou identifiant erroné.";
+    return false;
+  }
 }
 
 function score_exists($db, Score $score)
@@ -126,47 +130,18 @@ function score_exists($db, Score $score)
       return false;
     }
 
-    if ($result != NULL) { return true; }
-    else { return false; }
-  }
-  else { return false; }
-}
-function compute_score_points($db,Score $score, $enigme){
-
-  //prendre le taux dans model
-  // prendre les ratios de SP dans la bdd
-  // prendre le scoremax de l'enigme dans la bdd
-  // appliquer tout
-  // hydrater le score : en bdd ou le modele ?
-  try {
-    $db_req = $db->prepare('SELECT enigme.score_max,rel_enigme_situation_pro.ratio
-      FROM enigme
-      INNER JOIN rel_enigme_situation_pro ON rel_enigme_situation_pro.enigme_id = enigme.id
-      WHERE enigme.id = '.$enigme->get_id()
-    );
-    $db_req->execute();
-    $result = $db_req->fetchAll();
-    // en théorie, c'est le même score_max qui apparait plusieurs fois par relation 1 score -> n situationpro
-    if (!empty($result))
-    {
-      // recalcule du score
-      $score["points"]=0;
-      for ($i = 0; $i < count($result); ++$i)
-      {
-        $score["points"] += ($score->get_taux_de_succes()/100) * $result[$i]["score_max"] * ($result[$i]["ratio"] / 100);
-        
-      }
+    if ($result != NULL) {
       return true;
     }
     else {
       return false;
     }
   }
-  catch(PDOException $e) {
-    echo "(compute_score_points) Selection failed: " . $e->getMessage();
+  else{
     return false;
   }
 }
+
 function get_score($db, $id)
 {
   try {
@@ -216,6 +191,43 @@ function get_all_score($db)
    }
 }
 
+/* CALCUL DES POINTS EN FONCTION DU % DE REUSSITE DE L'UTILISATEUR */
+function compute_score_points($db,Score $score, $enigme){
+
+  try {
+    $db_req = $db->prepare('SELECT enigme.score_max,rel_enigme_situation_pro.ratio
+      FROM enigme
+      INNER JOIN rel_enigme_situation_pro ON rel_enigme_situation_pro.enigme_id = enigme.id
+      WHERE enigme.id = '.$enigme->get_id()
+    );
+    $db_req->execute();
+    $result = $db_req->fetchAll();
+    // en théorie, c'est le même score_max qui apparait plusieurs fois par relation 1 score -> n situationpro
+    if (!empty($result))
+    {
+      // recalcule du score
+      $score["points"]=0;
+      for ($i = 0; $i < count($result); ++$i)
+      {
+        $score["points"] += ($score->get_taux_de_succes()/100) * $result[$i]["score_max"] * ($result[$i]["ratio"] / 100);
+        
+      }
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+  catch(PDOException $e) {
+    echo "(compute_score_points) Selection failed: " . $e->getMessage();
+    return false;
+  }
+}
+/* FONCTION DE RECUPERATION ET CALCUL DE SCORE MAX SITUATIONNEL*/
+
+/* renvoie un objet Score
+crée le score max associé à l'énigme
+*/
 function get_score_max_from_enigme($db, Enigme $enigme)
 {
   $score = [
@@ -226,6 +238,9 @@ function get_score_max_from_enigme($db, Enigme $enigme)
   return create_score($score);
 }
 
+/* renvoie un objet Score
+crée le score max associé au cumul de toutes les énigmes réalisées par l'étudiant qui évaluent la compétence
+*/
 function get_score_max_from_competence_by_etudiant($db, Competence $competence, Etudiant $etudiant)
 {
   try {
@@ -258,7 +273,9 @@ function get_score_max_from_competence_by_etudiant($db, Competence $competence, 
     return create_score($score_tab);
   }
 }
-
+/* renvoie un objet Score
+crée le score max associé au cumul de toutes les énigmes réalisées qui évaluent la compétence
+*/
 function get_score_max_from_competence($db, Competence $competence)
 {
   try {
@@ -289,7 +306,9 @@ function get_score_max_from_competence($db, Competence $competence)
     return create_score(["points"=>-1]);
   }
 }
-
+/* renvoie un objet Score
+crée le score max associé au cumul de toutes les énigmes réalisées par l'étudiant qui évaluent la situation pro
+*/
 function get_score_max_from_situation_pro_by_etudiant($db, SituationPro $situation_pro, Etudiant $etudiant)
 {
   try {
@@ -325,7 +344,9 @@ function get_score_max_from_situation_pro_by_etudiant($db, SituationPro $situati
     return create_score(["points"=>-1]);
   }
 }
-
+/* renvoie un objet Score
+crée le score max sur 100, mais vérifie surtout la participation de la situation pro dans la compétence
+*/
 function check_score_from_etudiant_on_situation_pro_on_competence($db, Etudiant $etudiant, SituationPro $situation_pro, Competence $competence)
 {
   try {
@@ -357,11 +378,9 @@ function check_score_from_etudiant_on_situation_pro_on_competence($db, Etudiant 
     return create_score(["points"=>-1]);
   }
 }
-// Prend toutes les énigmes en bdd qui évalue $situation_pro
-//, et somme les points maximum qu'on peut obtenir de chaque énigme
-// pour avoir le score PERFECT sur $situation_pro
-
-// Exemple = tu as 220/250 missile tank
+/* renvoie un objet Score
+crée le score max associé au cumul de toutes les énigmes réalisées qui évaluent la situation pro
+*/
 function get_score_max_from_situation_pro($db, SituationPro $situation_pro)
 {
   try {
@@ -397,6 +416,11 @@ function get_score_max_from_situation_pro($db, SituationPro $situation_pro)
   }
 }
 
+/* FONCTION DE RECUPERATION ET CALCUL DE SCORE SITUATIONNEL*/
+
+/* renvoie un objet Score
+crée le score de l'étudiant à l'énigme
+*/
 function get_score_from_etudiant_on_enigme($db, Etudiant $etudiant, Enigme $enigme)
 {
   try {
@@ -420,7 +444,9 @@ function get_score_from_etudiant_on_enigme($db, Etudiant $etudiant, Enigme $enig
     return false;
   }
 }
-
+/* renvoie un objet Score
+crée le score de l'étudiant sur une compétence
+*/
 function get_score_from_etudiant_on_competence($db, Etudiant $etudiant, Competence $competence)
 {
   try {
@@ -456,7 +482,9 @@ function get_score_from_etudiant_on_competence($db, Etudiant $etudiant, Competen
     return false;
   }
 }
-
+/* renvoie un objet Score
+crée le score de l'étudiant sur la situation pro
+*/
 function get_score_from_etudiant_on_situation_pro($db, Etudiant $etudiant, SituationPro $situation_pro)
 {
   try {
@@ -492,7 +520,9 @@ function get_score_from_etudiant_on_situation_pro($db, Etudiant $etudiant, Situa
     return false;
   }
 }
-
+/* renvoie un objet Score
+crée le score de l'étudiant sur une situation pro participant au point de compétence
+*/
 function get_score_from_etudiant_on_situation_pro_on_competence($db, Etudiant $etudiant, SituationPro $situation_pro, Competence $competence)
 {
   try {
@@ -538,6 +568,11 @@ function get_score_from_etudiant_on_situation_pro_on_competence($db, Etudiant $e
   }
 }
 
+/* FONCTION DE RECUPERATION ET CALCUL DE SCORE MOYEN SITUATIONNEL*/
+
+/* renvoie un objet Score
+crée le score moyen de tous les étudiants à l'énigme
+*/
 function get_moyenne_score_from_enigme($db, Enigme $enigme)
 {
   try {
@@ -572,7 +607,9 @@ function get_moyenne_score_from_enigme($db, Enigme $enigme)
     return false;
   }
 }
-
+/* renvoie un objet Score
+crée le score moyen de tous les étudiant à la compétence
+*/
 function get_moyenne_score_from_competence($db, Competence $competence)
 {
   try {
@@ -611,6 +648,9 @@ function get_moyenne_score_from_competence($db, Competence $competence)
   }
 }
 
+/* renvoie un objet Score
+crée le score moyen de tous les étudiant à la situation pro
+*/
 function get_moyenne_score_from_situation_pro($db, SituationPro $situation_pro)
 {
   try {
@@ -646,7 +686,9 @@ function get_moyenne_score_from_situation_pro($db, SituationPro $situation_pro)
     return false;
   }
 }
-
+/* renvoie un objet Score
+crée le score moyen de tous les étudiant à la situation pro participant au point de compétence
+*/
 //note sur 100
 function get_moyenne_score_from_situation_pro_on_competence($db, SituationPro $situation_pro,Competence $competence)
 {
@@ -689,7 +731,9 @@ function get_moyenne_score_from_situation_pro_on_competence($db, SituationPro $s
     return create_score(["points"=>-1]);
   }
 }
-
+/* renvoie un objet Score
+crée le score 100, et vérifie l'existence des scores de tous les étudiant à la situation pro participant au point de compétence
+*/
 function check_score_from_situation_pro_on_competence($db, SituationPro $situation_pro,Competence $competence)
 {
   try {

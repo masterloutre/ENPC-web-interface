@@ -30,7 +30,7 @@ function send_dummy_player_info(){
     echo($json);
 }
 
-
+//send 3 random enigma, each one is a different type
 function send_enigmes_samples() {
     include "./Global/connect.php";
     $enigmes_type1 = get_n_random_from_array(get_all_enigme_by_type($db, 1), 1);
@@ -40,15 +40,17 @@ function send_enigmes_samples() {
     return $enigmes;
 }
 
+//send enabled enigma
 function send_enigmes_active() {
     include "./Global/connect.php";
     $enigmes = get_all_active_enigme($db);
     return $enigmes;
 }
 
+// endpoint method, change the function call to get different enigma
 function enigmes_dispo() {
     include "./Global/connect.php";
-    $enigmes = get_all_active_enigme($db);
+    $enigmes = send_enigmes_active();
     return $enigmes;
 }
 
@@ -74,9 +76,8 @@ function get_n_random_from_array($array, $n){
 
 //get authorization to start the game
 function send_session_ouverte_info(){
-    //arbitraire pour l'instant
-    // demander à la bdd quelle ligne est la seule à être à " 1 " en clé " phase ", puis renvoyer son id dans $session_ouverte
-    //sinon envoyer 0 pour que Unity.GlobalManager.GetSessionID bloque le jeu
+    // demande à la bdd quelle ligne est la seule à être à " 1 " en clé " phase ", puis renvoye son id dans $session_ouverte
+    //sinon envoye 0 pour que Unity.GlobalManager.GetSessionID bloque le jeu
     include "./Global/connect.php";
     $result=0;
     try {
@@ -157,8 +158,6 @@ function valid_int_bool($valeur){
     }
     return $valeur;
 }
-
-
 function valid_numeric($valeur){
     if(!is_numeric($valeur)){
         throw new Exception($valeur.' n\'est pas un nombre');

@@ -34,7 +34,8 @@ require_once ("./Controllers/SituationProController.php");
     <table>
         <tr>
            <?php $headers = $list[0]->get_vars();
-            foreach($headers as $key => $value): ?>
+            if($_GET['item']=='enigme'){ $headers['situation_pro']='';unset($headers['tentatives_max']); }
+            foreach($headers as $key => $value):?>
             <th><?php echo $key; ?></th>
             <?php endforeach; ?>
             <th colspan="2"></th>
@@ -43,22 +44,34 @@ require_once ("./Controllers/SituationProController.php");
         <?php foreach($list as $item): ?>
         <tr>
            <?php $id = $item->get_id();
-          if($_GET['item'] == 'enseignant'){ $admin = $item->get_admin(); }
-          if($_GET['item'] == 'enigme'){ $situPro = get_situation_pro_from_enigme($db, $item); }
-
             $item = $item->get_vars();
+            if($_GET['item'] == 'enseignant'){
+                $admin = $item->get_admin();
+            }
+            if($_GET['item'] == 'enigme'){
+                unset($item['tentatives_max']);
+                $item['situation_pro']='';
+            }
             foreach($item as $key => $value): ?>
 
                 <td>
                     <!-- valeur des cases -->
                     
                     <!-- si en plus on a des compétences à afficher -->
-                    <?php if($_GET['item'] == 'enigme' && $key == 'active'){
-                        if($value){ echo "true"; }
-                        else{ echo "false"; }
-                    }else{
-                        echo $value;
-                    } ?>
+                    <?php if($_GET['item'] == 'enigme'){
+                        if($key == 'active'){
+                            if($value){ echo "true"; }
+                            else{ echo "false"; }
+                        }
+                        else if($key == 'situation_pro'){
+                            $sps=get_ratio_situation_pro_enigme($db,$item['id']);
+                            foreach ($sps as $sp) {
+                                echo get_situation_pro($db,$sp['situation_pro_id'])->get_nom().': '.$sp['ratio'].'%'.'<br>';
+                            }
+                        }else{
+                            echo $value;
+                        }
+                    }?>
                 </td>
 
             <?php endforeach;
