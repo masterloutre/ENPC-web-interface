@@ -4,11 +4,10 @@ require "./Global/connect.php";
 require_once "./Models/SituationPro.php";
 require_once "./Models/Enigme.php";
 
-/*****
-FUNCTION
-*****/
 
-//create objet etudiant
+/* FONCTIONS BASIQUE DE BDD*/
+
+
 function create_situation_pro($arraySituation){
     return $situation = new SituationPro($arraySituation);
 }
@@ -132,7 +131,11 @@ function get_all_situation_pro($db){
         return $tab_situ;
     }
 }
-// get all the situation pro the enigma assess
+
+
+
+
+// Renvoie un tableau d'objet Situation Pro évalué par cette énigme
 function get_situation_pro_from_enigme($db, Enigme $enigme)
 {
   try {
@@ -160,7 +163,7 @@ function get_situation_pro_from_enigme($db, Enigme $enigme)
     return false;
   }
 }
-// method to modify situation pro score proportion in enigma
+// Ajoute en BDD la pondérations de la situation pro pour l'énigme
 function add_ratio_situation_pro_enigme($db, $enigme_id, $situation_id, $ratio)
 {
     try{
@@ -173,7 +176,7 @@ function add_ratio_situation_pro_enigme($db, $enigme_id, $situation_id, $ratio)
   }
     return 1;
 }
-
+// Renvoie un tableau contenant l'id d'une situation pro et sa pondération dans l'énigme
 function get_ratio_situation_pro_enigme($db, $enigme_id)
 {
     try{
@@ -186,7 +189,6 @@ function get_ratio_situation_pro_enigme($db, $enigme_id)
         $result = $db_req->fetchAll();
         if (!empty($result))
         {
-            //print_r($result);
             return $result;
         }
         else { 

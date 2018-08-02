@@ -1,3 +1,6 @@
+<!-- TABLEAU D'AFFICHAGE INTERFACE ADMIN
+Affiche les détails des notes par étudiant dans les compétences et situation pro
+-->
 <section class="tab-etudiants">
 <h3>Détail par étudiant</h3>
 <table>

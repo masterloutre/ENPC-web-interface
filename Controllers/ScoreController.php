@@ -28,6 +28,8 @@ Ainsi, cette difficulté apparait dans les méthodes dédiées à l'affichage. C
 */
 
 /* FONCTIONS BASIQUE DE BDD*/
+
+
 function create_score($array_score)
 {
   return new Score($array_score);
@@ -191,7 +193,11 @@ function get_all_score($db)
    }
 }
 
-/* CALCUL DES POINTS EN FONCTION DU % DE REUSSITE DE L'UTILISATEUR */
+
+
+// Renvoie true si le calcul des points de l'énigme est fait, false sinon
+// Calcul le nombre de points obtenu à une énigme d'après les statistiques de résultat contenu dans $score et les paramètres de l'énigme
+// à utiliser IMPERATIVEMENT avant toute modification de score en BDD
 function compute_score_points($db,Score $score, $enigme){
 
   try {
@@ -223,11 +229,10 @@ function compute_score_points($db,Score $score, $enigme){
     return false;
   }
 }
+
 /* FONCTION DE RECUPERATION ET CALCUL DE SCORE MAX SITUATIONNEL*/
 
-/* renvoie un objet Score
-crée le score max associé à l'énigme
-*/
+// Renvoie un objet Score représentant le score max associé à l'énigme
 function get_score_max_from_enigme($db, Enigme $enigme)
 {
   $score = [
@@ -238,9 +243,8 @@ function get_score_max_from_enigme($db, Enigme $enigme)
   return create_score($score);
 }
 
-/* renvoie un objet Score
-crée le score max associé au cumul de toutes les énigmes réalisées par l'étudiant qui évaluent la compétence
-*/
+// Renvoie un objet Score représentant le score max associé au cumul de tous les résultats de l'étudiant
+// des énigmes qui évaluent la compétence
 function get_score_max_from_competence_by_etudiant($db, Competence $competence, Etudiant $etudiant)
 {
   try {
@@ -273,9 +277,8 @@ function get_score_max_from_competence_by_etudiant($db, Competence $competence, 
     return create_score($score_tab);
   }
 }
-/* renvoie un objet Score
-crée le score max associé au cumul de toutes les énigmes réalisées qui évaluent la compétence
-*/
+// Renvoie un objet Score représentant le score max associé au cumul de tous les résultats de tous les étudiants
+// des énigmes qui évaluent la compétence
 function get_score_max_from_competence($db, Competence $competence)
 {
   try {
@@ -306,9 +309,8 @@ function get_score_max_from_competence($db, Competence $competence)
     return create_score(["points"=>-1]);
   }
 }
-/* renvoie un objet Score
-crée le score max associé au cumul de toutes les énigmes réalisées par l'étudiant qui évaluent la situation pro
-*/
+// Renvoie un objet Score représentant le score max associé au cumul des points de situation pro
+// de toutes les énigmes réalisées par un étudiant
 function get_score_max_from_situation_pro_by_etudiant($db, SituationPro $situation_pro, Etudiant $etudiant)
 {
   try {
@@ -344,9 +346,8 @@ function get_score_max_from_situation_pro_by_etudiant($db, SituationPro $situati
     return create_score(["points"=>-1]);
   }
 }
-/* renvoie un objet Score
-crée le score max sur 100, mais vérifie surtout la participation de la situation pro dans la compétence
-*/
+// Renvoie un objet Score symbolique de 100 si l'on peut calculer le cumul des points de situation pro gagnés par un étudiant
+// sur toutes les énigmes qu'il a réalisé et évaluant une compétence
 function check_score_from_etudiant_on_situation_pro_on_competence($db, Etudiant $etudiant, SituationPro $situation_pro, Competence $competence)
 {
   try {
@@ -378,9 +379,8 @@ function check_score_from_etudiant_on_situation_pro_on_competence($db, Etudiant 
     return create_score(["points"=>-1]);
   }
 }
-/* renvoie un objet Score
-crée le score max associé au cumul de toutes les énigmes réalisées qui évaluent la situation pro
-*/
+// Renvoie un objet Score représentant le score max associé au cumul des points de situation pro
+// de tous les scores d'énigmes qui l'évalue
 function get_score_max_from_situation_pro($db, SituationPro $situation_pro)
 {
   try {
@@ -418,9 +418,7 @@ function get_score_max_from_situation_pro($db, SituationPro $situation_pro)
 
 /* FONCTION DE RECUPERATION ET CALCUL DE SCORE SITUATIONNEL*/
 
-/* renvoie un objet Score
-crée le score de l'étudiant à l'énigme
-*/
+// Renvoie un objet Score représentant le score d'un étudiant à cette énigme
 function get_score_from_etudiant_on_enigme($db, Etudiant $etudiant, Enigme $enigme)
 {
   try {
@@ -444,9 +442,7 @@ function get_score_from_etudiant_on_enigme($db, Etudiant $etudiant, Enigme $enig
     return false;
   }
 }
-/* renvoie un objet Score
-crée le score de l'étudiant sur une compétence
-*/
+// Renvoie un objet Score représentant le score d'un étudiant sur une compétence
 function get_score_from_etudiant_on_competence($db, Etudiant $etudiant, Competence $competence)
 {
   try {
@@ -482,9 +478,7 @@ function get_score_from_etudiant_on_competence($db, Etudiant $etudiant, Competen
     return false;
   }
 }
-/* renvoie un objet Score
-crée le score de l'étudiant sur la situation pro
-*/
+// Renvoie un objet Score représentant le score d'un étudiant sur une situation pro
 function get_score_from_etudiant_on_situation_pro($db, Etudiant $etudiant, SituationPro $situation_pro)
 {
   try {
@@ -520,9 +514,8 @@ function get_score_from_etudiant_on_situation_pro($db, Etudiant $etudiant, Situa
     return false;
   }
 }
-/* renvoie un objet Score
-crée le score de l'étudiant sur une situation pro participant au point de compétence
-*/
+// Renvoie un objet Score représentant le score d'un étudiant sur une situation pro
+// à partir des scores des énigmes qui évaluent la situation pro et la compétence
 function get_score_from_etudiant_on_situation_pro_on_competence($db, Etudiant $etudiant, SituationPro $situation_pro, Competence $competence)
 {
   try {
@@ -570,9 +563,7 @@ function get_score_from_etudiant_on_situation_pro_on_competence($db, Etudiant $e
 
 /* FONCTION DE RECUPERATION ET CALCUL DE SCORE MOYEN SITUATIONNEL*/
 
-/* renvoie un objet Score
-crée le score moyen de tous les étudiants à l'énigme
-*/
+// Renvoie un objet Score représentant le score moyen des élèves à une énigme
 function get_moyenne_score_from_enigme($db, Enigme $enigme)
 {
   try {
@@ -607,9 +598,7 @@ function get_moyenne_score_from_enigme($db, Enigme $enigme)
     return false;
   }
 }
-/* renvoie un objet Score
-crée le score moyen de tous les étudiant à la compétence
-*/
+// Renvoie un objet Score représentant le score moyen des élèves à une compétence
 function get_moyenne_score_from_competence($db, Competence $competence)
 {
   try {
@@ -648,9 +637,7 @@ function get_moyenne_score_from_competence($db, Competence $competence)
   }
 }
 
-/* renvoie un objet Score
-crée le score moyen de tous les étudiant à la situation pro
-*/
+// Renvoie un objet Score représentant le score moyen des élèves à une situation pro
 function get_moyenne_score_from_situation_pro($db, SituationPro $situation_pro)
 {
   try {
@@ -686,9 +673,8 @@ function get_moyenne_score_from_situation_pro($db, SituationPro $situation_pro)
     return false;
   }
 }
-/* renvoie un objet Score
-crée le score moyen de tous les étudiant à la situation pro participant au point de compétence
-*/
+// Renvoie un objet Score représentant le score moyen des élèves à une situation pro
+// d'après les scores des énigmes évaluant la situation pro et la compétence
 //note sur 100
 function get_moyenne_score_from_situation_pro_on_competence($db, SituationPro $situation_pro,Competence $competence)
 {
@@ -731,9 +717,8 @@ function get_moyenne_score_from_situation_pro_on_competence($db, SituationPro $s
     return create_score(["points"=>-1]);
   }
 }
-/* renvoie un objet Score
-crée le score 100, et vérifie l'existence des scores de tous les étudiant à la situation pro participant au point de compétence
-*/
+// Renvoie un objet Score symbolique de 100 si l'on peut calculer le cumul des points de situation pro gagnés en moyenne
+// sur toutes les énigmes réalisées évaluant la situation pro et la compétence
 function check_score_from_situation_pro_on_competence($db, SituationPro $situation_pro,Competence $competence)
 {
   try {

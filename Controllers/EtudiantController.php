@@ -4,11 +4,10 @@ require "./Global/connect.php";
 require_once "./Models/Etudiant.php";
 require_once "./Controllers/SessionController.php";
 
-/*****
-FUNCTION
-*****/
 
-//create objet etudiant
+/* FONCTIONS BASIQUE DE BDD*/
+
+
 function create_etudiant($arrayEtudiant){
     return $etudiant = new Etudiant($arrayEtudiant);
 }

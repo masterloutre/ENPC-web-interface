@@ -7,6 +7,9 @@ require_once "./Models/Enigme.php";
 require_once "./Models/Etudiant.php";
 require_once "./Models/Competence.php";
 
+/* FONCTIONS BASIQUE DE BDD*/
+
+
 function create_enigme($array_enigme)
 {
   return new Enigme($array_enigme);
@@ -163,6 +166,11 @@ function get_all_enigme($db)
 
 }
 
+
+
+
+
+// Renvoie un tableau d'objet Enigme de toutes les énigmes en BDD ayant le même type
 function get_all_enigme_by_type($db, int $type)
 {
   try {
@@ -195,6 +203,7 @@ function get_all_enigme_by_type($db, int $type)
 
 }
 
+// Renvoie un tableau d'objet Enigme de toutes les énigmes actives en BDD
 function get_all_active_enigme($db)
 {
   try {
@@ -230,6 +239,7 @@ function get_all_active_enigme($db)
 
 }
 
+// Renvoie un tableau d'objet Enigme de toutes les énigmes résolues par un étudiant en BDD
 function get_all_enigme_from_etudiant($db, Etudiant $etudiant)
 {
   try {
@@ -258,6 +268,7 @@ function get_all_enigme_from_etudiant($db, Etudiant $etudiant)
   }
 }
 
+// Renvoie un tableau d'objet Enigme de toutes les énigmes évaluant une compétence
 function get_enigme_by_competence($db, Competence $comp)
 {
   try {
@@ -289,6 +300,7 @@ function get_enigme_by_competence($db, Competence $comp)
   }
 }
 
+// Supprime toutes les informations de pondération de SP sur une énigme
 function delete_ratio_situation_pro_enigme($db, Enigme $enigme){
 
     try{

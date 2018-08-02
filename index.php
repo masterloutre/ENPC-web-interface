@@ -2,7 +2,15 @@
 require_once './Controllers/FrontEndController.php';
 require_once './Controllers/SessionController.php';
 require_once './Controllers/GameInterfaceController.php';
+/* INDEX 
 
+Ceci est la page centrale par où l'on passe d'une page à l'autre
+Les informations sur la destination sont envoyées en $_GET :
+- "action" : la fonctionnalité souhaitée
+- "vue" : sous-menu
+- "item" : l'objet sur lequel on opère
+
+*/
 start();
 if (isset($_GET['action'])) {
     if ($_GET['action'] == 'login') {
@@ -84,7 +92,7 @@ if (isset($_GET['action'])) {
         } else {
             
             //header("HTTP/1.1 404 Not Found");
-            echo 40;//testing
+            echo 0;//testing
 
         }
     }

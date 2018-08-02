@@ -1,4 +1,5 @@
-﻿<tr>
+﻿<!-- LIGNE DU TABLEAU D'AFFICHAGE -->
+<tr>
 <a href="#">
   <td><?php echo ($etudiant['prenom'].' <span class="upper">'.$etudiant['nom'].'</span>'); ?></td>
 </a>

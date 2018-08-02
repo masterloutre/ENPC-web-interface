@@ -4,6 +4,8 @@ require "./Global/connect.php";
 require_once "./Models/Enseignant.php";
 require_once "./Controllers/SessionController.php";
 
+/* FONCTIONS BASIQUE DE BDD*/
+
 
 function create_enseignant($arrayEnseignant){
     return $enseignant = new Enseignant($arrayEnseignant);

@@ -7,7 +7,9 @@ require_once ("./Controllers/LancementJeuController.php");
 require_once ("./Controllers/SituationProController.php");
 ?>
 
-
+<!-- TABLEAU GENERIQUE POUR AFFICHAGE
+  Utilisé en interface admin pour tous les items
+-->
 <div class="wrapper">
 <?php
     // Renvoie vers la page principale de interface admin si item n'existe pas
@@ -34,7 +36,6 @@ require_once ("./Controllers/SituationProController.php");
     <table>
         <tr>
            <?php $headers = $list[0]->get_vars();
-           //print_r($headers);
             if($_GET['item']=='enigme'){ $headers['situation_pro']='';unset($headers['tentatives_max']); }
             foreach($headers as $key => $value):?>
             <th><?php echo $key; ?></th>

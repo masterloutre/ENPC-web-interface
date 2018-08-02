@@ -3,11 +3,12 @@
 class Score {
 
     /* SCORE
-    id :          int
-    points :      score obtenu (grâce aux autres champs)
-    tentatives :  nombre de tentatives effectuées
-    temps :       temps pour répondre
-    aide :        si aide extérieure demandée
+    id :                    int
+    points :                score obtenu (grâce aux autres champs)
+    tentatives :            nombre de tentatives effectuées
+    temps :                 temps pour répondre
+    aide :                  si aide extérieure demandée
+    taux_de_succes :        pourcentage de points
     */
 
 

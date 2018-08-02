@@ -1,4 +1,6 @@
-
+<!-- Ceci affiche le nom d'une compétence, son score,
+et les situations professionnelles associées, pour chaque objet compétence du tableau
+-->
 <section class="competences">
   <h3>Résumé des Compétences</h3>
   <div class="flex-container">

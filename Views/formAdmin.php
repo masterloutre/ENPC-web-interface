@@ -6,7 +6,9 @@ require_once ("./Controllers/EnigmeController.php");
 require_once ("./Controllers/LancementJeuController.php");
 require_once ("./Controllers/SituationProController.php");
 ?>
-
+<!-- FORMULAIRE GENERIQUE POUR MODIFICATION EN BDD
+  Utilisé en interface admin
+-->
 <div class="wrapper">
 <?php
     if(!array_key_exists('item', $_GET)){
@@ -21,7 +23,6 @@ require_once ("./Controllers/SituationProController.php");
         ?>
 
         <!-- AJOUT -->
-        <!--<form action="./Views/add.php?item=<?php echo $_GET['item']; ?>" method="POST">-->
         <form action="./index.php?action=interface-admin&admin=add&item=<?php echo $_GET['item']; ?>" method="POST">
            <?php $empty = $empty->get_vars();
            unset($empty['id']);
@@ -91,7 +92,7 @@ require_once ("./Controllers/SituationProController.php");
         if($_GET['item'] == "enigme"){
             $competence = $object->get_competence();
             $situation_pro = get_situation_pro_from_enigme($db, $object);
-            //var_dump($situation_pro);
+            
         } ?>
 
         <!-- MODIF -->

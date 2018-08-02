@@ -6,6 +6,7 @@ class SituationPro {
     id :       int
     nom :      nom de la situation professionnelle
     ratio :    rapport de points (%)
+    couleur :  hexadécimal de couleur pour affichage
     */
 
 

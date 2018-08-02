@@ -1,3 +1,4 @@
+<!-- BOUTON VERS LES SOUS MENU DE L'INTERFACE ADMIN -->
 <div class="wrapper">
  <h3>Résultats</h3>
   <a class="button" href="index.php?action=interface-enseignant-competence">Vue par Compétence</a>
