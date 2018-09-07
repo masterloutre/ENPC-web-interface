@@ -4,6 +4,8 @@ require "./Global/connect.php";
 require_once "./Models/Enseignant.php";
 require_once "./Controllers/SessionController.php";
 
+/* FONCTIONS BASIQUE DE BDD*/
+
 
 function create_enseignant($arrayEnseignant){
     return $enseignant = new Enseignant($arrayEnseignant);
@@ -16,7 +18,8 @@ function add_enseignant($db, Enseignant $enseignant){
     }
 
     try{
-        $pass_hache = sha1('gz'.$enseignant->get_mdp());
+        //$pass_hache = sha1('gz'.$enseignant->get_mdp());
+        $pass_hache = $enseignant->get_mdp();
         $enseignant->set_token(create_token($enseignant->get_login()));
 
         $bdd_req = $db->prepare('INSERT INTO enseignant (nom, prenom, login, mdp, token) VALUES ("'.$enseignant->get_nom().'", "'.$enseignant->get_prenom().'", "'.$enseignant->get_login().'", "'.$pass_hache.'", "'.$enseignant->get_token().'")');
@@ -58,10 +61,11 @@ function update_enseignant($db, Enseignant $enseignant){
     if($exists && $prev_id != $enseignant->get_id()){
         return 0;
     }
-
+    //$pass_hache = sha1('gz'.$enseignant->get_mdp());
+    $pass_hache = $enseignant->get_mdp();
     try{
 
-        $bdd_req = $db->prepare('UPDATE `enseignant` SET nom = "'.$enseignant->get_nom().'", prenom = "'.$enseignant->get_prenom().'", login = "'.$enseignant->get_login().'", mdp = "'.sha1('gz'.$enseignant->get_mdp()).'" WHERE `id` = '.$enseignant->get_id());
+        $bdd_req = $db->prepare('UPDATE `enseignant` SET nom = "'.$enseignant->get_nom().'", prenom = "'.$enseignant->get_prenom().'", login = "'.$enseignant->get_login().'", mdp = "'.$pass_hache.'" WHERE `id` = '.$enseignant->get_id());
         $bdd_req->execute();
 
     }catch(PDOException $e){

@@ -7,6 +7,9 @@ require_once "./Models/Enigme.php";
 require_once "./Models/Etudiant.php";
 require_once "./Models/Competence.php";
 
+/* FONCTIONS BASIQUE DE BDD*/
+
+
 function create_enigme($array_enigme)
 {
   return new Enigme($array_enigme);
@@ -163,49 +166,11 @@ function get_all_enigme($db)
 
 }
 
-function get_all_enigme_from_etudiant($db, Etudiant $etudiant)
-{
-  try {
-    $db_req = $db->prepare('SELECT enigme.id, index_unity, type, nom, temps_max, difficulte, score_max, tentatives_max, competence_id
-      FROM enigme
-      INNER JOIN score ON enigme.id = score.enigme_id
-      WHERE score.etudiant_id = '.$etudiant->get_id().' ORDER BY id'
-      );
-    $db_req->execute();
-    $enigme_tab = [];
-    $result = $db_req->fetchAll();
-    if (!empty($result))
-    {
-      for ($i = 0; $i < count($result); ++$i)
-      {
-        $result[$i]["competence"] = get_competence($db, $result[$i]["competence_id"]);
-        $enigme_tab[] = create_enigme($result[$i]);
-      }
-      return $enigme_tab;
-    }
-    else { return false; }
-  }
-  catch(PDOException $e) {
-    echo "Selection failed: " . $e->getMessage();
-    return false;
-  }
-}
 
-function delete_ratio_situation_pro_enigme($db, Enigme $enigme){
 
-    try{
-        $db_req = $db->prepare('DELETE
-        FROM rel_enigme_situation_pro
-        WHERE enigme_id = '.$enigme->get_id()
-        );
-        $db_req->execute();
-    }
-    catch(PDOException $e) {
-        echo "Selection failed: " . $e->getMessage();
-        return false;
-    }
-}
 
+
+// Renvoie un tableau d'objet Enigme de toutes les énigmes en BDD ayant le même type
 function get_all_enigme_by_type($db, int $type)
 {
   try {
@@ -237,6 +202,121 @@ function get_all_enigme_by_type($db, int $type)
   }
 
 }
+
+// Renvoie un tableau d'objet Enigme de toutes les énigmes actives en BDD
+function get_all_active_enigme($db)
+{
+  try {
+    $db_req = $db->prepare('SELECT id, index_unity, type, nom, temps_max, difficulte, score_max, competence_id
+      FROM enigme
+      WHERE active = 1
+      ORDER BY id'
+      );
+
+    $db_req->execute();
+    $enigme_tab = [];
+    $result = $db_req->fetchAll();
+
+    if (!empty($result))
+    {
+      for ($i = 0; $i < count($result); ++$i)
+      {
+        $result[$i]["competence"] = get_competence($db, $result[$i]["competence_id"]);
+        $enigme_tab[] = create_enigme($result[$i]);
+      }
+      return $enigme_tab;
+    }
+    else { 
+      echo "No enigma available for game session.";
+      return [];
+    }
+
+  }
+  catch(PDOException $e) {
+    echo "[get_all_active_enigme] failed: " . $e->getMessage();
+    return [];
+  }
+
+}
+
+// Renvoie un tableau d'objet Enigme de toutes les énigmes résolues par un étudiant en BDD
+function get_all_enigme_from_etudiant($db, Etudiant $etudiant)
+{
+  try {
+    $db_req = $db->prepare('SELECT enigme.id, index_unity, type, nom, temps_max, difficulte, score_max, competence_id
+      FROM enigme
+      INNER JOIN score ON enigme.id = score.enigme_id
+      WHERE score.etudiant_id = '.$etudiant->get_id().' ORDER BY id'
+      );
+    $db_req->execute();
+    $enigme_tab = [];
+    $result = $db_req->fetchAll();
+    if (!empty($result))
+    {
+      for ($i = 0; $i < count($result); ++$i)
+      {
+        $result[$i]["competence"] = get_competence($db, $result[$i]["competence_id"]);
+        $enigme_tab[] = create_enigme($result[$i]);
+      }
+      return $enigme_tab;
+    }
+    else { return false; }
+  }
+  catch(PDOException $e) {
+    echo "Selection failed: " . $e->getMessage();
+    return false;
+  }
+}
+
+// Renvoie un tableau d'objet Enigme de toutes les énigmes évaluant une compétence
+function get_enigme_by_competence($db, Competence $comp)
+{
+  try {
+    $db_req = $db->prepare('SELECT enigme.id, index_unity, type, nom, temps_max, difficulte, score_max, competence_id
+      FROM enigme
+      WHERE enigme.competence_id = '.$comp->get_id().
+      ' ORDER BY id'
+      );
+    $db_req->execute();
+    $enigme_tab = [];
+    $result = $db_req->fetchAll();
+    if (!empty($result))
+    {
+      for ($i = 0; $i < count($result); ++$i)
+      {
+        $result[$i]["competence"] = get_competence($db, $result[$i]["competence_id"]);
+        $enigme_tab[] = create_enigme($result[$i]);
+      }
+      return $enigme_tab;
+    }
+    else { 
+      "Aucune énigme ne possède cette compétence.";
+      return [];
+    }
+  }
+  catch(PDOException $e) {
+    echo "[get_enigme_by_competence] failed: " . $e->getMessage();
+    return [];
+  }
+}
+
+// Supprime toutes les informations de pondération de SP sur une énigme
+function delete_ratio_situation_pro_enigme($db, Enigme $enigme){
+
+    try{
+        $db_req = $db->prepare('DELETE
+        FROM rel_enigme_situation_pro
+        WHERE enigme_id = '.$enigme->get_id()
+        );
+        $db_req->execute();
+    }
+    catch(PDOException $e) {
+        echo "Selection failed: " . $e->getMessage();
+        return false;
+    }
+}
+
+
 
 
 

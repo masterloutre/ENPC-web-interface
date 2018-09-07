@@ -6,7 +6,9 @@ require_once ("./Controllers/EnseignantController.php");
 require_once ("./Controllers/EnigmeController.php");
 require_once ("./Controllers/LancementJeuController.php");
 require_once ("./Controllers/SituationProController.php");
-
+/* UPDATE
+Cette page sert à modifier les informations en BDD depuis un formulaire d'update de l'interface admin, pour tous les items.
+*/
 if(!array_key_exists('item', $_GET)){
     echo "erreur pas de clé item dans GET";
     header("Refresh:0; url=./index.php?action=interface-admin");
@@ -50,8 +52,8 @@ if(!array_key_exists('item', $_GET)){
             }
         }
 
-        header("Refresh:0; url=./index.php?action=interface-admin&vue=liste&item=".$_GET['item']);
-        //header("Location:./index.php?action=interface-admin&vue=liste&item=".$_GET['item']);
+        //header("Refresh:0; url=./index.php?action=interface-admin&vue=liste&item=".$_GET['item']);
+        header("Location:./index.php?action=interface-admin&vue=liste&item=".$_GET['item']);
     }
 }
 

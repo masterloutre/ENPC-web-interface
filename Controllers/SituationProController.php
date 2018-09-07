@@ -4,11 +4,10 @@ require "./Global/connect.php";
 require_once "./Models/SituationPro.php";
 require_once "./Models/Enigme.php";
 
-/*****
-FUNCTION
-*****/
 
-//create objet etudiant
+/* FONCTIONS BASIQUE DE BDD*/
+
+
 function create_situation_pro($arraySituation){
     return $situation = new SituationPro($arraySituation);
 }
@@ -20,10 +19,8 @@ function add_situation_pro($db, SituationPro $situPro){
     }
 
     try{
-        if(empty($situPro->get_couleur()))
-            echo "wesh";
-    $bdd_req = $db->prepare('INSERT INTO situation_pro (nom,couleur) VALUES ("'.$situPro->get_nom().'","'.$situPro->get_couleur().'")');
-    $bdd_req->execute();
+        $bdd_req = $db->prepare('INSERT INTO situation_pro (nom,couleur) VALUES ("'.$situPro->get_nom().'","'.$situPro->get_couleur().'")');
+        $bdd_req->execute();
 
     }catch(PDOException $e){
         echo "ADD SITUATION PRO FUNC ERROR : ".$e->getMessage();
@@ -135,6 +132,10 @@ function get_all_situation_pro($db){
     }
 }
 
+
+
+
+// Renvoie un tableau d'objet Situation Pro évalué par cette énigme
 function get_situation_pro_from_enigme($db, Enigme $enigme)
 {
   try {
@@ -162,7 +163,7 @@ function get_situation_pro_from_enigme($db, Enigme $enigme)
     return false;
   }
 }
-
+// Ajoute en BDD la pondérations de la situation pro pour l'énigme
 function add_ratio_situation_pro_enigme($db, $enigme_id, $situation_id, $ratio)
 {
     try{
@@ -174,6 +175,31 @@ function add_ratio_situation_pro_enigme($db, $enigme_id, $situation_id, $ratio)
     return false;
   }
     return 1;
+}
+// Renvoie un tableau contenant l'id d'une situation pro et sa pondération dans l'énigme
+function get_ratio_situation_pro_enigme($db, $enigme_id)
+{
+    try{
+        $db_req = $db->prepare(
+        'SELECT situation_pro_id, ratio
+        FROM rel_enigme_situation_pro 
+        WHERE enigme_id = '.$enigme_id
+        );
+        $db_req->execute();
+        $result = $db_req->fetchAll();
+        if (!empty($result))
+        {
+            return $result;
+        }
+        else { 
+            echo "Aucune SPs associées à cette énigme.";
+            return array();
+        }
+    }
+    catch(PDOException $e) {
+        echo "[get_ratio_situation_pro_enigme] failed: " . $e->getMessage();
+        return [];
+    }
 }
 
  ?>

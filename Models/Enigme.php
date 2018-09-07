@@ -12,6 +12,7 @@ class Enigme {
     score_max :         score maximum possible calculé
     tentatives_max :    tentatives maximum authorisées
     competence :        objet competence
+    active :            boolean
     */
 
 

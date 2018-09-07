@@ -5,7 +5,9 @@ require_once("./Controllers/EnseignantController.php");
 require_once("./Controllers/EnigmeController.php");
 require_once("./Controllers/LancementJeuController.php");
 require_once("./Controllers/SituationProController.php");
-
+/* ADD
+Cette page sert à envoyer les informations en BDD depuis un formulaire d'ajout de l'interface admin, pour tous les items.
+*/
 if(!array_key_exists('item', $_GET)){
     //echo "erreur pas de clé item dans GET";
     header("refresh:0; url=./index.php?action=interface-admin");
@@ -36,9 +38,6 @@ if(!array_key_exists('item', $_GET)){
             $object->set_score_max($object->get_difficulte() * $object->get_type() * 100);
             
         }
-        /*if($_GET['item'] == 'etudiant' || $_GET['item'] == 'enseignant'){
-            //$object->set_mdp("12345");
-        }*/
 
         $method = 'add_'.ucfirst($_GET['item']);
         $result = $method($db, $object);
@@ -54,8 +53,8 @@ if(!array_key_exists('item', $_GET)){
             }
         }
     }
-    header("Refresh:0; url=./index.php?action=interface-admin&vue=liste&item=".$_GET['item']);
-    //header("Location:./index.php?action=interface-admin&vue=liste&item=".$_GET['item']);
+    //header("Refresh:0; url=./index.php?action=interface-admin&vue=liste&item=".$_GET['item']);
+    header("Location:./index.php?action=interface-admin&vue=liste&item=".$_GET['item']);
 }
 
 ?>

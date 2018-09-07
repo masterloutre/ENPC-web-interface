@@ -49,7 +49,7 @@
   <?php
   for ($y = 0; $y < count($enigme['situations_pro']); ++$y)
   {
-    echo '<div class="tentative-full-box" style="background-color:'.$enigme['situations_pro'][$y]->get_couleur().';"></div>'.$enigme['situations_pro'][$y]->get_nom().' | ';
+    echo '<div class="tentative-full-box" style="background-color:'.$enigme['situations_pro'][$y]->get_couleur().';"></div>'.$enigme['situations_pro'][$y]->get_nom().' ('.$enigme['situations_pro'][$y]->get_ratio().'%) | ';
   }
   ?>
   </div>

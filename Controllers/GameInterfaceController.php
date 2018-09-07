@@ -24,20 +24,33 @@ function send_player_info(Etudiant $etudiant){
 }
 
 function send_dummy_player_info(){
-    $player = array('id' => 0,'studentNumber' => 6666666666, 'surname' => 'Dummy', 'firstname' => 'FromServer' , 'graduatingYear' =>'2000');
+    $player = array('id' => 0, 'studentNumber' => 6666666666, 'surname' => 'Dummy', 'firstname' => 'FromServer' , 'graduatingYear' =>'2000');
     header('Content-Type: application/json');
     $json = json_encode($player);
     echo($json);
 }
 
-
-//get ids of all the enigmas the player will have to do
-function enigmes_dispo() {
+//send 3 random enigma, each one is a different type
+function send_enigmes_samples() {
     include "./Global/connect.php";
     $enigmes_type1 = get_n_random_from_array(get_all_enigme_by_type($db, 1), 1);
     $enigmes_type2 = get_n_random_from_array(get_all_enigme_by_type($db, 2), 1);
     $enigmes_type3 = get_n_random_from_array(get_all_enigme_by_type($db, 3), 1);
     $enigmes = array_merge($enigmes_type1, $enigmes_type2, $enigmes_type3);
+    return $enigmes;
+}
+
+//send enabled enigma
+function send_enigmes_active() {
+    include "./Global/connect.php";
+    $enigmes = get_all_active_enigme($db);
+    return $enigmes;
+}
+
+// endpoint method, change the function call to get different enigma
+function enigmes_dispo() {
+    include "./Global/connect.php";
+    $enigmes = send_enigmes_active();
     return $enigmes;
 }
 
@@ -63,9 +76,8 @@ function get_n_random_from_array($array, $n){
 
 //get authorization to start the game
 function send_session_ouverte_info(){
-    //arbitraire pour l'instant
-    // demander à la bdd quelle ligne est la seule à être à " 1 " en clé " phase ", puis renvoyer son id dans $session_ouverte
-    //sinon envoyer 0 pour que Unity.GlobalManager.GetSessionID bloque le jeu
+    // demande à la bdd quelle ligne est la seule à être à " 1 " en clé " phase ", puis renvoye son id dans $session_ouverte
+    //sinon envoye 0 pour que Unity.GlobalManager.GetSessionID bloque le jeu
     include "./Global/connect.php";
     $result=0;
     try {
@@ -87,9 +99,8 @@ function send_session_ouverte_info(){
         echo "Selection failed: " . $e->getMessage();
         return false;
     }
-    echo $result;
     $session_ouverte = $result;
-    header('Content-Type: application/json');
+    //header('Content-Type: application/json');
     $json = json_encode($session_ouverte);
     echo $json;
 }
@@ -102,22 +113,25 @@ function process_score_info() {
         $id_etudiant = valid_numeric($_POST['id_etudiant']);
         $score_data = [
             'id' => NULL,
-            'points' => valid_numeric($_POST['points']),
+            'points'=> 0,
+            'taux_de_succes' => valid_numeric($_POST['taux_de_succes']),
             'tentatives' => valid_numeric($_POST['tentatives']),
             'temps' => valid_numeric($_POST['temps']),
             'aide' => valid_int_bool($_POST['aide'])
         ];
         $score = create_score($score_data);
-
         $etudiant = get_etudiant($db, $id_etudiant);
         $enigme = get_enigme($db, $id_enigme);
 
+
+        $iscomputed = compute_score_points($db,$score,$enigme->get_id());
+
         if(!$etudiant){
-          throw new Exception("L'id étudiant est invalid");
+          throw new Exception("L'id étudiant est invalide");
         }
         
         if(!$enigme){
-            throw new Exception("L'id enigme est invalid");
+            throw new Exception("L'id enigme est invalide");
         }
         
         $old_score = get_score_from_etudiant_on_enigme($db, $etudiant, $enigme);
@@ -143,8 +157,6 @@ function valid_int_bool($valeur){
     }
     return $valeur;
 }
-
-
 function valid_numeric($valeur){
     if(!is_numeric($valeur)){
         throw new Exception($valeur.' n\'est pas un nombre');

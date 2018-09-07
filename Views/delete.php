@@ -6,7 +6,9 @@ require_once ("./Controllers/EnseignantController.php");
 require_once ("./Controllers/EnigmeController.php");
 require_once ("./Controllers/LancementJeuController.php");
 require_once ("./Controllers/SituationProController.php");
-
+/* DELETE
+Cette page sert à supprimer les informations en BDD depuis l'interface admin, pour tous les items.
+*/
 if(!array_key_exists('item', $_GET)){
     echo "erreur pas de clé item dans GET";
     header("Refresh:0; url=./index.php?action=interface-admin");

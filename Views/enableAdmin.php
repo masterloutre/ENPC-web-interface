@@ -6,7 +6,9 @@ require_once ("./Controllers/EnigmeController.php");
 require_once ("./Controllers/LancementJeuController.php");
 require_once ("./Controllers/SituationProController.php");
 ?>
-
+<!-- ENABLE ADMIN
+Permet la modification du champs active de plusieurs énigmes à la fois, depuis l'interface admin
+ -->
 
 <div class="wrapper">
     
@@ -26,12 +28,6 @@ require_once ("./Controllers/SituationProController.php");
             <!-- Bouton de modification-->
             <div>
                 <input type="submit" value="Modifier" > 
-                <!-- <a class="button" href="" disabled> Activer par ...</a>
-                    <select style="display:inline;" name="filtre">
-                        <option value="1">QCM</option>
-                        <option value="2">Input</option>
-                        <option value="3">Algo</option>
-                    </select> -->
             </div>
     
             <!-- On récupère tout de la bdd en composant le nom de la méthode avec l'item-->
@@ -78,9 +74,6 @@ require_once ("./Controllers/SituationProController.php");
                         <?php 
         
                         $id = $item['id'];
-                        //if($_GET['item'] == 'enseignant'){ $admin = $item->get_admin(); }
-                        //if($_GET['item'] == 'enigme'){ $situPro = get_situation_pro_from_enigme($db, $item); }
-            
                         
                         foreach($item as $key => $value): 
                         ?>

@@ -1,10 +1,10 @@
-<?php
+﻿<?php
 
 require "./Global/connect.php";
 require "./Global/global.php";
 require_once "./Models/Competence.php";
 
-//var_dump(get_moyenne_score_from_competence($db, $competence2));
+/* FONCTIONS BASIQUE DE BDD*/
 
 function create_competence($array_competence)
 {
@@ -132,6 +132,11 @@ function get_all_competence($db)
   catch(PDOException $e) { echo "Selection failed: " . $e->getMessage(); }
 }
 
+
+
+
+
+// Retourne un objet Competence représentant la compétence évaluée par l'énigme
 function get_competence_from_enigme($db, Enigme $enigme)
 {
   try {

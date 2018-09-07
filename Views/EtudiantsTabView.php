@@ -1,3 +1,6 @@
+<!-- TABLEAU D'AFFICHAGE INTERFACE ADMIN
+Affiche les détails des notes par étudiant dans les compétences et situation pro
+-->
 <section class="tab-etudiants">
 <h3>Détail par étudiant</h3>
 <table>
@@ -7,13 +10,16 @@
 
       <th>Compétence <?php $i+1 ?> - <?php echo $competences_tab[$i]->get_nom(); ?></th>
 
-      <?php for ($j=0; $j < count($situation_pro_tab); $j++) { ?>
+      
+
+    <?php } ?>
+
+    <?php for ($j=0; $j < count($situation_pro_tab); $j++) { ?>
 
         <th><?php echo $situation_pro_tab[$j]->get_nom(); ?></th>
 
       <?php } ?>
-
-    <?php } ?>
+      
   </tr>
   <?php
   for ($x =0; $x < count($content['etudiants']); ++$x)
